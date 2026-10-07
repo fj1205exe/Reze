@@ -57,17 +57,21 @@ class OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onSelect,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: selected ? C.accent : Colors.white.withValues(alpha: 0.07)),
-          color: selected ? C.accent.withValues(alpha: 0.05) : C.surface,
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onSelect,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: selected ? C.accent : Colors.white.withValues(alpha: 0.07)),
+            color: selected ? C.accent.withValues(alpha: 0.05) : C.surface,
+          ),
+          child: child,
         ),
-        child: child,
       ),
     );
   }
@@ -88,15 +92,19 @@ class MLabHeader extends StatelessWidget {
         child: Row(
           children: [
             if (onBack != null)
-              GestureDetector(
-                onTap: onBack,
-                child: Container(
-                  width: 32, height: 32,
-                  decoration: BoxDecoration(
-                    color: C.surface2,
-                    borderRadius: BorderRadius.circular(8),
+              Semantics(
+                button: true,
+                label: 'Back',
+                child: GestureDetector(
+                  onTap: onBack,
+                  child: Container(
+                    width: 32, height: 32,
+                    decoration: BoxDecoration(
+                      color: C.surface2,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                   ),
-                  child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                 ),
               ),
             if (onBack != null) const SizedBox(width: 12),
@@ -268,7 +276,7 @@ class MLabNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF14171C),
+        color: C.surface,
         border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.06))),
       ),
       child: SafeArea(
@@ -287,18 +295,23 @@ class MLabNavBar extends StatelessWidget {
   Widget _tab(String id, String label, IconData icon, IconData activeIcon) {
     final isActive = active == id;
     return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => onNavigate(id),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(isActive ? activeIcon : icon, size: 20, color: isActive ? C.accent : C.muted),
-              const SizedBox(height: 4),
-              Text(label, style: inter(fontSize: 10, color: isActive ? C.accent : C.muted)),
-            ],
+      child: Semantics(
+        button: true,
+        label: label,
+        selected: isActive,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => onNavigate(id),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(isActive ? activeIcon : icon, size: 20, color: isActive ? C.accent : C.muted),
+                const SizedBox(height: 4),
+                Text(label, style: inter(fontSize: 10, color: isActive ? C.accent : C.muted)),
+              ],
+            ),
           ),
         ),
       ),

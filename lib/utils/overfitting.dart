@@ -48,7 +48,7 @@ List<double> _gaussianElim(List<List<double>> A, List<double> b) {
     for (int j = i + 1; j < n; j++) {
       x[i] -= aug[i][j] * x[j];
     }
-    x[i] /= (aug[i][i] == 0 ? 1 : aug[i][i]);
+    x[i] /= (aug[i][i].abs() < 1e-12 ? 1 : aug[i][i]);
   }
   return x;
 }

@@ -80,8 +80,13 @@ import 'screens/nn_challenge.dart';
 import 'screens/bp_discover.dart';
 import 'screens/bp_challenge.dart';
 
+const int maxHistory = 12;
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
   runApp(const MLabApp());
 }
 
@@ -504,13 +509,18 @@ class _MLabHomeState extends State<MLabHome> {
               flags.any((f) => _progress.getFlag(f));
           if (hasProgress) _screen = AppScreen.home;
         });
-      } catch (_) {}
+      } catch (_) {
+        await SharedPreferences.getInstance()
+            .then((p) => p.remove('mlab_progress'));
+      }
     }
   }
 
   Future<void> _saveProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('mlab_progress', jsonEncode(_progress.toJson()));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('mlab_progress', jsonEncode(_progress.toJson()));
+    } catch (_) {}
   }
 
   void _nav(AppScreen s) => setState(() {
@@ -533,8 +543,8 @@ class _MLabHomeState extends State<MLabHome> {
         ts: DateTime.now().millisecondsSinceEpoch,
       ),
     );
-    if (_progress.history.length > 12)
-      _progress.history = _progress.history.sublist(0, 12);
+    if (_progress.history.length > maxHistory)
+      _progress.history = _progress.history.sublist(0, maxHistory);
   }
 
   void _completeConcept(
