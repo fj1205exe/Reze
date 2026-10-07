@@ -153,11 +153,22 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
                   _buildSlider('Bias b', b, -2.0, 2.0, C.yellow, (v) => _handleUpdate(b: v)),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(
-                    label: canAdvance ? 'See why (The AI Winter)' : 'Try adjusting sliders (${6 - _moves} moves remaining)',
-                    disabled: !canAdvance,
-                    onPressed: canAdvance ? widget.onNext : null,
-                  ),
+                  if (canAdvance)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(
+                        label: 'See why (The AI Winter)',
+                        onPressed: widget.onNext,
+                      ),
+                    )
+                  else
+                    PrimaryBtn(
+                      label: 'Try adjusting sliders (${6 - _moves} moves remaining)',
+                      disabled: true,
+                      onPressed: null,
+                    ),
                 ],
               ),
             ),

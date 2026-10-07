@@ -278,7 +278,12 @@ class _OFDiscoverScreenState extends State<OFDiscoverScreen> {
                   const SizedBox(height: 16),
 
                   if (_discoverSteps >= 5) ...[
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

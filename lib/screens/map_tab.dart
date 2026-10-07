@@ -46,42 +46,47 @@ class MapTabScreen extends StatelessWidget {
               itemBuilder: (_, i) {
                 final c = _concepts[i];
                 final done = progress.getFlag(c['flag'] as String);
-                return GestureDetector(
-                  onTap: () => onNavigate(c['nav'] as AppScreen),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: done ? C.green.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 32, height: 32,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: done ? C.green.withValues(alpha: 0.15) : C.surface2,
+                return FadeSlideIn(
+                  delay: Duration(milliseconds: 40 * i),
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 12,
+                  child: GestureDetector(
+                    onTap: () => onNavigate(c['nav'] as AppScreen),
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: done ? C.green.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 32, height: 32,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: done ? C.green.withValues(alpha: 0.15) : C.surface2,
+                            ),
+                            child: Icon(
+                              done ? Icons.check : Icons.play_arrow,
+                              size: 16,
+                              color: done ? C.green : C.muted,
+                            ),
                           ),
-                          child: Icon(
-                            done ? Icons.check : Icons.play_arrow,
-                            size: 16,
-                            color: done ? C.green : C.muted,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(c['label'] as String, style: spaceGrotesk(fontSize: 15, fontWeight: FontWeight.w600)),
+                                Text(c['cat'] as String, style: inter(fontSize: 12, color: C.muted)),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(c['label'] as String, style: spaceGrotesk(fontSize: 15, fontWeight: FontWeight.w600)),
-                              Text(c['cat'] as String, style: inter(fontSize: 12, color: C.muted)),
-                            ],
-                          ),
-                        ),
-                        Text(done ? 'Done' : 'Play', style: inter(fontSize: 12, color: done ? C.green : C.accent)),
-                      ],
+                          Text(done ? 'Done' : 'Play', style: inter(fontSize: 12, color: done ? C.green : C.accent)),
+                        ],
+                      ),
                     ),
                   ),
                 );

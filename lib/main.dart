@@ -9,6 +9,7 @@ import 'utils/neuralnet.dart' as nn;
 import 'utils/bayes.dart' as bay;
 import 'utils/classification.dart' as cl;
 import 'utils/probability.dart' as pr;
+import 'utils/content.dart';
 
 import 'screens/splash_screen.dart';
 import 'screens/welcome_screen.dart';
@@ -81,6 +82,8 @@ import 'screens/bp_discover.dart';
 import 'screens/bp_challenge.dart';
 
 const int maxHistory = 12;
+
+enum ComprehensionLevel { beginner, intermediate, advanced }
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -272,6 +275,8 @@ class AppProgress {
   bool gdComplete, lrComplete, ofComplete, lfComplete, sgdComplete;
   bool clComplete, prComplete, vecComplete, dotComplete;
   bool bayComplete, nnComplete, bpComplete;
+  ComprehensionLevel comprehensionLevel;
+  String goal;
   Map<String, int> skillMap;
   List<ActivityItem> history;
 
@@ -288,16 +293,18 @@ class AppProgress {
     this.bayComplete = false,
     this.nnComplete = false,
     this.bpComplete = false,
+    this.comprehensionLevel = ComprehensionLevel.beginner,
+    this.goal = '',
     Map<String, int>? skillMap,
     List<ActivityItem>? history,
   }) : skillMap =
            skillMap ??
            {
-             'Algebra': 72,
-             'Functions': 58,
-             'Vectors': 45,
-             'Probability': 61,
-             'Statistics': 54,
+             'Algebra': 0,
+             'Functions': 0,
+             'Vectors': 0,
+             'Probability': 0,
+             'Statistics': 0,
              'Calculus': 0,
              'Optimization': 0,
            },
@@ -376,17 +383,19 @@ class AppProgress {
     'bayComplete': bayComplete,
     'nnComplete': nnComplete,
     'bpComplete': bpComplete,
+    'comprehensionLevel': comprehensionLevel.name,
+    'goal': goal,
     'skillMap': skillMap,
     'history': history.map((h) => h.toJson()).toList(),
   };
 
   factory AppProgress.fromJson(Map<String, dynamic> j) {
     final sm = <String, int>{
-      'Algebra': 72,
-      'Functions': 58,
-      'Vectors': 45,
-      'Probability': 61,
-      'Statistics': 54,
+      'Algebra': 0,
+      'Functions': 0,
+      'Vectors': 0,
+      'Probability': 0,
+      'Statistics': 0,
       'Calculus': 0,
       'Optimization': 0,
     };
@@ -401,6 +410,11 @@ class AppProgress {
               .map((e) => ActivityItem.fromJson(e as Map<String, dynamic>))
               .toList()
         : <ActivityItem>[];
+    final levelStr = j['comprehensionLevel'] as String? ?? 'beginner';
+    final level = ComprehensionLevel.values.firstWhere(
+      (e) => e.name == levelStr,
+      orElse: () => ComprehensionLevel.beginner,
+    );
     return AppProgress(
       gdComplete: j['gdComplete'] == true,
       lrComplete: j['lrComplete'] == true,
@@ -414,6 +428,8 @@ class AppProgress {
       bayComplete: j['bayComplete'] == true,
       nnComplete: j['nnComplete'] == true,
       bpComplete: j['bpComplete'] == true,
+      comprehensionLevel: level,
+      goal: j['goal'] as String? ?? '',
       skillMap: sm,
       history: hist,
     );
@@ -429,7 +445,6 @@ class MLabHome extends StatefulWidget {
 class _MLabHomeState extends State<MLabHome> {
   AppScreen _screen = AppScreen.splash;
   String _goal = '';
-  String _skillMapMode = 'onboarding';
   bool _goingBack = false;
 
   int _gdRoundsPassed = 0;
@@ -694,26 +709,29 @@ class _MLabHomeState extends State<MLabHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: C.bg,
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeOutCubic,
-        switchOutCurve: Curves.easeInCubic,
-        transitionBuilder: (child, animation) {
-          final slide =
-              Tween<Offset>(
-                begin: Offset(_goingBack ? -0.08 : 0.08, 0),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
-              );
-          return FadeTransition(
-            opacity: animation,
-            child: SlideTransition(position: slide, child: child),
-          );
-        },
-        child: _buildScreen(),
+    return LevelProvider(
+      level: _progress.comprehensionLevel,
+      child: Scaffold(
+        backgroundColor: C.bg,
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 380),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, animation) {
+            final slide =
+                Tween<Offset>(
+                  begin: Offset(_goingBack ? -0.15 : 0.15, 0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+                );
+            return FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: SlideTransition(position: slide, child: child),
+            );
+          },
+          child: _buildScreen(),
+        ),
       ),
     );
   }
@@ -743,37 +761,28 @@ class _MLabHomeState extends State<MLabHome> {
         return DiagnosticScreen(
           key: const ValueKey('diag'),
           onBack: () => _back(AppScreen.goal),
-          onNext: (scores) {
+          onNext: (level) {
             setState(() {
-              _progress.skillMap['Optimization'] = min(
-                100,
-                scores['Optimization'] ?? 0,
-              );
-              _progress.skillMap['Calculus'] = min(
-                100,
-                scores['Calculus'] ?? 0,
-              );
+              _progress.comprehensionLevel = level;
+              _progress.goal = _goal;
               _addHistory(
-                'Diagnostic',
-                'Math assessment',
-                'completed',
+                'About You',
+                'Comprehension profile',
+                level.name,
                 0xFF8B5CF6,
               );
-              _skillMapMode = 'onboarding';
             });
             _saveProgress();
-            _nav(AppScreen.skillmap);
+            _nav(AppScreen.home);
           },
         );
       case AppScreen.skillmap:
         return SkillMapScreen(
           key: const ValueKey('skillmap'),
           skillMap: _progress.skillMap,
-          mode: _skillMapMode,
-          onNext: () => _nav(AppScreen.recommend),
-          onBack: () => _back(
-            _skillMapMode == 'explore' ? AppScreen.home : AppScreen.diagnostic,
-          ),
+          mode: 'explore',
+          onNext: () => _nav(AppScreen.home),
+          onBack: () => _back(AppScreen.home),
         );
       case AppScreen.recommend:
         return RecommendedStartScreen(
@@ -787,7 +796,7 @@ class _MLabHomeState extends State<MLabHome> {
         return GDPlayScreen(
           key: const ValueKey('gd-play'),
           onNext: () => _nav(AppScreen.gdDiscover),
-          onBack: () => _back(AppScreen.recommend),
+          onBack: () => _back(AppScreen.home),
         );
       case AppScreen.gdDiscover:
         return GDDiscoverScreen(
@@ -1533,10 +1542,11 @@ class _MLabHomeState extends State<MLabHome> {
       case AppScreen.bpChallenge:
         return BPChallengeScreen(
           key: const ValueKey('bp-ch'),
-          onComplete: (success, correct, loss) {
+          onComplete: (success, correct, _) {
             setState(() {
               _bpChalSuccess = success;
-              _bpChalCorrect = correct;            });
+              _bpChalCorrect = correct;
+            });
             _completeBP();
             _nav(AppScreen.bpResult);
           },
@@ -1558,10 +1568,7 @@ class _MLabHomeState extends State<MLabHome> {
         return HomeScreen(
           key: const ValueKey('home'),
           progress: _progress,
-          onNavigate: (s) {
-            if (s == AppScreen.skillmap) _skillMapMode = 'explore';
-            _nav(s);
-          },
+          onNavigate: (s) => _nav(s),
         );
       case AppScreen.mapTab:
         return MapTabScreen(

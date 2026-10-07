@@ -21,72 +21,100 @@ class RecommendedStartScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Text('Your next concept', style: inter(fontSize: 14, color: C.muted)),
-                  const SizedBox(height: 4),
-                  Text('Gradient Descent', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      _tag('OPTIMIZATION', C.blue),
-                      const SizedBox(width: 8),
-                      _tag('∼ 10 min', C.green),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    height: 180,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: CustomPaint(painter: _PreviewPainter()),
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Let's experiment with how learning rate changes movement.",
-                          style: inter(fontSize: 14, color: C.txt)),
+                        Text('Your next concept', style: inter(fontSize: 14, color: C.muted)),
+                        const SizedBox(height: 4),
+                        Text('Gradient Descent', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
                         const SizedBox(height: 16),
                         Row(
                           children: [
-                            Text('Optimization ', style: inter(fontSize: 12, color: C.muted)),
-                            Text('+8', style: mono(fontSize: 12, color: C.accent)),
-                            const SizedBox(width: 16),
-                            Text('Calculus ', style: inter(fontSize: 12, color: C.muted)),
-                            Text('+4', style: mono(fontSize: 12, color: C.accent)),
+                            _tag('OPTIMIZATION', C.blue),
+                            const SizedBox(width: 8),
+                            _tag('∼ 10 min', C.green),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      for (final tag in ['Gradient', 'Derivatives', 'Loss Functions'])
-                        Container(
-                          margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: C.surface2,
-                            borderRadius: BorderRadius.circular(4),
+                  const SizedBox(height: 24),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 150),
+                    duration: const Duration(milliseconds: 500),
+                    slideDistance: 16,
+                    child: Container(
+                      height: 180,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: CustomPaint(painter: _PreviewPainter()),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Let's experiment with how learning rate changes movement.",
+                            style: inter(fontSize: 14, color: C.txt)),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Text('Optimization ', style: inter(fontSize: 12, color: C.muted)),
+                              Text('+8', style: mono(fontSize: 12, color: C.accent)),
+                              const SizedBox(width: 16),
+                              Text('Calculus ', style: inter(fontSize: 12, color: C.muted)),
+                              Text('+4', style: mono(fontSize: 12, color: C.accent)),
+                            ],
                           ),
-                          child: Text(tag, style: inter(fontSize: 12, color: C.muted)),
-                        ),
-                    ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 10,
+                    child: Row(
+                      children: [
+                        for (final tag in ['Gradient', 'Derivatives', 'Loss Functions'])
+                          Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: C.surface2,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(tag, style: inter(fontSize: 12, color: C.muted)),
+                          ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 32),
-                  PrimaryBtn(label: 'Play', onPressed: onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 10,
+                    child: PrimaryBtn(label: 'Play', onPressed: onNext),
+                  ),
                   const SizedBox(height: 32),
                 ],
               ),

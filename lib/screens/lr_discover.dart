@@ -348,8 +348,12 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                   ),
                   if (_feedbackType != null) ...[
                     const SizedBox(height: 16),
-                    FeedbackBar(
-                        type: _feedbackType!, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: FeedbackBar(
+                          type: _feedbackType!, message: _feedbackMsg),
+                    ),
                   ],
                   const SizedBox(height: 16),
                   PrimaryBtn(
@@ -357,9 +361,14 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       onPressed: _handleGradientStep),
                   if (_discoverSteps >= 5) ...[
                     const SizedBox(height: 12),
-                    SecondaryBtn(
-                      label: 'I understand — show me the math →',
-                      onPressed: widget.onNext,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(
+                        label: 'I understand — show me the math →',
+                        onPressed: widget.onNext,
+                      ),
                     ),
                   ],
                 ],

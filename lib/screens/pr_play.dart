@@ -173,7 +173,7 @@ class PRPlayScreen extends StatelessWidget {
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: flips.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 6),
+                              separatorBuilder: (_, _) => const SizedBox(width: 6),
                               itemBuilder: (_, i) {
                                 final f = flips[flips.length - 1 - i];
                                 final isH = f == 'H';
@@ -202,7 +202,12 @@ class PRPlayScreen extends StatelessWidget {
                   PrimaryBtn(label: 'Flip', onPressed: onFlip),
                   if (canAdvance) ...[
                     const SizedBox(height: 12),
-                    SecondaryBtn(label: 'What if the coin is biased? →', onPressed: onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'What if the coin is biased? →', onPressed: onNext),
+                    ),
                   ],
                 ],
               ),

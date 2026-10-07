@@ -104,21 +104,35 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       onPressed: _selectedGuess != null ? () => setState(() => _phase = _BayPhase.reveal) : null,
                     ),
                   ] else if (_phase == _BayPhase.reveal) ...[
-                    Text(
-                      _selectedGuess == 1 ? 'Correct! ~16%' : 'Surprise: It is only ~16%',
-                      style: spaceGrotesk(fontSize: 20, fontWeight: FontWeight.w700, color: _selectedGuess == 1 ? C.green : C.yellow),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Out of 1,000 people:\n• 10 have the disease → ~9 test positive.\n• 990 do NOT have the disease → ~50 test false positive!\nOut of ~59 positive tests, only 9 actually have the disease: 9 / 59 ≈ 16%.',
-                      style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _selectedGuess == 1 ? 'Correct! ~16%' : 'Surprise: It is only ~16%',
+                            style: spaceGrotesk(fontSize: 20, fontWeight: FontWeight.w700, color: _selectedGuess == 1 ? C.green : C.yellow),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Out of 1,000 people:\n• 10 have the disease → ~9 test positive.\n• 990 do NOT have the disease → ~50 test false positive!\nOut of ~59 positive tests, only 9 actually have the disease: 9 / 59 ≈ 16%.',
+                            style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 18),
                     _buildDotGrid(0.01, 0.95, 0.95),
                     const SizedBox(height: 18),
-                    PrimaryBtn(
-                      label: 'EXPLORE WITH SLIDERS',
-                      onPressed: () => setState(() => _phase = _BayPhase.explore),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(
+                        label: 'EXPLORE WITH SLIDERS',
+                        onPressed: () => setState(() => _phase = _BayPhase.explore),
+                      ),
                     ),
                   ] else ...[
                     Text('Update beliefs with evidence.', style: spaceGrotesk(fontSize: 20, fontWeight: FontWeight.w600)),

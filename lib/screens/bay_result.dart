@@ -33,24 +33,30 @@ class BAYResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: C.green.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: C.green.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 12, color: C.green),
-                    const SizedBox(width: 4),
-                    Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ],
-                ),
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: C.green.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check, size: 12, color: C.green),
+                        const SizedBox(width: 4),
+                        Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text("Bayes' Theorem", style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
+                ]),
               ),
-              const SizedBox(height: 8),
-              Text("Bayes' Theorem", style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
               const SizedBox(height: 24),
 
               Container(
@@ -171,9 +177,19 @@ class BAYResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 28),
 
-              PrimaryBtn(label: 'NEXT: NEURAL NETS', onPressed: onPlayNN),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 250),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: PrimaryBtn(label: 'NEXT: NEURAL NETS', onPressed: onPlayNN),
+              ),
               const SizedBox(height: 12),
-              SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 10,
+                child: SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+              ),
             ],
           ),
         ),

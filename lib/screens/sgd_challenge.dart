@@ -157,7 +157,11 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  FeedbackBar(message: _feedback, type: _feedbackType),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: FeedbackBar(message: _feedback, type: _feedbackType),
+                  ),
                   const SizedBox(height: 14),
 
                   if (!_done) ...[
@@ -252,54 +256,67 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
 
                   if (_done) ...[
                     const SizedBox(height: 16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: _converged
-                            ? C.green.withValues(alpha: 0.1)
-                            : C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: (_converged ? C.green : C.pink).withValues(alpha: 0.3),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: _converged
+                              ? C.green.withValues(alpha: 0.1)
+                              : C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: (_converged ? C.green : C.pink).withValues(alpha: 0.3),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                _converged ? Icons.emoji_events : Icons.replay,
-                                size: 18,
-                                color: _converged ? C.yellow : C.pink,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                _converged ? 'Challenge passed!' : 'Not quite — try again',
-                                style: spaceGrotesk(fontSize: 15, fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _converged
-                                ? 'Converged in $_steps step${_steps == 1 ? '' : 's'} using ${sgd.batchLabels[_batch]} at lr=${ _lr.toStringAsFixed(2)}.'
-                                : 'The default settings overshoot. Try lowering the learning rate or switching to mini-batch.',
-                            style: inter(fontSize: 13, color: _converged ? C.green : C.pink),
-                          ),
-                        ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  _converged ? Icons.emoji_events : Icons.replay,
+                                  size: 18,
+                                  color: _converged ? C.yellow : C.pink,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _converged ? 'Challenge passed!' : 'Not quite — try again',
+                                  style: spaceGrotesk(fontSize: 15, fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _converged
+                                  ? 'Converged in $_steps step${_steps == 1 ? '' : 's'} using ${sgd.batchLabels[_batch]} at lr=${ _lr.toStringAsFixed(2)}.'
+                                  : 'The default settings overshoot. Try lowering the learning rate or switching to mini-batch.',
+                              style: inter(fontSize: 13, color: _converged ? C.green : C.pink),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (_converged)
-                      PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _steps, gd.lossFunc(_theta)))
-                    else
-                      PrimaryBtn(label: 'Retry', onPressed: _retry),
-                    if (!_converged) ...[
-                      const SizedBox(height: 12),
-                      SecondaryBtn(label: 'Skip to results', onPressed: () => widget.onComplete(false, _steps, gd.lossFunc(_theta))),
-                    ],
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: Column(
+                        children: [
+                          if (_converged)
+                            PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _steps, gd.lossFunc(_theta)))
+                          else
+                            PrimaryBtn(label: 'Retry', onPressed: _retry),
+                          if (!_converged) ...[
+                            const SizedBox(height: 12),
+                            SecondaryBtn(label: 'Skip to results', onPressed: () => widget.onComplete(false, _steps, gd.lossFunc(_theta))),
+                          ],
+                        ],
+                      ),
+                    ),
                   ],
                 ],
               ),

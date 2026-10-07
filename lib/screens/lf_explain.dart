@@ -45,23 +45,32 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('Measuring mistakes.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'A loss function assigns a single number to how wrong a prediction is. Optimization algorithms do one thing: push this number toward zero.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Measuring mistakes.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'A loss function assigns a single number to how wrong a prediction is. Optimization algorithms do one thing: push this number toward zero.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 18),
 
@@ -101,40 +110,49 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                   const SizedBox(height: 14),
 
                   // Active equation display
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: activeCol.withValues(alpha: 0.3)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('FORMULA', style: spaceGrotesk(fontSize: 11, color: C.muted, letterSpacing: 0.06)),
-                        const SizedBox(height: 12),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: C.surface2,
-                            borderRadius: BorderRadius.circular(8),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: activeCol.withValues(alpha: 0.3)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('FORMULA', style: spaceGrotesk(fontSize: 11, color: C.muted, letterSpacing: 0.06)),
+                          const SizedBox(height: 12),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: C.surface2,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: _buildEquationFormula(_activeType, activeCol),
                           ),
-                          child: _buildEquationFormula(_activeType, activeCol),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          _getEquationDetail(_activeType),
-                          style: inter(fontSize: 13, color: const Color(0xFF9CA3AF)),
-                        ),
-                      ],
+                          const SizedBox(height: 12),
+                          Text(
+                            _getEquationDetail(_activeType),
+                            style: inter(fontSize: 13, color: const Color(0xFF9CA3AF)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
 
                   // Term breakdown
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -155,11 +173,16 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                         _buildTermRow('δ', 'Huber threshold (cutoff for quadratic)', C.yellow),
                       ],
                     ),
+                    ),
                   ),
                   const SizedBox(height: 16),
 
                   // Insight
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 280),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -178,9 +201,15 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

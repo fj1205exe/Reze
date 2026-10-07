@@ -135,18 +135,22 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
 
                   if (step == 4) ...[
                     const SizedBox(height: 14),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.25)),
-                      ),
-                      child: Text(
-                        'Each weight now has a gradient. w_new = w_old − lr × gradient.',
-                        style: inter(fontSize: 13, color: C.green),
-                        textAlign: TextAlign.center,
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: C.green.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                        ),
+                        child: Text(
+                          'Each weight now has a gradient. w_new = w_old − lr × gradient.',
+                          style: inter(fontSize: 13, color: C.green),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ],
@@ -156,10 +160,20 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
                     PrimaryBtn(label: 'Next step →', onPressed: widget.onStep),
                   if (_allSeen) ...[
                     if (step == 4) ...[
-                      PrimaryBtn(label: 'Continue', onPressed: widget.onNext),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 400),
+                        slideDistance: 12,
+                        child: PrimaryBtn(label: 'Continue', onPressed: widget.onNext),
+                      ),
                     ] else ...[
                       const SizedBox(height: 12),
-                      SecondaryBtn(label: 'Continue →', onPressed: widget.onNext),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 400),
+                        slideDistance: 12,
+                        child: SecondaryBtn(label: 'Continue →', onPressed: widget.onNext),
+                      ),
                     ],
                   ],
                 ],

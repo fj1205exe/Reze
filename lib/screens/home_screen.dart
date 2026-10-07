@@ -56,24 +56,28 @@ class HomeScreen extends StatelessWidget {
             bottom: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(greeting, style: inter(fontSize: 14, color: C.muted)),
-                      const SizedBox(height: 2),
-                      Text("What's next?", style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
-                    ],
-                  ),
-                  Container(
-                    width: 36, height: 36,
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: C.accent),
-                    alignment: Alignment.center,
-                    child: Text('M', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white)),
-                  ),
-                ],
+              child: FadeSlideIn(
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 10,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(greeting, style: inter(fontSize: 14, color: C.muted)),
+                        const SizedBox(height: 2),
+                        Text("What's next?", style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
+                      ],
+                    ),
+                    Container(
+                      width: 36, height: 36,
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: C.accent),
+                      alignment: Alignment.center,
+                      child: Text('M', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -83,57 +87,86 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('continue', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 60),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: Text('continue', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                  ),
                   const SizedBox(height: 8),
-                  if (nextConcept != null)
-                    _continueCard(nextConcept, completedCount, totalConcepts)
-                  else
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.06),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.15)),
-                      ),
-                      child: Text('All $totalConcepts concepts complete. Nice work.',
-                        style: inter(fontSize: 14, color: C.green)),
-                    ),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 100),
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 14,
+                    child: nextConcept != null
+                      ? _continueCard(nextConcept, completedCount, totalConcepts)
+                      : Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.06),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: C.green.withValues(alpha: 0.15)),
+                          ),
+                          child: Text('All $totalConcepts concepts complete. Nice work.',
+                            style: inter(fontSize: 14, color: C.green)),
+                        ),
+                  ),
                   if (available.isNotEmpty) ...[
                     const SizedBox(height: 24),
-                    Text('recommended', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: Text('recommended', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    ),
                     const SizedBox(height: 8),
-                    for (final c in available) ...[
-                      _conceptTile(c),
+                    for (int i = 0; i < available.length; i++) ...[
+                      FadeSlideIn(
+                        delay: Duration(milliseconds: 250 + i * 70),
+                        duration: const Duration(milliseconds: 400),
+                        slideDistance: 12,
+                        child: _conceptTile(available[i]),
+                      ),
                       const SizedBox(height: 8),
                     ],
                   ],
                   const SizedBox(height: 24),
-                  Text('your skills', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
-                  const SizedBox(height: 8),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 12,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (final s in _allSkills) ...[
-                          SkillBar(
-                            label: s['label'] as String,
-                            value: progress.skillMap[s['label'] as String] ?? 0,
-                            color: Color(s['color'] as int),
+                        Text('your skills', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: C.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
                           ),
-                          const SizedBox(height: 12),
-                        ],
-                        GestureDetector(
-                          onTap: () => onNavigate(AppScreen.skillmap),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('View full map →', style: inter(fontSize: 12, color: C.accent.withValues(alpha: 0.65))),
+                          child: Column(
+                            children: [
+                              for (final s in _allSkills) ...[
+                                SkillBar(
+                                  label: s['label'] as String,
+                                  value: progress.skillMap[s['label'] as String] ?? 0,
+                                  color: Color(s['color'] as int),
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                              GestureDetector(
+                                onTap: () => onNavigate(AppScreen.skillmap),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('View full map →', style: inter(fontSize: 12, color: C.accent.withValues(alpha: 0.65))),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -202,10 +235,15 @@ class HomeScreen extends StatelessWidget {
             Container(
               height: 6,
               decoration: BoxDecoration(color: C.surface3, borderRadius: BorderRadius.circular(3)),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: total == 0 ? 0 : completed / total,
-                child: Container(decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(3))),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(end: total == 0 ? 0.0 : completed / total),
+                duration: const Duration(milliseconds: 900),
+                curve: Curves.easeOutCubic,
+                builder: (context, val, _) => FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: val,
+                  child: Container(decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(3))),
+                ),
               ),
             ),
           ],

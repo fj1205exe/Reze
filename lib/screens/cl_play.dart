@@ -159,19 +159,28 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
             child: Column(
               children: [
                 if (isGood && _interactions > 0)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: C.green.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                      ),
+                      child: Text('Great separation at this angle!', style: inter(fontSize: 14, color: C.green), textAlign: TextAlign.center),
                     ),
-                    child: Text('Great separation at this angle!', style: inter(fontSize: 14, color: C.green), textAlign: TextAlign.center),
                   ),
                 if (unlocked)
-                  SecondaryBtn(label: 'Try fitting it precisely →', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: SecondaryBtn(label: 'Try fitting it precisely →', onPressed: widget.onNext),
+                  ),
               ],
             ),
           ),

@@ -47,7 +47,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
   int _currentScenario = 0;
   double _userGuess = 50.0;
   bool _submitted = false;
-  List<bool> _results = [];
+  final List<bool> _results = [];
   bool _started = false;
 
   bool get _done => _results.length >= 3;
@@ -363,68 +363,85 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
 
                   // Result after submission
                   if (_submitted) ...[
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: (_userGuess - truePosterior).abs() <= 5.0
-                            ? C.green.withValues(alpha: 0.1)
-                            : C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
                           color: (_userGuess - truePosterior).abs() <= 5.0
-                              ? C.green.withValues(alpha: 0.3)
-                              : C.pink.withValues(alpha: 0.25),
+                              ? C.green.withValues(alpha: 0.1)
+                              : C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: (_userGuess - truePosterior).abs() <= 5.0
+                                ? C.green.withValues(alpha: 0.3)
+                                : C.pink.withValues(alpha: 0.25),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            (_userGuess - truePosterior).abs() <= 5.0 ? 'Correct!' : 'Close, but not quite.',
-                            style: spaceGrotesk(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: (_userGuess - truePosterior).abs() <= 5.0 ? C.green : C.pink,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              (_userGuess - truePosterior).abs() <= 5.0 ? 'Correct!' : 'Close, but not quite.',
+                              style: spaceGrotesk(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: (_userGuess - truePosterior).abs() <= 5.0 ? C.green : C.pink,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Your guess: ${_userGuess.round()}% | True posterior: ${truePosterior.toStringAsFixed(1)}%',
-                            style: inter(fontSize: 12, color: const Color(0xFFD1D5DB)),
-                          ),
-                        ],
+                            const SizedBox(height: 6),
+                            Text(
+                              'Your guess: ${_userGuess.round()}% | True posterior: ${truePosterior.toStringAsFixed(1)}%',
+                              style: inter(fontSize: 12, color: const Color(0xFFD1D5DB)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
                     // Natural frequency breakdown
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('THE BREAKDOWN', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Out of 1,000 people:\n• ${stats.hasDisease} have the condition\n  → ${stats.truePositive} test positive (TP)\n• ${stats.doesntHaveDisease} do NOT have it\n  → ${stats.falsePositive} test false positive (FP)\n\nOut of ${stats.truePositive + stats.falsePositive} positive tests, only ${stats.truePositive} truly have it:\n${stats.truePositive} / ${stats.truePositive + stats.falsePositive} = ${truePosterior.toStringAsFixed(1)}%',
-                            style: inter(fontSize: 12, color: const Color(0xFFD1D5DB)),
-                          ),
-                        ],
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 120),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: C.surface,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('THE BREAKDOWN', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Out of 1,000 people:\n• ${stats.hasDisease} have the condition\n  → ${stats.truePositive} test positive (TP)\n• ${stats.doesntHaveDisease} do NOT have it\n  → ${stats.falsePositive} test false positive (FP)\n\nOut of ${stats.truePositive + stats.falsePositive} positive tests, only ${stats.truePositive} truly have it:\n${stats.truePositive} / ${stats.truePositive + stats.falsePositive} = ${truePosterior.toStringAsFixed(1)}%',
+                              style: inter(fontSize: 12, color: const Color(0xFFD1D5DB)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                   const SizedBox(height: 16),
 
-                  if (!_submitted)
-                    PrimaryBtn(label: 'SUBMIT GUESS', onPressed: _handleSubmit)
-                  else if (_currentScenario < 2)
-                    PrimaryBtn(label: 'NEXT SCENARIO', onPressed: _handleNext)
-                  else
-                    PrimaryBtn(label: 'SEE RESULTS', onPressed: () => setState(() {})),
+                  FadeSlideIn(
+                    delay: _submitted ? const Duration(milliseconds: 250) : Duration.zero,
+                    duration: const Duration(milliseconds: 350),
+                    slideDistance: 10,
+                    child: Builder(builder: (_) {
+                      if (!_submitted) {
+                        return PrimaryBtn(label: 'SUBMIT GUESS', onPressed: _handleSubmit);
+                      } else if (_currentScenario < 2) {
+                        return PrimaryBtn(label: 'NEXT SCENARIO', onPressed: _handleNext);
+                      } else {
+                        return PrimaryBtn(label: 'SEE RESULTS', onPressed: () => setState(() {}));
+                      }
+                    }),
+                  ),
                 ],
               ),
             ),
@@ -483,73 +500,92 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: _passed ? C.green.withValues(alpha: 0.1) : C.yellow.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _passed ? C.green.withValues(alpha: 0.3) : C.yellow.withValues(alpha: 0.25)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _passed ? 'You correctly estimated $_correctCount / 3 posteriors!' : 'You got $_correctCount / 3 correct.',
-                          style: spaceGrotesk(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: _passed ? C.green : C.yellow,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          _passed
-                              ? 'Bayesian reasoning is now part of your intuition. You understand how base rates dominate inference.'
-                              : 'The base rate is often counterintuitive — try the scenarios again to build your intuition.',
-                          style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  Text('Your Results', style: spaceGrotesk(fontSize: 14, color: C.muted)),
-                  const SizedBox(height: 10),
-                  for (int i = 0; i < _results.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Container(
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: _passed ? C.green.withValues(alpha: 0.1) : C.yellow.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: _passed ? C.green.withValues(alpha: 0.3) : C.yellow.withValues(alpha: 0.25)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            _results[i] ? Icons.check_circle : Icons.cancel,
-                            size: 16,
-                            color: _results[i] ? C.green : C.pink,
-                          ),
-                          const SizedBox(width: 8),
                           Text(
-                            _scenarios[i]['name'] as String,
-                            style: inter(fontSize: 13, color: _results[i] ? C.txt : C.muted),
+                            _passed ? 'You correctly estimated $_correctCount / 3 posteriors!' : 'You got $_correctCount / 3 correct.',
+                            style: spaceGrotesk(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: _passed ? C.green : C.yellow,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            _passed
+                                ? 'Bayesian reasoning is now part of your intuition. You understand how base rates dominate inference.'
+                                : 'The base rate is often counterintuitive — try the scenarios again to build your intuition.',
+                            style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
                           ),
                         ],
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Your Results', style: spaceGrotesk(fontSize: 14, color: C.muted)),
+                        const SizedBox(height: 10),
+                        for (int i = 0; i < _results.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  _results[i] ? Icons.check_circle : Icons.cancel,
+                                  size: 16,
+                                  color: _results[i] ? C.green : C.pink,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _scenarios[i]['name'] as String,
+                                  style: inter(fontSize: 13, color: _results[i] ? C.txt : C.muted),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 24),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: ElevatedButton(
-                      onPressed: () => widget.onComplete(_passed, _correctCount, 3),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _passed ? C.green : C.accent,
-                        foregroundColor: _passed ? C.bg : Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 0,
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 350),
+                    slideDistance: 10,
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton(
+                        onPressed: () => widget.onComplete(_passed, _correctCount, 3),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _passed ? C.green : C.accent,
+                          foregroundColor: _passed ? C.bg : Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          elevation: 0,
+                        ),
+                        child: Text('See results', style: spaceGrotesk(
+                          fontSize: 15, fontWeight: FontWeight.w600,
+                          color: _passed ? C.bg : Colors.white, letterSpacing: 0.05,
+                        )),
                       ),
-                      child: Text('See results', style: spaceGrotesk(
-                        fontSize: 15, fontWeight: FontWeight.w600,
-                        color: _passed ? C.bg : Colors.white, letterSpacing: 0.05,
-                      )),
                     ),
                   ),
                 ],

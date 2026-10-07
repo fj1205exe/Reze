@@ -32,28 +32,41 @@ class SGDExplainScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('Noise is a feature, not a bug.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Classic gradient descent computes the exact gradient over the entire dataset on every step. That is computationally prohibitive on millions of items. SGD trades precision for speed by estimating the gradient from small random batches.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Noise is a feature, not a bug.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Classic gradient descent computes the exact gradient over the entire dataset on every step. That is computationally prohibitive on millions of items. SGD trades precision for speed by estimating the gradient from small random batches.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 18),
 
                   // Why noise helps
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -73,10 +86,15 @@ class SGDExplainScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
 
                   // Batch size comparison
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -96,9 +114,15 @@ class SGDExplainScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: onNext),
+                  ),
                 ],
               ),
             ),

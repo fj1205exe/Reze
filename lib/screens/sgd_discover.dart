@@ -247,9 +247,14 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                   const SizedBox(height: 12),
 
                   if (_allTried && widget.history.length >= 6)
-                    SecondaryBtn(
-                      label: 'Why does noise help? →',
-                      onPressed: widget.onNext,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(
+                        label: 'Why does noise help? →',
+                        onPressed: widget.onNext,
+                      ),
                     )
                   else
                     PrimaryBtn(

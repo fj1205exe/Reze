@@ -45,76 +45,105 @@ class ProgressTabScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Concepts completed', style: inter(fontSize: 12, color: C.muted)),
-                        const SizedBox(height: 8),
-                        Text('$completedCount / ${flags.length}', style: mono(fontSize: 28, color: C.accent)),
-                        const SizedBox(height: 12),
-                        Container(
-                          height: 6,
-                          decoration: BoxDecoration(color: C.surface3, borderRadius: BorderRadius.circular(3)),
-                          child: FractionallySizedBox(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: completedCount / flags.length,
-                            child: Container(decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(3))),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Concepts completed', style: inter(fontSize: 12, color: C.muted)),
+                          const SizedBox(height: 8),
+                          Text('$completedCount / ${flags.length}', style: mono(fontSize: 28, color: C.accent)),
+                          const SizedBox(height: 12),
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(end: completedCount / flags.length),
+                            duration: const Duration(milliseconds: 900),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, val, _) => Container(
+                              height: 6,
+                              decoration: BoxDecoration(color: C.surface3, borderRadius: BorderRadius.circular(3)),
+                              child: FractionallySizedBox(
+                                alignment: Alignment.centerLeft,
+                                widthFactor: val,
+                                child: Container(decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(3))),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text('Skills', style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 12),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 150),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (final s in _skills) ...[
-                          SkillBar(
-                            label: s['label'] as String,
-                            value: skillMap[s['label'] as String] ?? 0,
-                            color: Color(s['color'] as int),
+                        Text('Skills', style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 12),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: C.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
                           ),
-                          const SizedBox(height: 12),
-                        ],
+                          child: Column(
+                            children: [
+                              for (final s in _skills) ...[
+                                SkillBar(
+                                  label: s['label'] as String,
+                                  value: skillMap[s['label'] as String] ?? 0,
+                                  color: Color(s['color'] as int),
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   if (progress.history.isNotEmpty) ...[
                     const SizedBox(height: 24),
-                    Text('Recent activity', style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600)),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: Text('Recent activity', style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600)),
+                    ),
                     const SizedBox(height: 12),
-                    for (final item in progress.history.take(8)) ...[
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: C.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.concept, style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600)),
-                            Text('${item.action} · ${item.detail}', style: inter(fontSize: 12, color: C.muted)),
-                          ],
+                    for (int i = 0; i < progress.history.take(8).length; i++) ...[
+                      FadeSlideIn(
+                        delay: Duration(milliseconds: 350 + i * 50),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: C.surface,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(progress.history[i].concept, style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600)),
+                              Text('${progress.history[i].action} · ${progress.history[i].detail}', style: inter(fontSize: 12, color: C.muted)),
+                            ],
+                          ),
                         ),
                       ),
                     ],

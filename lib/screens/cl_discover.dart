@@ -278,13 +278,22 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                   const SizedBox(height: 12),
 
                   if (_feedbackType != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: FeedbackBar(type: _feedbackType!, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: FeedbackBar(type: _feedbackType!, message: _feedbackMsg),
+                      ),
                     ),
 
                   if (unlocked)
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                 ],
               ),
             ),

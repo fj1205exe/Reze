@@ -71,22 +71,31 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY', style: spaceGrotesk(fontSize: 12, color: C.green)),
+                        ),
+                        const SizedBox(height: 12),
+                        Text('The law of large numbers.',
+                          style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
+                        const SizedBox(height: 20),
+                        Text(
+                          'As you collect more observations, empirical frequencies converge to true underlying probabilities. This guarantee underpins all of data science, sampling, and model evaluation.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY', style: spaceGrotesk(fontSize: 12, color: C.green)),
-                  ),
-                  const SizedBox(height: 12),
-                  Text('The law of large numbers.',
-                    style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
-                  const SizedBox(height: 20),
-                  Text(
-                    'As you collect more observations, empirical frequencies converge to true underlying probabilities. This guarantee underpins all of data science, sampling, and model evaluation.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 20),
 
@@ -123,28 +132,33 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                     ),
 
                   // Formula 1: Simple probability
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      children: [
-                        Text('COIN FLIP PROBABILITY', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
-                        const SizedBox(height: 12),
-                        RichText(
-                          text: TextSpan(
-                            style: mono(fontSize: 22, color: C.txt),
-                            children: [
-                              const TextSpan(text: 'P(heads) = '),
-                              TextSpan(text: 'p', style: mono(fontSize: 22, color: C.yellow)),
-                            ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        children: [
+                          Text('COIN FLIP PROBABILITY', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
+                          const SizedBox(height: 12),
+                          RichText(
+                            text: TextSpan(
+                              style: mono(fontSize: 22, color: C.txt),
+                              children: [
+                                const TextSpan(text: 'P(heads) = '),
+                                TextSpan(text: 'p', style: mono(fontSize: 22, color: C.yellow)),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -202,28 +216,38 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                   const SizedBox(height: 16),
 
                   // Connection to ML
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('connection to machine learning', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
-                        const SizedBox(height: 8),
-                        Text(
-                          '• Classification output probabilities: Softmax and Sigmoid outputs estimate p.\n• Cross-Entropy Loss: Minimizes the divergence between predicted probability distributions and empirical ground truth.\n• Monte Carlo methods: Sampling used in diffusion models and reinforcement learning.',
-                          style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
-                        ),
-                      ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 280),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('connection to machine learning', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                          const SizedBox(height: 8),
+                          Text(
+                            '• Classification output probabilities: Softmax and Sigmoid outputs estimate p.\n• Cross-Entropy Loss: Minimizes the divergence between predicted probability distributions and empirical ground truth.\n• Monte Carlo methods: Sampling used in diffusion models and reinforcement learning.',
+                            style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

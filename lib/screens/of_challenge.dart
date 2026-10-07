@@ -216,38 +216,46 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                 children: [
                   // Success / failure cards
                   if (_done && _succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Best degree found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
-                            style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
-                          const SizedBox(height: 4),
-                          Text('Degree $degree balances bias and variance.',
-                            style: inter(fontSize: 12, color: C.greenLight)),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Best degree found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
+                              style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
+                            const SizedBox(height: 4),
+                            Text('Degree $degree balances bias and variance.',
+                              style: inter(fontSize: 12, color: C.greenLight)),
+                          ],
+                        ),
                       ),
                     ),
                   if (_done && !_succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Text('Ran out of attempts. The sweet spot is usually between degree 2-4.',
+                          style: inter(fontSize: 14, color: C.pink)),
                       ),
-                      child: Text('Ran out of attempts. The sweet spot is usually between degree 2-4.',
-                        style: inter(fontSize: 14, color: C.pink)),
                     ),
 
                   // Train / Test MSE cards
@@ -358,9 +366,13 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
 
                   // Feedback
                   if (_started && !_done)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                      ),
                     ),
 
                   if (!_done && !_started)
@@ -369,21 +381,26 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                       onPressed: () => setState(() => _started = true),
                     )
                   else if (_done)
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: widget.onNext,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _succeeded ? C.green : C.accent,
-                          foregroundColor: _succeeded ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          elevation: 0,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: widget.onNext,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _succeeded ? C.green : C.accent,
+                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 0,
+                          ),
+                          child: Text('See results', style: spaceGrotesk(
+                            fontSize: 15, fontWeight: FontWeight.w600,
+                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                          )),
                         ),
-                        child: Text('See results', style: spaceGrotesk(
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
-                        )),
                       ),
                     ),
                 ],

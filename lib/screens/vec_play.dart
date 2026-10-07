@@ -156,7 +156,11 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
 
                   if (unlocked) ...[
                     const SizedBox(height: 8),
-                    FeedbackBar(type: 'ok', message: 'Both vectors inspected.'),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: FeedbackBar(type: 'ok', message: 'Both vectors inspected.'),
+                    ),
                   ],
 
                   const SizedBox(height: 20),
@@ -167,9 +171,14 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
                   ),
                   if (unlocked) ...[
                     const SizedBox(height: 12),
-                    SecondaryBtn(
-                      label: 'Try changing the vectors →',
-                      onPressed: widget.onNext,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(
+                        label: 'Try changing the vectors →',
+                        onPressed: widget.onNext,
+                      ),
                     ),
                   ],
                 ],

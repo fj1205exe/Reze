@@ -155,33 +155,46 @@ class OFPlayScreen extends StatelessWidget {
             child: Column(
               children: [
                 if (degree >= 5)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: C.pink.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: C.pink.withValues(alpha: 0.3)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: C.pink.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: C.pink.withValues(alpha: 0.3)),
+                      ),
+                      child: Text('The curve bends wildly to fit every point. Will it generalize?',
+                        style: inter(fontSize: 14, color: C.pink), textAlign: TextAlign.center),
                     ),
-                    child: Text('The curve bends wildly to fit every point. Will it generalize?',
-                      style: inter(fontSize: 14, color: C.pink), textAlign: TextAlign.center),
                   )
                 else if (degree >= 3)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: C.accent.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: C.accent.withValues(alpha: 0.3)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: C.accent.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: C.accent.withValues(alpha: 0.3)),
+                      ),
+                      child: Text('The curve bends to fit every point. Is that always better?',
+                        style: inter(fontSize: 14, color: C.accentLight), textAlign: TextAlign.center),
                     ),
-                    child: Text('The curve bends to fit every point. Is that always better?',
-                      style: inter(fontSize: 14, color: C.accentLight), textAlign: TextAlign.center),
                   ),
                 if (unlocked)
-                  SecondaryBtn(label: 'What happens with more flexibility? →', onPressed: onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: SecondaryBtn(label: 'What happens with more flexibility? →', onPressed: onNext),
+                  ),
               ],
             ),
           ),

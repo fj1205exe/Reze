@@ -65,28 +65,41 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('The bias-variance tradeoff.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Every model lives somewhere between two failure modes. Too simple — it misses the pattern entirely. Too complex — it memorizes the training data and fails on anything new.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('The bias-variance tradeoff.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Every model lives somewhere between two failure modes. Too simple — it misses the pattern entirely. Too complex — it memorizes the training data and fails on anything new.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 18),
 
                   // Plot card
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     height: 200,
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -144,48 +157,59 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 12),
 
                   // Current zone badge & errors
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border(left: BorderSide(color: zoneColor, width: 2)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(zoneLabel, style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: zoneColor)),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Text('train: ${trainMSE.toStringAsFixed(4)}', style: mono(fontSize: 12, color: const Color(0xFF6B7280))),
-                            const SizedBox(width: 14),
-                            Text('test: ${testMSE.toStringAsFixed(4)}', style: mono(fontSize: 12, color: const Color(0xFF6B7280))),
-                          ],
-                        ),
-                      ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border(left: BorderSide(color: zoneColor, width: 2)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(zoneLabel, style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: zoneColor)),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Text('train: ${trainMSE.toStringAsFixed(4)}', style: mono(fontSize: 12, color: const Color(0xFF6B7280))),
+                              const SizedBox(width: 14),
+                              Text('test: ${testMSE.toStringAsFixed(4)}', style: mono(fontSize: 12, color: const Color(0xFF6B7280))),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
 
                   // Tradeoff formula -- interactive
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      children: [
-                        Text('THE TRADEOFF', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
-                        const SizedBox(height: 16),
-                        _equation(),
-                        const SizedBox(height: 12),
-                        Text('Tap a symbol to learn what it means.', style: inter(fontSize: 12, color: C.muted)),
-                      ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 280),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        children: [
+                          Text('THE TRADEOFF', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
+                          const SizedBox(height: 16),
+                          _equation(),
+                          const SizedBox(height: 12),
+                          Text('Tap a symbol to learn what it means.', style: inter(fontSize: 12, color: C.muted)),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -203,7 +227,12 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

@@ -34,16 +34,42 @@ class VECChallengeScreen extends StatefulWidget {
 class _VECChallengeScreenState extends State<VECChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  late double _ax;
+  late double _ay;
 
-  double get _currentMag => vec_utils.vecMagnitude(vec_utils.Vec2(widget.ax, widget.ay));
+  @override
+  void initState() {
+    super.initState();
+    _ax = widget.ax;
+    _ay = widget.ay;
+  }
+
+  double get _currentMag => vec_utils.vecMagnitude(vec_utils.Vec2(_ax, _ay));
   double get _delta => (_currentMag - widget.targetMag).abs();
   bool get _succeeded => _delta < 0.05;
   bool get _outOfSteps => widget.steps >= _maxSteps;
   bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
 
-  void _handleSlider(double x, double y) {
-    if (_done) return;
+  void _onXChanged(double v) {
     if (!_started) setState(() => _started = true);
+    setState(() => _ax = v);
+  }
+
+  void _onYChanged(double v) {
+    if (!_started) setState(() => _started = true);
+    setState(() => _ay = v);
+  }
+
+  void _onXChangeEnd(double v) {
+    _handleSliderCommit(v, _ay);
+  }
+
+  void _onYChangeEnd(double v) {
+    _handleSliderCommit(_ax, v);
+  }
+
+  void _handleSliderCommit(double x, double y) {
+    if (_done) return;
     widget.onUpdateA(x, y);
     if (_succeeded || widget.steps + 1 >= _maxSteps) {
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -67,7 +93,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final a = vec_utils.Vec2(widget.ax, widget.ay);
+    final a = vec_utils.Vec2(_ax, _ay);
 
     return Container(
       color: C.bg,
@@ -213,38 +239,46 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
 
                   // Result banners
                   if (_done && _succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Target matched in ${widget.steps} adjustments.',
-                              style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
-                          const SizedBox(height: 4),
-                          Text('You understand magnitude.', style: inter(fontSize: 12, color: C.greenLight)),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Target matched in ${widget.steps} adjustments.',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
+                            const SizedBox(height: 4),
+                            Text('You understand magnitude.', style: inter(fontSize: 12, color: C.greenLight)),
+                          ],
+                        ),
                       ),
                     ),
 
                   if (_done && !_succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Text('Ran out of adjustments. Think about how x and y components contribute to magnitude.',
+                            style: inter(fontSize: 14, color: C.pink)),
                       ),
-                      child: Text('Ran out of adjustments. Think about how x and y components contribute to magnitude.',
-                          style: inter(fontSize: 14, color: C.pink)),
                     ),
 
                   // Sliders (only when not done)
@@ -262,17 +296,21 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         children: [
                           Text('Adjust vector a', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.accentLight)),
                           const SizedBox(height: 8),
-                          _buildSlider('x', widget.ax, -2.0, 2.0, C.accentLight, (v) => _handleSlider(v, widget.ay)),
-                          _buildSlider('y', widget.ay, -2.0, 2.0, C.accentLight, (v) => _handleSlider(widget.ax, v)),
+                          _buildSlider('x', _ax, -2.0, 2.0, C.accentLight, _onXChanged, _onXChangeEnd),
+                          _buildSlider('y', _ay, -2.0, 2.0, C.accentLight, _onYChanged, _onYChangeEnd),
                         ],
                       ),
                     ),
 
                   // Feedback
                   if (_started && !_done)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                      ),
                     ),
 
                   if (_started && !_done)
@@ -287,21 +325,26 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                     ),
 
                   if (_done)
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: widget.onNext,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _succeeded ? C.green : C.accent,
-                          foregroundColor: _succeeded ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          elevation: 0,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: widget.onNext,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _succeeded ? C.green : C.accent,
+                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 0,
+                          ),
+                          child: Text('See results', style: spaceGrotesk(
+                            fontSize: 15, fontWeight: FontWeight.w600,
+                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                          )),
                         ),
-                        child: Text('See results', style: spaceGrotesk(
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
-                        )),
                       ),
                     ),
 
@@ -320,7 +363,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
     );
   }
 
-  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
+  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange, ValueChanged<double> onChangeEnd) {
     return Row(
       children: [
         SizedBox(width: 14, child: Text(label, style: mono(fontSize: 12, color: C.muted))),
@@ -339,6 +382,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
               min: min,
               max: max,
               onChanged: onChange,
+              onChangeEnd: onChangeEnd,
             ),
           ),
         ),

@@ -248,85 +248,103 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                     ),
                   ] else if (!_gameFinished) ...[
                     // Reveal
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: _isCorrect ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: _isCorrect ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _isCorrect ? 'Correct!' : 'Not quite.',
-                            style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w700, color: _isCorrect ? C.green : C.pink),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Your guess:', style: inter(fontSize: 13, color: C.muted)),
-                              Text(_guess!.toStringAsFixed(2), style: mono(fontSize: 14, color: C.txt)),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('True bias:', style: inter(fontSize: 13, color: C.muted)),
-                              Text(_hiddenPs[_round].toStringAsFixed(2), style: mono(fontSize: 14, color: C.accent)),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Difference:', style: inter(fontSize: 13, color: C.muted)),
-                              Text(
-                                '${(_guess! - _hiddenPs[_round]).abs().toStringAsFixed(2)} (need < 0.15)',
-                                style: mono(fontSize: 12, color: _isCorrect ? C.green : C.pink),
-                              ),
-                            ],
-                          ),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: _isCorrect ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: _isCorrect ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _isCorrect ? 'Correct!' : 'Not quite.',
+                              style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w700, color: _isCorrect ? C.green : C.pink),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Your guess:', style: inter(fontSize: 13, color: C.muted)),
+                                Text(_guess!.toStringAsFixed(2), style: mono(fontSize: 14, color: C.txt)),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('True bias:', style: inter(fontSize: 13, color: C.muted)),
+                                Text(_hiddenPs[_round].toStringAsFixed(2), style: mono(fontSize: 14, color: C.accent)),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Difference:', style: inter(fontSize: 13, color: C.muted)),
+                                Text(
+                                  '${(_guess! - _hiddenPs[_round]).abs().toStringAsFixed(2)} (need < 0.15)',
+                                  style: mono(fontSize: 12, color: _isCorrect ? C.green : C.pink),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    PrimaryBtn(
-                      label: _round < 2 ? 'Next Round' : 'See Results',
-                      onPressed: _round < 2 ? _nextRound : () {
-                        _gameFinished = true;
-                        widget.onNext();
-                      },
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(
+                        label: _round < 2 ? 'Next Round' : 'See Results',
+                        onPressed: _round < 2 ? _nextRound : () {
+                          _gameFinished = true;
+                          widget.onNext();
+                        },
+                      ),
                     ),
                   ] else ...[
                     // Game finished
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            _correctGuesses >= 2 ? 'Challenge passed!' : 'Challenge missed.',
-                            style: spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w700, color: _correctGuesses >= 2 ? C.green : C.pink),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '$_correctGuesses/3 rounds correct',
-                            style: inter(fontSize: 14, color: C.muted),
-                          ),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              _correctGuesses >= 2 ? 'Challenge passed!' : 'Challenge missed.',
+                              style: spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w700, color: _correctGuesses >= 2 ? C.green : C.pink),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '$_correctGuesses/3 rounds correct',
+                              style: inter(fontSize: 14, color: C.muted),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

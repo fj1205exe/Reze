@@ -211,7 +211,7 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: widget.flips.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 6),
+                              separatorBuilder: (_, _) => const SizedBox(width: 6),
                               itemBuilder: (_, i) {
                                 final f = widget.flips[widget.flips.length - 1 - i];
                                 final isH = f == 'H';
@@ -286,9 +286,13 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
 
                   // Feedback bar
                   if (n > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                      ),
                     ),
 
                   // Action buttons row
@@ -344,7 +348,12 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
 
                   if (_canAdvance) ...[
                     const SizedBox(height: 16),
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

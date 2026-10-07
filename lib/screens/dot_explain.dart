@@ -41,23 +41,32 @@ class DOTExplainScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('The engine of ML.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'The dot product has two equivalent formulas — one geometric (angles and lengths) and one algebraic (multiplying coordinates). Modern deep learning is largely millions of dot products evaluated per second.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('The engine of ML.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'The dot product has two equivalent formulas — one geometric (angles and lengths) and one algebraic (multiplying coordinates). Modern deep learning is largely millions of dot products evaluated per second.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 16),
 
@@ -105,18 +114,22 @@ class DOTExplainScreen extends StatelessWidget {
                   const SizedBox(height: 18),
 
                   // Geometric vs Algebraic Formulas
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('two faces of the same operation', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('two faces of the same operation', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                         const SizedBox(height: 12),
                         Container(
                           width: double.infinity,
@@ -152,6 +165,7 @@ class DOTExplainScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
 
                   // Applications in modern ML
@@ -177,7 +191,12 @@ class DOTExplainScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: onNext),
+                  ),
                 ],
               ),
             ),

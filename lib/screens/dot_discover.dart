@@ -352,7 +352,12 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                   const SizedBox(height: 16),
 
                   if (_discoverSteps >= 6) ...[
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

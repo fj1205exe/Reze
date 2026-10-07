@@ -242,7 +242,12 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                       onPressed: null,
                     )
                   else
-                    PrimaryBtn(label: 'Now I see why — continue', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(label: 'Now I see why — continue', onPressed: widget.onNext),
+                    ),
                 ],
               ),
             ),
@@ -338,13 +343,21 @@ class _DiscoverPlotPainter extends CustomPainter {
         final x = i / 80.0;
         double loss = 0;
         for (final target in targets) {
-          if (types[t] == 'mse') loss += lf.mseLoss(x, target);
-          else if (types[t] == 'mae') loss += lf.maeLoss(x, target);
-          else loss += lf.huberLoss(x, target);
+          if (types[t] == 'mse') {
+            loss += lf.mseLoss(x, target);
+          } else if (types[t] == 'mae') {
+            loss += lf.maeLoss(x, target);
+          } else {
+            loss += lf.huberLoss(x, target);
+          }
         }
         loss /= targets.length;
         final px = toX(x), py = toY(loss);
-        if (i == 0) path.moveTo(px, py); else path.lineTo(px, py);
+        if (i == 0) {
+          path.moveTo(px, py);
+        } else {
+          path.lineTo(px, py);
+        }
       }
       canvas.drawPath(path, Paint()
         ..color = colors[t]

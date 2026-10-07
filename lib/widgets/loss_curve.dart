@@ -102,7 +102,7 @@ bool _listEquals(List<double> a, List<double> b) {
   return true;
 }
 
-class LossCurveWidget extends StatelessWidget {
+class LossCurveWidget extends StatefulWidget {
   final double theta;
   final List<double> history;
   final bool showMinMarker;
@@ -116,15 +116,56 @@ class LossCurveWidget extends StatelessWidget {
   });
 
   @override
+  State<LossCurveWidget> createState() => _LossCurveWidgetState();
+}
+
+class _LossCurveWidgetState extends State<LossCurveWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  double _displayTheta = 0;
+  double _fromTheta = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayTheta = widget.theta;
+    _fromTheta = widget.theta;
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 450),
+      vsync: this,
+    )..addListener(() {
+        setState(() {
+          final t = Curves.easeOutCubic.transform(_ctrl.value);
+          _displayTheta = _fromTheta + (widget.theta - _fromTheta) * t;
+        });
+      });
+  }
+
+  @override
+  void didUpdateWidget(LossCurveWidget old) {
+    super.didUpdateWidget(old);
+    if (old.theta != widget.theta) {
+      _fromTheta = _displayTheta;
+      _ctrl.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: height,
+      height: widget.height,
       child: CustomPaint(
         painter: LossCurvePainter(
-          theta: theta,
-          history: history,
-          showMinMarker: showMinMarker,
+          theta: _displayTheta,
+          history: widget.history,
+          showMinMarker: widget.showMinMarker,
         ),
       ),
     );

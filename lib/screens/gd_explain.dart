@@ -173,7 +173,11 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
 
                 for (int i = 0; i < _terms.length; i++) ...[
                   if (i < _revealedTerms) ...[
-                    _termCard(_terms[i]),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: _termCard(_terms[i]),
+                    ),
                     const SizedBox(height: 8),
                   ],
                 ],
@@ -208,28 +212,37 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
 
                   if (_answered) ...[
                     const SizedBox(height: 12),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.25),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 12,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.25),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        _selectedAnswer == _quizzes[_quizIdx].correct
-                            ? 'Correct!'
-                            : _quizzes[_quizIdx].explanation,
-                        style: inter(fontSize: 14,
-                          color: _selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow),
+                        child: Text(
+                          _selectedAnswer == _quizzes[_quizIdx].correct
+                              ? 'Correct!'
+                              : _quizzes[_quizIdx].explanation,
+                          style: inter(fontSize: 14,
+                            color: _selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
-                    PrimaryBtn(
-                      label: _quizIdx < _quizzes.length - 1 ? 'Next question' : 'See results',
-                      onPressed: _nextQuiz,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(
+                        label: _quizIdx < _quizzes.length - 1 ? 'Next question' : 'See results',
+                        onPressed: _nextQuiz,
+                      ),
                     ),
                   ],
                 ],
@@ -407,7 +420,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
             child: _answered
                 ? Icon(isCorrect ? Icons.check : selected ? Icons.close : null,
                     size: 14, color: isCorrect ? C.green : C.pink)
-                : Text('${String.fromCharCode(65 + idx)}', style: mono(fontSize: 11, color: C.muted)),
+                : Text(String.fromCharCode(65 + idx), style: mono(fontSize: 11, color: C.muted)),
           ),
           const SizedBox(width: 12),
           Expanded(child: Text(q.options[idx], style: inter(fontSize: 14, color: C.txt))),

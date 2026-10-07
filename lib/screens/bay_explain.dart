@@ -69,28 +69,41 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('Prior beliefs meet evidence.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Bayesian reasoning updates prior beliefs when new evidence arrives. Even a test with high accuracy can produce mostly false positives when the prior probability of an event is tiny.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Prior beliefs meet evidence.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Bayesian reasoning updates prior beliefs when new evidence arrives. Even a test with high accuracy can produce mostly false positives when the prior probability of an event is tiny.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 18),
 
                   // The Theorem formula box
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
@@ -126,21 +139,26 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
 
                   // Medical test live context
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('for our medical test', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('for our medical test', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                         const SizedBox(height: 10),
                         Row(
                           children: [
@@ -212,6 +230,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
 
                   // Interactive terms
@@ -266,28 +285,38 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                   const SizedBox(height: 16),
 
                   // Machine learning context
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('bayesian thinking in modern AI', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
-                        const SizedBox(height: 8),
-                        Text(
-                          '• Naive Bayes: Text classification and spam detection.\n• Bayesian Neural Networks: Weights are probability distributions rather than single scalar values, giving calibrated uncertainty.\n• Bayesian Optimization: Tuning hyperparameters efficiently when evaluations are expensive.',
-                          style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
-                        ),
-                      ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 280),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('bayesian thinking in modern AI', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                          const SizedBox(height: 8),
+                          Text(
+                            '• Naive Bayes: Text classification and spam detection.\n• Bayesian Neural Networks: Weights are probability distributions rather than single scalar values, giving calibrated uncertainty.\n• Bayesian Optimization: Tuning hyperparameters efficiently when evaluations are expensive.',
+                            style: inter(fontSize: 13, color: const Color(0xFFD1D5DB)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

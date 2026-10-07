@@ -334,56 +334,74 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
               ],
 
               if (_failed) ...[
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: C.pink.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: C.pink.withValues(alpha: 0.25)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Not quite — distance to min: ${(_theta - gd.trueMin).abs().toStringAsFixed(2)}',
-                        style: inter(fontSize: 14, color: C.pink)),
-                      if (_showHint && _exp.hint.isNotEmpty) ...[
-                        const SizedBox(height: 6),
-                        Text('Hint: ${_exp.hint}', style: inter(fontSize: 13, color: C.yellow)),
+                FadeSlideIn(
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 14,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: C.pink.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Not quite — distance to min: ${(_theta - gd.trueMin).abs().toStringAsFixed(2)}',
+                          style: inter(fontSize: 14, color: C.pink)),
+                        if (_showHint && _exp.hint.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Text('Hint: ${_exp.hint}', style: inter(fontSize: 13, color: C.yellow)),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
-                PrimaryBtn(label: 'Try again', onPressed: _retry),
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 150),
+                  duration: const Duration(milliseconds: 350),
+                  slideDistance: 10,
+                  child: PrimaryBtn(label: 'Try again', onPressed: _retry),
+                ),
               ],
 
               if (_showInsight) ...[
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: C.green.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: C.green.withValues(alpha: 0.2)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [
-                        Icon(Icons.lightbulb_outline, size: 16, color: C.green),
-                        const SizedBox(width: 8),
-                        Text('INSIGHT', style: spaceGrotesk(fontSize: 11, color: C.green, letterSpacing: 0.1)),
-                      ]),
-                      const SizedBox(height: 12),
-                      Text(_exp.insight, style: inter(fontSize: 14, color: C.txt, height: 1.5)),
-                    ],
+                FadeSlideIn(
+                  duration: const Duration(milliseconds: 450),
+                  slideDistance: 16,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: C.green.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: C.green.withValues(alpha: 0.2)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Icon(Icons.lightbulb_outline, size: 16, color: C.green),
+                          const SizedBox(width: 8),
+                          Text('INSIGHT', style: spaceGrotesk(fontSize: 11, color: C.green, letterSpacing: 0.1)),
+                        ]),
+                        const SizedBox(height: 12),
+                        Text(_exp.insight, style: inter(fontSize: 14, color: C.txt, height: 1.5)),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                PrimaryBtn(
-                  label: _isLast ? 'See the math →' : 'Next experiment',
-                  onPressed: _nextExp,
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 12,
+                  child: PrimaryBtn(
+                    label: _isLast ? 'See the math →' : 'Next experiment',
+                    onPressed: _nextExp,
+                  ),
                 ),
               ],
             ]),

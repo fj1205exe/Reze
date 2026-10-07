@@ -29,7 +29,7 @@ class BAYDiscoverScreen extends StatefulWidget {
 
 class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
   int _discoverSteps = 0;
-  Set<String> _adjustedSliders = {};
+  final Set<String> _adjustedSliders = {};
 
   String get _feedbackMsg {
     final prior = widget.prior;
@@ -289,7 +289,12 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                   const SizedBox(height: 16),
 
                   if (unlocked) ...[
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

@@ -35,29 +35,42 @@ class OFResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Badge
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: C.green.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: C.green.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+              // Badge + Title
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.check, size: 12, color: C.green),
-                    const SizedBox(width: 4),
-                    Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: C.green.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.check, size: 12, color: C.green),
+                          const SizedBox(width: 4),
+                          Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('Overfitting', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
-              Text('Overfitting', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
               const SizedBox(height: 24),
 
               // Summary
-              Container(
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 120),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
@@ -98,10 +111,15 @@ class OFResultScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              ),
               const SizedBox(height: 20),
 
               // Challenge metrics
-              Container(
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -147,6 +165,7 @@ class OFResultScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              ),
               if (!challengeSuccess) ...[
                 const SizedBox(height: 12),
                 SecondaryBtn(label: 'Retry challenge', onPressed: onRetry),
@@ -183,9 +202,16 @@ class OFResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 28),
 
-              PrimaryBtn(label: 'NEXT: LOSS FUNCTIONS', onPressed: onPlayLF),
-              const SizedBox(height: 12),
-              SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: Column(children: [
+                  PrimaryBtn(label: 'NEXT: LOSS FUNCTIONS', onPressed: onPlayLF),
+                  const SizedBox(height: 12),
+                  SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+                ]),
+              ),
             ],
           ),
         ),

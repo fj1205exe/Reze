@@ -83,28 +83,41 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY',
+                              style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('The neuron is just math.',
+                            style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Text(
+                          'A biological metaphor, but mathematical in practice: dot product of inputs and weights, shifted by bias, squashed by an activation function.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY',
-                        style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('The neuron is just math.',
-                      style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  Text(
-                    'A biological metaphor, but mathematical in practice: dot product of inputs and weights, shifted by bias, squashed by an activation function.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 18),
 
                   // The Neuron Equation
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -183,9 +196,17 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
 
                   // Activation functions tabs
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                   Text('activation functions', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                   const SizedBox(height: 10),
                   Row(
@@ -230,10 +251,17 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                       style: inter(fontSize: 12, color: const Color(0xFFD1D5DB)),
                     ),
                   ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 16),
 
                   // The Solution to XOR: Hidden Layers
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 280),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -252,9 +280,15 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 20),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

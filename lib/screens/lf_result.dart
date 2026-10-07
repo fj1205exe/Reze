@@ -34,27 +34,37 @@ class LFResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: C.green.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: C.green.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 12, color: C.green),
-                    const SizedBox(width: 4),
-                    Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ],
-                ),
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: C.green.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check, size: 12, color: C.green),
+                        const SizedBox(width: 4),
+                        Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Loss Functions', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
+                ]),
               ),
-              const SizedBox(height: 8),
-              Text('Loss Functions', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
               const SizedBox(height: 24),
 
-              Container(
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 120),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
@@ -80,16 +90,22 @@ class LFResultScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              ),
               const SizedBox(height: 20),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: challengeSuccess
+
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: C.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: challengeSuccess
                         ? C.green.withValues(alpha: 0.2)
                         : C.pink.withValues(alpha: 0.15),
                   ),
@@ -119,6 +135,7 @@ class LFResultScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
               ),
               if (!challengeSuccess) ...[
                 const SizedBox(height: 12),
@@ -154,9 +171,16 @@ class LFResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 28),
 
-              PrimaryBtn(label: 'NEXT: STOCHASTIC GD', onPressed: onPlaySGD),
-              const SizedBox(height: 12),
-              SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: Column(children: [
+                  PrimaryBtn(label: 'NEXT: STOCHASTIC GD', onPressed: onPlaySGD),
+                  const SizedBox(height: 12),
+                  SecondaryBtn(label: 'BACK TO HOME', onPressed: onNext),
+                ]),
+              ),
             ],
           ),
         ),

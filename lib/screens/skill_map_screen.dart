@@ -50,50 +50,78 @@ class SkillMapScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Your math map', style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 4),
-                  Text("You don't need to learn everything at once.", style: inter(fontSize: 14, color: C.muted)),
-                  const SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: CustomPaint(
-                      painter: _SkillGraphPainter(skillMap),
-                      size: const Size(double.infinity, 270),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Your math map', style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 4),
+                        Text("You don't need to learn everything at once.", style: inter(fontSize: 14, color: C.muted)),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 20),
-                  for (final s in _skillList) ...[
-                    SkillBar(
-                      label: s['label'] as String,
-                      value: skillMap[s['label'] as String] ?? 0,
-                      color: Color(s['color'] as int),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 500),
+                    slideDistance: 14,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: CustomPaint(
+                        painter: _SkillGraphPainter(skillMap),
+                        size: const Size(double.infinity, 270),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  for (int i = 0; i < _skillList.length; i++) ...[
+                    FadeSlideIn(
+                      delay: Duration(milliseconds: 250 + i * 50),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 10,
+                      child: SkillBar(
+                        label: _skillList[i]['label'] as String,
+                        value: skillMap[_skillList[i]['label'] as String] ?? 0,
+                        color: Color(_skillList[i]['color'] as int),
+                      ),
                     ),
                     const SizedBox(height: 8),
                   ],
                   if (mode == 'onboarding') ...[
                     const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: C.accent.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.accent.withValues(alpha: 0.18)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(width: 8, height: 8, decoration: BoxDecoration(shape: BoxShape.circle, color: C.accent)),
-                          const SizedBox(width: 12),
-                          Expanded(child: Text('Optimization is your next frontier — start with Gradient Descent.',
-                            style: inter(fontSize: 14, color: C.accentLight))),
-                        ],
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 600),
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 14,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: C.accent.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.accent.withValues(alpha: 0.18)),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(width: 8, height: 8, decoration: BoxDecoration(shape: BoxShape.circle, color: C.accent)),
+                            const SizedBox(width: 12),
+                            Expanded(child: Text('Optimization is your next frontier — start with Gradient Descent.',
+                              style: inter(fontSize: 14, color: C.accentLight))),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),
-                    PrimaryBtn(label: 'Continue', onPressed: onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 750),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 10,
+                      child: PrimaryBtn(label: 'Continue', onPressed: onNext),
+                    ),
                   ],
                   const SizedBox(height: 32),
                 ],

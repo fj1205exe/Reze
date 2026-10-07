@@ -31,24 +31,30 @@ class BPResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: C.green.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: C.green.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 12, color: C.green),
-                    const SizedBox(width: 4),
-                    Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
-                  ],
-                ),
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: C.green.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check, size: 12, color: C.green),
+                        const SizedBox(width: 4),
+                        Text('CONCEPT CLEAR', style: spaceGrotesk(fontSize: 11, color: C.green, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Backpropagation', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
+                ]),
               ),
-              const SizedBox(height: 8),
-              Text('Backpropagation', style: spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700)),
               const SizedBox(height: 24),
 
               Container(
@@ -172,7 +178,12 @@ class BPResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 28),
 
-              PrimaryBtn(label: 'RETURN TO LEARNING HUB', onPressed: onNext),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 250),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: PrimaryBtn(label: 'RETURN TO LEARNING HUB', onPressed: onNext),
+              ),
             ],
           ),
         ),

@@ -150,40 +150,59 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
                     ),
                   ] else ...[
                     // Result
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: _passed ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: (_passed ? C.green : C.pink).withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _passed
-                                ? '$_correctCount/3 correct — you understand gradient direction!'
-                                : '$_correctCount/3 correct — need at least 2. Look at the gradient signs.',
-                            style: inter(fontSize: 14, color: _passed ? C.green : C.pink),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Positive gradient → weight contributed to increasing loss → decrease it.\n'
-                            'Negative gradient → weight contributed to decreasing loss → increase it.',
-                            style: inter(fontSize: 12, color: C.muted),
-                          ),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: _passed ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: (_passed ? C.green : C.pink).withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _passed
+                                  ? '$_correctCount/3 correct — you understand gradient direction!'
+                                  : '$_correctCount/3 correct — need at least 2. Look at the gradient signs.',
+                              style: inter(fontSize: 14, color: _passed ? C.green : C.pink),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Positive gradient → weight contributed to increasing loss → decrease it.\n'
+                              'Negative gradient → weight contributed to decreasing loss → increase it.',
+                              style: inter(fontSize: 12, color: C.muted),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     if (_passed)
-                      PrimaryBtn(label: 'Complete', onPressed: () => widget.onComplete(_passed, _correctCount, _fwd['loss']!)),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: PrimaryBtn(label: 'Complete', onPressed: () => widget.onComplete(_passed, _correctCount, _fwd['loss']!)),
+                      ),
                     if (!_passed) ...[
-                      SecondaryBtn(label: 'Retry', onPressed: _retry),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: SecondaryBtn(label: 'Retry', onPressed: _retry),
+                      ),
                       const SizedBox(height: 12),
                       if (_retries >= 2)
-                        PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _correctCount, _fwd['loss']!)),
+                        FadeSlideIn(
+                          delay: const Duration(milliseconds: 250),
+                          duration: const Duration(milliseconds: 350),
+                          slideDistance: 10,
+                          child: PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _correctCount, _fwd['loss']!)),
+                        ),
                     ],
                   ],
                 ],

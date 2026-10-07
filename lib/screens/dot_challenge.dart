@@ -33,10 +33,17 @@ class DOTChallengeScreen extends StatefulWidget {
 class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  late double _angleB;
+
+  @override
+  void initState() {
+    super.initState();
+    _angleB = widget.angleB;
+  }
 
   double get _currentDot {
     final aRad = widget.angleA * pi / 180;
-    final bRad = widget.angleB * pi / 180;
+    final bRad = _angleB * pi / 180;
     final ax = widget.magA * cos(aRad);
     final ay = widget.magA * sin(aRad);
     final bx = widget.magB * cos(bRad);
@@ -64,10 +71,14 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
     return 'The vectors are pointing away. Rotate b closer to perpendicular.';
   }
 
-  void _handleAngleChange(double newAngle) {
-    if (_done || !_started) return;
-    if (newAngle == widget.angleB) return;
-    widget.onUpdate(widget.angleA, newAngle, widget.magA, widget.magB);
+  void _onAngleBChanged(double v) {
+    if (!_started) setState(() => _started = true);
+    setState(() => _angleB = v);
+  }
+
+  void _onAngleBChangeEnd(double v) {
+    if (_done) return;
+    widget.onUpdate(widget.angleA, v, widget.magA, widget.magB);
 
     Future.delayed(const Duration(milliseconds: 300), () {
       if (!mounted) return;
@@ -80,7 +91,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
   @override
   Widget build(BuildContext context) {
     final aRad = widget.angleA * pi / 180;
-    final bRad = widget.angleB * pi / 180;
+    final bRad = _angleB * pi / 180;
     final ax = widget.magA * cos(aRad);
     final ay = widget.magA * sin(aRad);
     final bx = widget.magB * cos(bRad);
@@ -193,38 +204,46 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                 children: [
                   // Success / failure cards
                   if (_done && _succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Perpendicular found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
-                            style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
-                          const SizedBox(height: 4),
-                          Text('The angle between vectors is ${angleBetween.round()}°, close to 90°.',
-                            style: inter(fontSize: 12, color: C.greenLight)),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Perpendicular found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
+                              style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
+                            const SizedBox(height: 4),
+                            Text('The angle between vectors is ${angleBetween.round()}°, close to 90°.',
+                              style: inter(fontSize: 12, color: C.greenLight)),
+                          ],
+                        ),
                       ),
                     ),
                   if (_done && !_succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Text('Out of attempts. Hint: perpendicular vectors have θ = 90°.',
+                          style: inter(fontSize: 14, color: C.pink)),
                       ),
-                      child: Text('Out of attempts. Hint: perpendicular vectors have θ = 90°.',
-                        style: inter(fontSize: 14, color: C.pink)),
                     ),
 
                   // Stats
@@ -299,7 +318,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('angle', style: inter(fontSize: 12, color: C.muted)),
-                              Text('${widget.angleB.round()}°', style: mono(fontSize: 14, color: C.blue)),
+                              Text('${_angleB.round()}°', style: mono(fontSize: 14, color: C.blue)),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -313,10 +332,11 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
-                              value: widget.angleB,
+                              value: _angleB,
                               min: 0,
                               max: 360,
-                              onChanged: _handleAngleChange,
+                              onChanged: _onAngleBChanged,
+                              onChangeEnd: _onAngleBChangeEnd,
                             ),
                           ),
                         ],
@@ -325,9 +345,13 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
 
                   // Feedback
                   if (_started && !_done)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
+                      ),
                     ),
 
                   if (!_done && !_started)
@@ -336,21 +360,26 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       onPressed: () => setState(() => _started = true),
                     )
                   else if (_done)
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: widget.onNext,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _succeeded ? C.green : C.accent,
-                          foregroundColor: _succeeded ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          elevation: 0,
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: widget.onNext,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _succeeded ? C.green : C.accent,
+                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 0,
+                          ),
+                          child: Text('See results', style: spaceGrotesk(
+                            fontSize: 15, fontWeight: FontWeight.w600,
+                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                          )),
                         ),
-                        child: Text('See results', style: spaceGrotesk(
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
-                        )),
                       ),
                     ),
                 ],

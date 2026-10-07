@@ -346,53 +346,62 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                       onPressed: _step),
               ],
               if (_roundDone) ...[
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: (_roundPassed ? C.green : C.pink)
-                        .withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                        color: (_roundPassed ? C.green : C.pink)
-                            .withValues(alpha: 0.25)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _roundPassed
-                            ? 'Converged in $_steps steps!'
-                            : 'Not quite — distance: ${dist.toStringAsFixed(2)}',
-                        style: spaceGrotesk(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: _roundPassed ? C.green : C.pink),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _roundPassed
-                            ? 'η = ${_lr.toStringAsFixed(2)} worked well.'
-                            : 'Try a different η next time.',
-                        style: inter(
-                            fontSize: 13,
-                            color: (_roundPassed ? C.green : C.pink)
-                                .withValues(alpha: 0.75)),
-                      ),
-                    ],
+                FadeSlideIn(
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 14,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: (_roundPassed ? C.green : C.pink)
+                          .withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: (_roundPassed ? C.green : C.pink)
+                              .withValues(alpha: 0.25)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _roundPassed
+                              ? 'Converged in $_steps steps!'
+                              : 'Not quite — distance: ${dist.toStringAsFixed(2)}',
+                          style: spaceGrotesk(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: _roundPassed ? C.green : C.pink),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _roundPassed
+                              ? 'η = ${_lr.toStringAsFixed(2)} worked well.'
+                              : 'Try a different η next time.',
+                          style: inter(
+                              fontSize: 13,
+                              color: (_roundPassed ? C.green : C.pink)
+                                  .withValues(alpha: 0.75)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Text('Score: $_totalPassed / ${_roundIdx + 3}',
                     style: mono(fontSize: 14, color: C.accent)),
                 const SizedBox(height: 16),
-                PrimaryBtn(
-                  label: _roundIdx < _rounds.length - 1
-                      ? 'Next round'
-                      : 'See results',
-                  onPressed: _roundIdx < _rounds.length - 1
-                      ? _nextRound
-                      : () => setState(() => _allDone = true),
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 12,
+                  child: PrimaryBtn(
+                    label: _roundIdx < _rounds.length - 1
+                        ? 'Next round'
+                        : 'See results',
+                    onPressed: _roundIdx < _rounds.length - 1
+                        ? _nextRound
+                        : () => setState(() => _allDone = true),
+                  ),
                 ),
               ],
             ]),
@@ -412,29 +421,38 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: (mastered ? C.green : C.yellow)
-                      .withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      color: (mastered ? C.green : C.yellow)
-                          .withValues(alpha: 0.25)),
-                ),
-                child: Text(
-                  mastered ? 'CHALLENGE COMPLETE' : 'GOOD EFFORT',
-                  style: spaceGrotesk(
-                      fontSize: 12,
-                      color: mastered ? C.green : C.yellow,
-                      letterSpacing: 0.1),
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: (mastered ? C.green : C.yellow)
+                            .withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: (mastered ? C.green : C.yellow)
+                                .withValues(alpha: 0.25)),
+                      ),
+                      child: Text(
+                        mastered ? 'CHALLENGE COMPLETE' : 'GOOD EFFORT',
+                        style: spaceGrotesk(
+                            fontSize: 12,
+                            color: mastered ? C.green : C.yellow,
+                            letterSpacing: 0.1),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text('Gradient Descent',
+                        style: spaceGrotesk(
+                            fontSize: 28, fontWeight: FontWeight.w700)),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              Text('Gradient Descent',
-                  style: spaceGrotesk(
-                      fontSize: 28, fontWeight: FontWeight.w700)),
               const SizedBox(height: 24),
               Row(children: [
                 Expanded(
@@ -476,32 +494,39 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                 ),
               ),
               const SizedBox(height: 24),
-              if (mastered)
-                PrimaryBtn(
-                    label: 'Free play sandbox →', onPressed: _finish)
-              else ...[
-                PrimaryBtn(
-                    label: 'Retry challenge',
-                    onPressed: () {
-                      final first = _rounds[0];
-                      setState(() {
-                        _roundIdx = 0;
-                        _theta = first.startTheta;
-                        _displayTheta = first.startTheta;
-                        _history = [];
-                        _steps = 0;
-                        _lr = first.defaultLr;
-                        _roundDone = false;
-                        _roundPassed = false;
-                        _passed = 0;
-                        _totalSteps = 0;
-                        _allDone = false;
-                      });
-                    }),
-                const SizedBox(height: 12),
-                SecondaryBtn(
-                    label: 'Continue anyway', onPressed: _finish),
-              ],
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: Column(children: [
+                  if (mastered)
+                    PrimaryBtn(
+                        label: 'Free play sandbox →', onPressed: _finish)
+                  else ...[
+                    PrimaryBtn(
+                        label: 'Retry challenge',
+                        onPressed: () {
+                          final first = _rounds[0];
+                          setState(() {
+                            _roundIdx = 0;
+                            _theta = first.startTheta;
+                            _displayTheta = first.startTheta;
+                            _history = [];
+                            _steps = 0;
+                            _lr = first.defaultLr;
+                            _roundDone = false;
+                            _roundPassed = false;
+                            _passed = 0;
+                            _totalSteps = 0;
+                            _allDone = false;
+                          });
+                        }),
+                    const SizedBox(height: 12),
+                    SecondaryBtn(
+                        label: 'Continue anyway', onPressed: _finish),
+                  ],
+                ]),
+              ),
             ],
           ),
         ),

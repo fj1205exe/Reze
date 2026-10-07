@@ -64,12 +64,24 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
   void _handleSlopeChange(double v) {
     setState(() {
       _slope = v;
+    });
+  }
+
+  void _handleSlopeChangeEnd(double v) {
+    setState(() {
+      _slope = v;
       _adjustments++;
     });
     widget.onUpdate(v, _intercept);
   }
 
   void _handleInterceptChange(double v) {
+    setState(() {
+      _intercept = v;
+    });
+  }
+
+  void _handleInterceptChangeEnd(double v) {
     setState(() {
       _intercept = v;
       _adjustments++;
@@ -197,6 +209,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               min: -0.5,
                               max: 2.0,
                               onChanged: _handleSlopeChange,
+                              onChangeEnd: _handleSlopeChangeEnd,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -221,6 +234,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               min: -0.5,
                               max: 1.5,
                               onChanged: _handleInterceptChange,
+                              onChangeEnd: _handleInterceptChangeEnd,
                             ),
                           ),
                         ],
@@ -229,7 +243,12 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                   const SizedBox(height: 20),
 
                   if (done)
-                    PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                    ),
                 ],
               ),
             ),

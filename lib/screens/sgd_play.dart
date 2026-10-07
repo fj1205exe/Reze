@@ -226,11 +226,22 @@ class SGDPlayScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  PrimaryBtn(
-                    label: canAdvance ? 'See the math' : 'Take ${_stepsToAdvance - steps} more steps to advance',
-                    disabled: !canAdvance,
-                    onPressed: canAdvance ? onNext : null,
-                  ),
+                  if (canAdvance)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(
+                        label: 'See the math',
+                        onPressed: onNext,
+                      ),
+                    )
+                  else
+                    PrimaryBtn(
+                      label: 'Take ${_stepsToAdvance - steps} more steps to advance',
+                      disabled: true,
+                      onPressed: null,
+                    ),
                 ],
               ),
             ),

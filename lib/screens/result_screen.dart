@@ -31,29 +31,47 @@ class ResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: (succeeded ? C.green : C.accentLight).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: (succeeded ? C.green : C.accent).withValues(alpha: 0.3)),
+              FadeSlideIn(
+                duration: const Duration(milliseconds: 450),
+                slideDistance: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: (succeeded ? C.green : C.accentLight).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: (succeeded ? C.green : C.accent).withValues(alpha: 0.3)),
+                      ),
+                      child: Text(succeeded ? 'CONCEPT CLEAR' : 'GOOD EFFORT',
+                        style: spaceGrotesk(fontSize: 12, color: succeeded ? C.green : C.accentLight, letterSpacing: 0.1)),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(succeeded ? 'Gradient Descent' : 'Keep experimenting',
+                      style: spaceGrotesk(fontSize: 30, fontWeight: FontWeight.w700, letterSpacing: -0.02)),
+                  ],
                 ),
-                child: Text(succeeded ? 'CONCEPT CLEAR' : 'GOOD EFFORT',
-                  style: spaceGrotesk(fontSize: 12, color: succeeded ? C.green : C.accentLight, letterSpacing: 0.1)),
-              ),
-              const SizedBox(height: 8),
-              Text(succeeded ? 'Gradient Descent' : 'Keep experimenting',
-                style: spaceGrotesk(fontSize: 30, fontWeight: FontWeight.w700, letterSpacing: -0.02)),
-              const SizedBox(height: 28),
-              Row(
-                children: [
-                  Expanded(child: _metric('Rounds', '$roundsPassed', '/ $totalRounds', roundsPassed >= 4 ? C.green : C.yellow)),
-                  const SizedBox(width: 12),
-                  Expanded(child: _metric('Steps', '$totalSteps', '', C.accent)),
-                ],
               ),
               const SizedBox(height: 28),
-              Container(
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 120),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Row(
+                  children: [
+                    Expanded(child: _metric('Rounds', '$roundsPassed', '/ $totalRounds', roundsPassed >= 4 ? C.green : C.yellow)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _metric('Steps', '$totalSteps', '', C.accent)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 14,
+                child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -88,6 +106,7 @@ class ResultScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              ),
               if (succeeded) ...[
                 const SizedBox(height: 28),
                 Text('Skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
@@ -99,17 +118,22 @@ class ResultScreen extends StatelessWidget {
                 _nextConceptCard(),
               ],
               const SizedBox(height: 28),
-              Row(
-                children: [
-                  Expanded(child: SecondaryBtn(label: 'Home', onPressed: onNext)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: PrimaryBtn(
-                      label: succeeded ? 'Play next →' : 'Retry Challenge',
-                      onPressed: succeeded ? onPlayLR : onRetry,
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 400),
+                slideDistance: 12,
+                child: Row(
+                  children: [
+                    Expanded(child: SecondaryBtn(label: 'Home', onPressed: onNext)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: PrimaryBtn(
+                        label: succeeded ? 'Play next →' : 'Retry Challenge',
+                        onPressed: succeeded ? onPlayLR : onRetry,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

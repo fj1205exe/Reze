@@ -31,14 +31,41 @@ class CLChallengeScreen extends StatefulWidget {
 class _CLChallengeScreenState extends State<CLChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  late double _angle;
+  late double _offset;
+
+  @override
+  void initState() {
+    super.initState();
+    _angle = widget.angle;
+    _offset = widget.offset;
+  }
 
   double get _accuracy => cl_utils.calcAccuracyForDataset(
-    widget.angle, widget.offset, cl_utils.challengeClassA, cl_utils.challengeClassB,
+    _angle, _offset, cl_utils.challengeClassA, cl_utils.challengeClassB,
   );
 
   bool get _succeeded => _accuracy >= 90.0;
   bool get _outOfSteps => widget.steps >= _stepLimit;
   bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
+
+  void _onAngleChanged(double v) {
+    if (!_started) setState(() => _started = true);
+    setState(() => _angle = v);
+  }
+
+  void _onOffsetChanged(double v) {
+    if (!_started) setState(() => _started = true);
+    setState(() => _offset = v);
+  }
+
+  void _onAngleChangeEnd(double v) {
+    _handleUpdate(v, _offset);
+  }
+
+  void _onOffsetChangeEnd(double v) {
+    _handleUpdate(_angle, v);
+  }
 
   void _handleUpdate(double a, double o) {
     if (!_started) setState(() => _started = true);
@@ -146,7 +173,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                     padding: const EdgeInsets.all(4),
                     child: CustomPaint(
                       size: Size.infinite,
-                      painter: _ChallengePlotPainter(angle: widget.angle, offset: widget.offset),
+                      painter: _ChallengePlotPainter(angle: _angle, offset: _offset),
                     ),
                   ),
                 ],
@@ -159,38 +186,46 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
               child: Column(
                 children: [
                   if (_done && _succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.green.withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('${accuracy.round()}% accuracy in ${widget.steps} adjustments.',
-                            style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
-                          const SizedBox(height: 4),
-                          Text('You found the right boundary.', style: inter(fontSize: 12, color: C.greenLight)),
-                        ],
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.green.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${accuracy.round()}% accuracy in ${widget.steps} adjustments.',
+                              style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
+                            const SizedBox(height: 4),
+                            Text('You found the right boundary.', style: inter(fontSize: 12, color: C.greenLight)),
+                          ],
+                        ),
                       ),
                     ),
                   if (_done && !_succeeded)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.pink.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.pink.withValues(alpha: 0.25)),
-                      ),
-                      child: Text(
-                        'Ran out of adjustments — ${accuracy.round()}% accuracy. 90% needed. Try adjusting angle close to -45° with a small offset.',
-                        style: inter(fontSize: 14, color: C.pink),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.pink.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.pink.withValues(alpha: 0.25)),
+                        ),
+                        child: Text(
+                          'Ran out of adjustments — ${accuracy.round()}% accuracy. 90% needed. Try adjusting angle close to -45° with a small offset.',
+                          style: inter(fontSize: 14, color: C.pink),
+                        ),
                       ),
                     ),
                   if (!_done) ...[
@@ -210,7 +245,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Angle', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                              Text('${widget.angle.round()}', style: mono(fontSize: 13, color: C.accentLight)),
+                              Text('${_angle.round()}', style: mono(fontSize: 13, color: C.accentLight)),
                             ],
                           ),
                           SliderTheme(
@@ -223,10 +258,11 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
-                              value: widget.angle,
+                              value: _angle,
                               min: -90,
                               max: 90,
-                              onChanged: (v) => _handleUpdate(v, widget.offset),
+                              onChanged: _onAngleChanged,
+                              onChangeEnd: _onAngleChangeEnd,
                             ),
                           ),
                         ],
@@ -248,7 +284,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Offset', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                              Text(widget.offset.toStringAsFixed(2), style: mono(fontSize: 13, color: C.yellow)),
+                              Text(_offset.toStringAsFixed(2), style: mono(fontSize: 13, color: C.yellow)),
                             ],
                           ),
                           SliderTheme(
@@ -261,10 +297,11 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
-                              value: widget.offset,
+                              value: _offset,
                               min: -0.5,
                               max: 0.5,
-                              onChanged: (v) => _handleUpdate(widget.angle, v),
+                              onChanged: _onOffsetChanged,
+                              onChangeEnd: _onOffsetChangeEnd,
                             ),
                           ),
                         ],
@@ -272,15 +309,23 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                     ),
                   ],
                   if (_started && !_done)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: FeedbackBar(
-                        type: accuracy >= 80 ? 'ok' : 'info',
-                        message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - widget.steps)} adjustments remaining.',
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: FeedbackBar(
+                          type: accuracy >= 80 ? 'ok' : 'info',
+                          message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - widget.steps)} adjustments remaining.',
+                        ),
                       ),
                     ),
                   if (_done)
-                    SizedBox(
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SizedBox(
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
@@ -296,6 +341,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                           color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
                         )),
                       ),
+                    ),
                     ),
                 ],
               ),

@@ -281,12 +281,16 @@ class _LFPlayScreenState extends State<LFPlayScreen> {
                   const SizedBox(height: 12),
 
                   if (hint != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border(left: BorderSide(color: lossColor, width: 2)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border(left: BorderSide(color: lossColor, width: 2)),
+                        ),
+                        child: Text(hint, style: inter(fontSize: 13, color: lossColor)),
                       ),
-                      child: Text(hint, style: inter(fontSize: 13, color: lossColor)),
                     ),
                   const SizedBox(height: 20),
 

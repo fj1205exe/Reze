@@ -226,21 +226,30 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                   const SizedBox(height: 16),
 
                   if (_moves >= 5)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: C.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: C.accent.withValues(alpha: 0.3)),
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: C.accent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: C.accent.withValues(alpha: 0.3)),
+                        ),
+                        child: Text('The dot product changes with angle. What else controls it?',
+                          style: inter(fontSize: 14, color: C.accentLight), textAlign: TextAlign.center),
                       ),
-                      child: Text('The dot product changes with angle. What else controls it?',
-                        style: inter(fontSize: 14, color: C.accentLight), textAlign: TextAlign.center),
                     ),
 
                   if (unlocked) ...[
-                    SecondaryBtn(label: 'Discover what controls the dot product →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'Discover what controls the dot product →', onPressed: widget.onNext),
+                    ),
                   ] else ...[
                     PrimaryBtn(
                       label: 'Adjust sliders ${5 - _moves} more time${5 - _moves > 1 ? 's' : ''}',

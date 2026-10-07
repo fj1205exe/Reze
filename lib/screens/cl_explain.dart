@@ -91,44 +91,58 @@ class _CLExplainScreenState extends State<CLExplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: C.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: C.green.withValues(alpha: 0.25)),
+                          ),
+                          child: Text('DISCOVERY', style: spaceGrotesk(fontSize: 12, color: C.green)),
+                        ),
+                        const SizedBox(height: 12),
+                        Text('Where you draw the line matters.',
+                          style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Classification is about finding a decision boundary that separates classes. '
+                          'A linear classifier draws a straight line (or hyperplane in higher dimensions). '
+                          'Points on each side receive a prediction label.',
+                          style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
+                        ),
+                      ],
                     ),
-                    child: Text('DISCOVERY', style: spaceGrotesk(fontSize: 12, color: C.green)),
-                  ),
-                  const SizedBox(height: 12),
-                  Text('Where you draw the line matters.',
-                    style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Classification is about finding a decision boundary that separates classes. '
-                    'A linear classifier draws a straight line (or hyperplane in higher dimensions). '
-                    'Points on each side receive a prediction label.',
-                    style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                   ),
                   const SizedBox(height: 20),
 
                   // Decision boundary formula
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: C.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                    ),
-                    child: Column(
-                      children: [
-                        Text('THE DECISION BOUNDARY', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
-                        const SizedBox(height: 16),
-                        _boundaryEquation(),
-                        const SizedBox(height: 12),
-                        Text('Tap a symbol to learn what it means.', style: inter(fontSize: 12, color: C.muted)),
-                      ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 14,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: C.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: Column(
+                        children: [
+                          Text('THE DECISION BOUNDARY', style: spaceGrotesk(fontSize: 10, color: C.muted, letterSpacing: 0.12)),
+                          const SizedBox(height: 16),
+                          _boundaryEquation(),
+                          const SizedBox(height: 12),
+                          Text('Tap a symbol to learn what it means.', style: inter(fontSize: 12, color: C.muted)),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -189,7 +203,12 @@ class _CLExplainScreenState extends State<CLExplainScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 400),
+                    slideDistance: 12,
+                    child: PrimaryBtn(label: 'TAKE THE CHALLENGE', onPressed: widget.onNext),
+                  ),
                 ],
               ),
             ),

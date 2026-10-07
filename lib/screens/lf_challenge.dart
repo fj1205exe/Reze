@@ -110,7 +110,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
                     children: [
                       ProgressPill(current: _current, total: _scenarios.length),
                       const Spacer(),
-                      Text('${_correct}/${_current} correct',
+                      Text('$_correct/$_current correct',
                           style: mono(fontSize: 12, color: C.muted)),
                     ],
                   ),
@@ -129,25 +129,39 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
                   const SizedBox(height: 18),
 
                   if (_answered) ...[
-                    FeedbackBar(
-                      type: isRight ? 'ok' : 'warn',
-                      message: isRight ? 'Correct!' : 'Not quite — ${lf.lossNames[s.correct]} was the right pick.',
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: FeedbackBar(
+                        type: isRight ? 'ok' : 'warn',
+                        message: isRight ? 'Correct!' : 'Not quite — ${lf.lossNames[s.correct]} was the right pick.',
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 14,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: C.surface,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        ),
+                        child: Text(s.explanation, style: inter(fontSize: 13, color: const Color(0xFFD1D5DB))),
                       ),
-                      child: Text(s.explanation, style: inter(fontSize: 13, color: const Color(0xFFD1D5DB))),
                     ),
                     const SizedBox(height: 16),
-                    PrimaryBtn(
-                      label: _current < _scenarios.length - 1 ? 'Next scenario' : 'See results',
-                      onPressed: _current < _scenarios.length - 1 ? _advance : () => setState(() => _current = _scenarios.length),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(
+                        label: _current < _scenarios.length - 1 ? 'Next scenario' : 'See results',
+                        onPressed: _current < _scenarios.length - 1 ? _advance : () => setState(() => _current = _scenarios.length),
+                      ),
                     ),
                   ],
                 ],
@@ -233,35 +247,52 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
               child: Column(
                 children: [
-                  Icon(
-                    passed ? Icons.emoji_events : Icons.refresh,
-                    size: 48,
-                    color: passed ? C.yellow : C.muted,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    '$_correct / ${_scenarios.length}',
-                    style: spaceGrotesk(fontSize: 32, fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    passed ? 'You know your losses!' : 'Review and try again.',
-                    style: inter(fontSize: 14, color: C.muted),
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
+                    slideDistance: 16,
+                    child: Column(
+                      children: [
+                        Icon(
+                          passed ? Icons.emoji_events : Icons.refresh,
+                          size: 48,
+                          color: passed ? C.yellow : C.muted,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          '$_correct / ${_scenarios.length}',
+                          style: spaceGrotesk(fontSize: 32, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          passed ? 'You know your losses!' : 'Review and try again.',
+                          style: inter(fontSize: 14, color: C.muted),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  PrimaryBtn(label: passed ? 'Complete' : 'See results', onPressed: () => widget.onComplete(passed, _correct, _scenarios.length)),
-                  if (!passed) ...[
-                    const SizedBox(height: 10),
-                    SecondaryBtn(
-                      label: 'Retry challenge',
-                      onPressed: () => setState(() {
-                        _current = 0;
-                        _correct = 0;
-                        _selected = null;
-                        _answered = false;
-                      }),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 350),
+                    slideDistance: 10,
+                    child: Column(
+                      children: [
+                        PrimaryBtn(label: passed ? 'Complete' : 'See results', onPressed: () => widget.onComplete(passed, _correct, _scenarios.length)),
+                        if (!passed) ...[
+                          const SizedBox(height: 10),
+                          SecondaryBtn(
+                            label: 'Retry challenge',
+                            onPressed: () => setState(() {
+                              _current = 0;
+                              _correct = 0;
+                              _selected = null;
+                              _answered = false;
+                            }),
+                          ),
+                        ],
+                      ],
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),

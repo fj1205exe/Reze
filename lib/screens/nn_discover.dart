@@ -264,7 +264,12 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                   const SizedBox(height: 16),
 
                   if (unlocked) ...[
-                    SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: SecondaryBtn(label: 'I understand — show me the math →', onPressed: widget.onNext),
+                    ),
                   ],
                 ],
               ),

@@ -149,44 +149,53 @@ class BPPlayScreen extends StatelessWidget {
                   if (step < 4)
                     PrimaryBtn(label: 'NEXT STEP IN BACKPROP', onPressed: onStep)
                   else ...[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 48,
-                            child: ElevatedButton(
-                              onPressed: onTrain,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: C.green,
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                elevation: 0,
+                    FadeSlideIn(
+                      duration: const Duration(milliseconds: 450),
+                      slideDistance: 16,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: onTrain,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: C.green,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  elevation: 0,
+                                ),
+                                child: Text('TAKE GD STEP (x1)', style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.bold)),
                               ),
-                              child: Text('TAKE GD STEP (x1)', style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.bold)),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        SizedBox(
-                          height: 48,
-                          child: OutlinedButton(
-                            onPressed: onReset,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: C.txt,
-                              side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            height: 48,
+                            child: OutlinedButton(
+                              onPressed: onReset,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: C.txt,
+                                side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: const Text('RESET'),
                             ),
-                            child: const Text('RESET'),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     if (trainSteps > 0) ...[
                       const SizedBox(height: 6),
                       Center(child: Text('Training steps taken: $trainSteps', style: mono(fontSize: 11, color: C.muted))),
                     ],
                     const SizedBox(height: 12),
-                    PrimaryBtn(label: 'See the chain rule math', onPressed: onNext),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(label: 'See the chain rule math', onPressed: onNext),
+                    ),
                   ],
                 ],
               ),

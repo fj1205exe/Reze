@@ -52,7 +52,18 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
     return 'warn';
   }
 
-  void _handleSlider(String param, double value) {
+  void _handleSliderChange(String param, double value) {
+    if (_locked || _done) return;
+    setState(() {
+      switch (param) {
+        case 'w1': _w1 = value;
+        case 'w2': _w2 = value;
+        case 'bias': _bias = value;
+      }
+    });
+  }
+
+  void _handleSliderChangeEnd(String param, double value) {
     if (_locked || _done) return;
     setState(() {
       switch (param) {
@@ -177,20 +188,35 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
 
                   // Sliders
                   if (!_done) ...[
-                    _sliderCard('w₁', _w1, C.blue, (v) => _handleSlider('w1', v)),
+                    _sliderCard('w₁', _w1, C.blue, (v) => _handleSliderChange('w1', v), (v) => _handleSliderChangeEnd('w1', v)),
                     const SizedBox(height: 10),
-                    _sliderCard('w₂', _w2, C.accentLight, (v) => _handleSlider('w2', v)),
+                    _sliderCard('w₂', _w2, C.accentLight, (v) => _handleSliderChange('w2', v), (v) => _handleSliderChangeEnd('w2', v)),
                     const SizedBox(height: 10),
-                    _sliderCard('bias', _bias, C.yellow, (v) => _handleSlider('bias', v)),
+                    _sliderCard('bias', _bias, C.yellow, (v) => _handleSliderChange('bias', v), (v) => _handleSliderChangeEnd('bias', v)),
                   ],
                   const SizedBox(height: 20),
 
                   if (_succeeded)
-                    PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _attempts)),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _attempts)),
+                    ),
                   if (_exhausted) ...[
-                    SecondaryBtn(label: 'Retry', onPressed: _retry),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SecondaryBtn(label: 'Retry', onPressed: _retry),
+                    ),
                     const SizedBox(height: 12),
-                    PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _attempts)),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _attempts)),
+                    ),
                   ],
                 ],
               ),
@@ -213,7 +239,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
     );
   }
 
-  Widget _sliderCard(String label, double value, Color color, ValueChanged<double> onChange) {
+  Widget _sliderCard(String label, double value, Color color, ValueChanged<double> onChange, ValueChanged<double> onChangeEnd) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -246,6 +272,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
               min: -2.0,
               max: 2.0,
               onChanged: _done ? null : onChange,
+              onChangeEnd: _done ? null : onChangeEnd,
             ),
           ),
         ],
