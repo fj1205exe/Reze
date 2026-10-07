@@ -15,7 +15,7 @@ const BAYState bayInit = BAYState();
 
 double calcPosterior(double prior, double sensitivity, double specificity) {
   final pPositive = sensitivity * prior + (1 - specificity) * (1 - prior);
-  if (pPositive == 0) return 0;
+  if (pPositive.abs() < 1e-10) return 0;
   return (sensitivity * prior) / pPositive;
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/gd.dart' as gd;
 import '../theme.dart';
 
@@ -58,7 +59,7 @@ class LossCurvePainter extends CustomPainter {
       canvas.drawCircle(Offset(minX, minY), 5, Paint()..color = C.green.withValues(alpha: 0.45));
 
       final tp = TextPainter(
-        text: TextSpan(text: 'min', style: TextStyle(color: C.green.withValues(alpha: 0.55), fontSize: 9, fontFamily: 'JetBrains Mono')),
+        text: TextSpan(text: 'min', style: GoogleFonts.jetBrainsMono(color: C.green.withValues(alpha: 0.55), fontSize: 9)),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(minX + 5, pt + 3));

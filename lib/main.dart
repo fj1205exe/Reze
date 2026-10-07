@@ -504,7 +504,10 @@ class _MLabHomeState extends State<MLabHome> {
               flags.any((f) => _progress.getFlag(f));
           if (hasProgress) _screen = AppScreen.home;
         });
-      } catch (_) {}
+      } catch (_) {
+        await SharedPreferences.getInstance()
+            .then((p) => p.remove('mlab_progress'));
+      }
     }
   }
 

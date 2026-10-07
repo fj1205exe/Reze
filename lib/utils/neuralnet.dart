@@ -5,8 +5,6 @@ double sigmoidDerivative(double z) {
   final s = sigmoid(z);
   return s * (1 - s);
 }
-double relu(double z) => max(0, z);
-double reluDerivative(double z) => z > 0 ? 1 : 0;
 
 class NNState {
   final double w1, w2, bias, x1, x2;
