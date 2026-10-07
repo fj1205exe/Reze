@@ -91,7 +91,15 @@ class LossCurvePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(LossCurvePainter oldDelegate) =>
-      theta != oldDelegate.theta || history.length != oldDelegate.history.length;
+      theta != oldDelegate.theta || !_listEquals(history, oldDelegate.history);
+}
+
+bool _listEquals(List<double> a, List<double> b) {
+  if (a.length != b.length) return false;
+  for (int i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
 }
 
 class LossCurveWidget extends StatelessWidget {

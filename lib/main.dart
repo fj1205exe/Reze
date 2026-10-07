@@ -82,6 +82,9 @@ import 'screens/bp_challenge.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
   runApp(const MLabApp());
 }
 
@@ -512,8 +515,10 @@ class _MLabHomeState extends State<MLabHome> {
   }
 
   Future<void> _saveProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('mlab_progress', jsonEncode(_progress.toJson()));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('mlab_progress', jsonEncode(_progress.toJson()));
+    } catch (_) {}
   }
 
   void _nav(AppScreen s) => setState(() {
