@@ -66,6 +66,11 @@ ThemeData mlabTheme() {
     colorScheme: const ColorScheme.dark(
       surface: C.bg,
       primary: C.accent,
+      secondary: C.blue,
+      error: C.pink,
+      onPrimary: C.txt,
+      onSurface: C.txt,
+      onError: C.txt,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: C.bg,
