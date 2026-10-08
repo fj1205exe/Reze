@@ -43,3 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Claude Code / AI tooling
+.claude/
+humanreports/
+opus-corner/
+
+# Scratch files
+CONFLICT-FIX.md
+PR-GUIDE.md
+RUN-THIS.md
+
+# Media
+*.mp4
