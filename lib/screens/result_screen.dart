@@ -111,9 +111,13 @@ class ResultScreen extends StatelessWidget {
               Text(succeeded ? 'Skill updates' : 'What to aim for',
                   style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 12),
-              _skillUpdate('Optimization', 8, succeeded ? C.blue : C.muted),
+              SkillGainBar(skill: 'Optimization', delta: 8,
+                  color: succeeded ? C.blue : C.muted,
+                  delay: const Duration(milliseconds: 300)),
               const SizedBox(height: 8),
-              _skillUpdate('Calculus', 4, succeeded ? C.accent : C.muted),
+              SkillGainBar(skill: 'Calculus', delta: 4,
+                  color: succeeded ? C.accent : C.muted,
+                  delay: const Duration(milliseconds: 500)),
               if (succeeded) ...[
                 const SizedBox(height: 28),
                 _nextConceptCard(),
@@ -164,20 +168,6 @@ class ResultScreen extends StatelessWidget {
               if (sub.isNotEmpty) Text(sub, style: mono(fontSize: 14, color: C.muted)),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _skillUpdate(String skill, int delta, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(border: Border(left: BorderSide(color: color, width: 2))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(skill, style: spaceGrotesk(fontSize: 14)),
-          Text('+$delta', style: mono(fontSize: 14, fontWeight: FontWeight.w600, color: color)),
         ],
       ),
     );

@@ -271,6 +271,106 @@ class SkillBar extends StatelessWidget {
   }
 }
 
+class SkillGainBar extends StatefulWidget {
+  final String skill;
+  final int delta;
+  final Color color;
+  final Duration delay;
+  const SkillGainBar({
+    super.key,
+    required this.skill,
+    required this.delta,
+    required this.color,
+    this.delay = Duration.zero,
+  });
+  @override
+  State<SkillGainBar> createState() => _SkillGainBarState();
+}
+
+class _SkillGainBarState extends State<SkillGainBar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    )..addListener(() => setState(() {}));
+    if (widget.delay == Duration.zero) {
+      _ctrl.forward();
+    } else {
+      Future.delayed(widget.delay, () {
+        if (mounted) _ctrl.forward();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Curves.easeOutCubic.transform(_ctrl.value);
+    final displayDelta = (widget.delta * t).round();
+
+    return Opacity(
+      opacity: t.clamp(0.0, 1.0),
+      child: Transform.translate(
+        offset: Offset(0, 10 * (1 - t)),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: C.surface,
+            borderRadius: S.borderSm,
+            border: Border.all(color: C.border),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(widget.skill, style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
+                  Text('+$displayDelta',
+                      style: mono(fontSize: 14, fontWeight: FontWeight.w600, color: widget.color)),
+                ],
+              ),
+              const SizedBox(height: 6),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: SizedBox(
+                  height: 6,
+                  child: Stack(
+                    children: [
+                      Container(color: C.surface3),
+                      FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: (widget.delta / 20.0).clamp(0.05, 1.0) * t,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [widget.color.withValues(alpha: 0.5), widget.color],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class LrSlider extends StatelessWidget {
   final double value;
   final ValueChanged<double> onChange;

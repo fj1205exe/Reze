@@ -133,9 +133,11 @@ class PRResultScreen extends StatelessWidget {
               // Skill updates
               Text('skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 10),
-              _buildSkillRow('Probability', 14, const Color(0xFFA78BFA), progress.skillMap['Probability'] ?? 0),
+              SkillGainBar(skill: 'Probability', delta: 14, color: const Color(0xFFA78BFA),
+                  delay: const Duration(milliseconds: 300)),
               const SizedBox(height: 8),
-              _buildSkillRow('Statistics', 6, C.blue, progress.skillMap['Statistics'] ?? 0),
+              SkillGainBar(skill: 'Statistics', delta: 6, color: C.blue,
+                  delay: const Duration(milliseconds: 500)),
               const SizedBox(height: 24),
 
               // Concepts completed
@@ -176,40 +178,6 @@ class PRResultScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSkillRow(String skill, int delta, Color color, int val) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: C.surface,
-        borderRadius: S.borderSm,
-        border: Border(left: BorderSide(color: color, width: 2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(skill, style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-              const SizedBox(height: 4),
-              Container(
-                width: 90,
-                height: 4,
-                decoration: BoxDecoration(color: C.surface3, borderRadius: BorderRadius.circular(2)),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: (val / 100).clamp(0.0, 1.0),
-                  child: Container(decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2))),
-                ),
-              ),
-            ],
-          ),
-          Text('+$delta', style: mono(fontSize: 14, fontWeight: FontWeight.w600, color: color)),
-        ],
       ),
     );
   }

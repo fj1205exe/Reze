@@ -145,9 +145,11 @@ class LFResultScreen extends StatelessWidget {
 
               Text('skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 10),
-              _buildSkillRow('Optimization', 15, C.accent, progress.skillMap['Optimization'] ?? 0),
+              SkillGainBar(skill: 'Optimization', delta: 15, color: C.accent,
+                  delay: const Duration(milliseconds: 300)),
               const SizedBox(height: 8),
-              _buildSkillRow('Calculus', 8, C.blue, progress.skillMap['Calculus'] ?? 0),
+              SkillGainBar(skill: 'Calculus', delta: 8, color: C.blue,
+                  delay: const Duration(milliseconds: 500)),
               const SizedBox(height: 24),
 
               Container(
@@ -218,40 +220,6 @@ class LFResultScreen extends StatelessWidget {
         children: [
           Text(name, style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: col)),
           Text(formula, style: mono(fontSize: 12, color: C.txt)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSkillRow(String skill, int delta, Color color, int val) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: C.surface,
-        borderRadius: S.borderSm,
-        border: Border(left: BorderSide(color: color, width: 2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(skill, style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-              const SizedBox(height: 4),
-              Container(
-                width: 90,
-                height: 4,
-                decoration: BoxDecoration(color: C.surface3, borderRadius: BorderRadius.circular(2)),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: (val / 100).clamp(0.0, 1.0),
-                  child: Container(decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2))),
-                ),
-              ),
-            ],
-          ),
-          Text('+$delta', style: mono(fontSize: 14, fontWeight: FontWeight.w600, color: color)),
         ],
       ),
     );
