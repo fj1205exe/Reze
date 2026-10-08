@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'theme.dart';
 import 'utils/gd.dart' as gd;
@@ -87,6 +88,7 @@ enum ComprehensionLevel { beginner, intermediate, advanced }
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
   };
