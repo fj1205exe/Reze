@@ -30,6 +30,10 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
   int _interactions = 0;
 
   void _handleSliderUpdate(double slope, double intercept) {
+    widget.onUpdate(slope, intercept);
+  }
+
+  void _handleSliderEnd(double slope, double intercept) {
     setState(() => _interactions++);
     widget.onUpdate(slope, intercept);
   }
@@ -157,6 +161,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                             min: -1,
                             max: 2,
                             onChanged: (v) => _handleSliderUpdate(v, widget.intercept),
+                            onChangeEnd: (v) => _handleSliderEnd(v, widget.intercept),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -182,6 +187,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                             min: -0.3,
                             max: 1.2,
                             onChanged: (v) => _handleSliderUpdate(widget.slope, v),
+                            onChangeEnd: (v) => _handleSliderEnd(widget.slope, v),
                           ),
                         ),
                       ],

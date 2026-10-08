@@ -47,14 +47,10 @@ const _rounds = [
 ];
 
 class GDChallengeScreen extends StatefulWidget {
-  final int warmupPassed;
-  final int warmupSteps;
   final void Function(int passed, int total, int totalSteps) onComplete;
   final VoidCallback onBack;
   const GDChallengeScreen({
     super.key,
-    this.warmupPassed = 0,
-    this.warmupSteps = 0,
     required this.onComplete,
     required this.onBack,
   });
@@ -79,8 +75,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
   Animation<double>? _ballTween;
 
   _Round get _round => _rounds[_roundIdx];
-  int get _totalPassed => widget.warmupPassed + _passed;
-  int get _allTotalSteps => widget.warmupSteps + _totalSteps;
+  bool get _mastered => _passed >= 2;
 
   @override
   void initState() {
@@ -154,7 +149,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
   }
 
   void _finish() {
-    widget.onComplete(_totalPassed, 5, _allTotalSteps);
+    widget.onComplete(_passed, _rounds.length, _totalSteps);
   }
 
   @override
@@ -387,7 +382,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                     ),
                   ),
                 ),
-                Text('Score: $_totalPassed / ${_roundIdx + 3}',
+                Text('Score: $_passed / ${_roundIdx + 1}',
                     style: mono(fontSize: 14, color: C.accent)),
                 const SizedBox(height: 16),
                 FadeSlideIn(
@@ -412,7 +407,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
   }
 
   Widget _summaryView() {
-    final mastered = _totalPassed >= 4;
+    final mastered = _mastered;
     return Container(
       color: C.bg,
       child: SafeArea(
@@ -457,20 +452,16 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
               Row(children: [
                 Expanded(
                     child: _metricCard('Rounds',
-                        '$_totalPassed / 5', _totalPassed >= 4 ? C.green : C.yellow)),
+                        '$_passed / ${_rounds.length}', mastered ? C.green : C.yellow)),
                 const SizedBox(width: 12),
                 Expanded(
                     child: _metricCard(
-                        'Total steps', '$_allTotalSteps', C.accent)),
+                        'Total steps', '$_totalSteps', C.accent)),
               ]),
               const SizedBox(height: 12),
-              for (int i = 0; i < 2; i++) ...[
-                _roundResultTile(i, i < widget.warmupPassed),
-                const SizedBox(height: 8),
-              ],
               for (int i = 0; i < _rounds.length; i++) ...[
                 _roundResultTile(
-                    i + 2,
+                    i,
                     i < _roundIdx ||
                         (i == _roundIdx && _roundPassed)),
                 if (i < _rounds.length - 1) const SizedBox(height: 8),
@@ -488,7 +479,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                 child: Text(
                   mastered
                       ? 'You\'ve demonstrated control over learning rate across different scenarios — the core skill of gradient descent.'
-                      : 'You need 4/5 rounds to master this concept. Each round tests a different aspect of choosing the right learning rate.',
+                      : 'Pass 2 of ${_rounds.length} rounds to master this concept. Each round tests a different aspect of choosing the right learning rate.',
                   style:
                       inter(fontSize: 14, color: C.txt, height: 1.5),
                 ),
@@ -601,13 +592,11 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
 
   Widget _roundResultTile(int roundNum, bool passed) {
     final names = [
-      'Warm-up',
-      'Precision',
       'Speed',
       'Constrained',
-      'Adapt'
+      'Adapt',
     ];
-    final attempted = roundNum <= (_roundIdx + 2);
+    final attempted = roundNum <= _roundIdx;
     return Container(
       padding:
           const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

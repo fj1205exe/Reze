@@ -401,7 +401,9 @@ class AppProgress {
     };
     if (j['skillMap'] is Map) {
       (j['skillMap'] as Map).forEach((k, v) {
-        sm[k.toString()] = (v is int) ? v : (v as num).toInt();
+        final saved = (v is int) ? v : (v as num).toInt();
+        final key = k.toString();
+        sm[key] = max(sm[key] ?? 0, saved);
       });
     }
     final hist = (j['history'] is List)
@@ -448,6 +450,7 @@ class _MLabHomeState extends State<MLabHome> {
   bool _goingBack = false;
 
   int _gdRoundsPassed = 0;
+  int _gdTotalRounds = 3;
   int _gdTotalSteps = 0;
   late LRState _lr;
   late OFState _of;
@@ -580,16 +583,17 @@ class _MLabHomeState extends State<MLabHome> {
     _saveProgress();
   }
 
-  void _completeGD(int roundsPassed, int totalSteps) {
+  void _completeGD(int roundsPassed, int totalRounds, int totalSteps) {
     setState(() {
       _gdRoundsPassed = roundsPassed;
       _gdTotalSteps = totalSteps;
+      _gdTotalRounds = totalRounds;
     });
-    if (roundsPassed >= 4) {
+    if (roundsPassed >= 2) {
       _completeConcept(
         'gdComplete',
         'Gradient Descent',
-        '$roundsPassed/5 rounds · $totalSteps steps',
+        '$roundsPassed/$totalRounds rounds · $totalSteps steps',
         {'Optimization': 8, 'Calculus': 4},
       );
     }
@@ -814,7 +818,7 @@ class _MLabHomeState extends State<MLabHome> {
         return GDChallengeScreen(
           key: const ValueKey('gd-ch'),
           onComplete: (passed, total, steps) {
-            _completeGD(passed, steps);
+            _completeGD(passed, total, steps);
             _nav(AppScreen.result);
           },
           onBack: () => _back(AppScreen.gdExplain),
@@ -823,9 +827,9 @@ class _MLabHomeState extends State<MLabHome> {
         return ResultScreen(
           key: const ValueKey('result'),
           roundsPassed: _gdRoundsPassed,
-          totalRounds: 5,
+          totalRounds: _gdTotalRounds,
           totalSteps: _gdTotalSteps,
-          succeeded: _gdRoundsPassed >= 4,
+          succeeded: _gdRoundsPassed >= 2,
           onNext: () => _nav(AppScreen.home),
           onPlayLR: () {
             _lr = LRState();
@@ -844,7 +848,6 @@ class _MLabHomeState extends State<MLabHome> {
           onUpdate: (s, i) => setState(() {
             _lr.slope = s;
             _lr.intercept = i;
-            _lr.steps++;
           }),
           onNext: () => _nav(AppScreen.lrDiscover),
           onBack: () => _back(AppScreen.home),
@@ -859,7 +862,6 @@ class _MLabHomeState extends State<MLabHome> {
           onUpdate: (s, i) => setState(() {
             _lr.slope = s;
             _lr.intercept = i;
-            _lr.steps++;
           }),
           onGradientStep: _lrGradientStep,
           onLrChange: (v) => setState(() => _lr.lr = v),
