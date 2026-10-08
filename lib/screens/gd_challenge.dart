@@ -177,7 +177,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                       height: 32,
                       decoration: BoxDecoration(
                         color: C.surface2,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                       ),
                       child: const Icon(Icons.chevron_left,
                           color: C.muted, size: 18),
@@ -235,7 +235,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                   color: _roundDone
                       ? (_roundPassed ? C.green : C.pink)
                           .withValues(alpha: 0.3)
-                      : Colors.white.withValues(alpha: 0.06),
+                      : C.border,
                 ),
               ),
               child: Stack(
@@ -261,7 +261,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: C.surface2,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                         ),
                         child: Text(
                             '${_round.maxSteps - _steps} left',
@@ -302,7 +302,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                     color: C.surface,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.06)),
+                        color: C.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +351,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                     decoration: BoxDecoration(
                       color: (_roundPassed ? C.green : C.pink)
                           .withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(
                           color: (_roundPassed ? C.green : C.pink)
                               .withValues(alpha: 0.25)),
@@ -472,9 +472,9 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: S.borderMd,
                   border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.06)),
+                      color: C.border),
                 ),
                 child: Text(
                   mastered
@@ -554,7 +554,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -571,9 +571,9 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: S.borderMd,
         border:
-            Border.all(color: Colors.white.withValues(alpha: 0.06)),
+            Border.all(color: C.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -602,12 +602,12 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
           const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border.all(
             color: attempted
                 ? (passed ? C.green : C.pink)
                     .withValues(alpha: 0.2)
-                : Colors.white.withValues(alpha: 0.04)),
+                : C.dim),
       ),
       child: Row(children: [
         Container(

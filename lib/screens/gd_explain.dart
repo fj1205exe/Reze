@@ -110,7 +110,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -194,7 +194,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: C.accent.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                       border: Border.all(color: C.accent.withValues(alpha: 0.15)),
                     ),
                     child: Text('CHECK YOUR UNDERSTANDING  ($_correctCount/${_quizIdx + (_answered ? 1 : 0)} correct)',
@@ -220,7 +220,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(
                             color: (_selectedAnswer == _quizzes[_quizIdx].correct ? C.green : C.yellow).withValues(alpha: 0.25),
                           ),
@@ -355,13 +355,13 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isHl ? color.withValues(alpha: 0.06) : C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: isHl ? color.withValues(alpha: 0.22) : Colors.white.withValues(alpha: 0.05)),
         ),
         child: Row(children: [
           Container(
             width: 32, height: 32,
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: S.borderSm),
             alignment: Alignment.center,
             child: Text(term['sym'] as String, style: mono(fontSize: 15, color: color)),
           ),
@@ -382,7 +382,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
   Widget _quizOption(int idx, _QuizQ q) {
     final selected = _selectedAnswer == idx;
     final isCorrect = idx == q.correct;
-    Color borderColor = Colors.white.withValues(alpha: 0.06);
+    Color borderColor = C.border;
     Color bgColor = C.surface;
 
     if (_answered) {
@@ -405,7 +405,7 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: borderColor),
         ),
         child: Row(children: [

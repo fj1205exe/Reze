@@ -56,7 +56,7 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
           MLabHeader(label: "Bayes' Theorem", onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -76,14 +76,14 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: InkWell(
                             onTap: () => setState(() => _selectedGuess = i),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: S.borderMd,
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: isSel ? C.accent.withValues(alpha: 0.15) : C.surface,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: isSel ? C.accent : Colors.white.withValues(alpha: 0.06)),
+                                borderRadius: S.borderMd,
+                                border: Border.all(color: isSel ? C.accent : C.border),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,8 +145,8 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         children: [
@@ -178,7 +178,7 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: S.borderMd,
                         border: Border.all(color: postColor.withValues(alpha: 0.3)),
                       ),
                       child: Row(
@@ -262,8 +262,8 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+        borderRadius: S.borderMd,
+        border: Border.all(color: C.border),
       ),
       child: Column(
         children: [

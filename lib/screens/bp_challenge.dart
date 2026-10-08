@@ -86,7 +86,7 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
           MLabHeader(label: 'BP Challenge', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -102,8 +102,8 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +158,7 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: _passed ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: (_passed ? C.green : C.pink).withValues(alpha: 0.3)),
                         ),
                         child: Column(
@@ -234,10 +234,10 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: S.borderMd,
         border: Border.all(
           color: correct == null
-              ? Colors.white.withValues(alpha: 0.06)
+              ? C.border
               : (correct ? C.green.withValues(alpha: 0.4) : C.pink.withValues(alpha: 0.4)),
         ),
       ),
@@ -284,9 +284,9 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: selected ? C.accent.withValues(alpha: 0.15) : C.surface2,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: S.borderSm,
             border: Border.all(
-              color: selected ? C.accent : Colors.white.withValues(alpha: 0.06),
+              color: selected ? C.accent : C.border,
             ),
           ),
           child: Text(

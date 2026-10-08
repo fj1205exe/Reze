@@ -51,7 +51,7 @@ class RecommendedStartScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        border: Border.all(color: C.border),
                       ),
                       child: CustomPaint(painter: _PreviewPainter()),
                     ),
@@ -66,8 +66,8 @@ class RecommendedStartScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

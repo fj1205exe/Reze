@@ -28,7 +28,7 @@ class SGDExplainScreen extends StatelessWidget {
           MLabHeader(label: 'Stochastic GD Explained', onBack: onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,8 +70,8 @@ class SGDExplainScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,8 +98,8 @@ class SGDExplainScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,7 @@ class SGDExplainScreen extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: col.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border(left: BorderSide(color: col, width: 2)),
       ),
       child: Column(

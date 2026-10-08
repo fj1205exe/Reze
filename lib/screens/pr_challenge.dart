@@ -80,14 +80,14 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -118,7 +118,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -127,7 +127,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -151,8 +151,8 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       children: [
@@ -197,8 +197,8 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,7 +256,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: _isCorrect ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: _isCorrect ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
                         ),
                         child: Column(
@@ -320,7 +320,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: _correctGuesses >= 2 ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
                         ),
                         child: Column(

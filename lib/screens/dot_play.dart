@@ -69,7 +69,7 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
           MLabHeader(label: 'The Dot Product', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -86,7 +86,7 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: regColor.withValues(alpha: 0.3)),
                     ),
                     child: CustomPaint(
@@ -103,8 +103,8 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,8 +125,8 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,8 +147,8 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,8 +188,8 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +235,7 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: C.accent.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.accent.withValues(alpha: 0.3)),
                         ),
                         child: Text('The dot product changes with angle. What else controls it?',
@@ -292,7 +292,7 @@ class _DotCanvasPainter extends CustomPainter {
       origin,
       scale,
       Paint()
-        ..color = Colors.white.withValues(alpha: 0.04)
+        ..color = C.dim
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );

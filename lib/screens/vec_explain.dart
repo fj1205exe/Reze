@@ -78,7 +78,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -132,7 +132,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         children: [
@@ -162,7 +162,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: C.accent.withValues(alpha: 0.25)),
                     ),
                     child: Column(
@@ -203,7 +203,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                           decoration: BoxDecoration(
-                            color: isSelected ? col.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.04),
+                            color: isSelected ? col.withValues(alpha: 0.2) : C.dim,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: isSelected ? col : Colors.white.withValues(alpha: 0.08)),
                           ),
@@ -221,7 +221,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                         border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                       ),
                       child: Text(
@@ -237,8 +237,8 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,14 +340,14 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isHl ? color.withValues(alpha: 0.06) : C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: isHl ? color.withValues(alpha: 0.22) : Colors.white.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
             Container(
               width: 32, height: 32,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: S.borderSm),
               alignment: Alignment.center,
               child: Text(term['sym'] as String, style: mono(fontSize: 15, color: color)),
             ),
@@ -373,7 +373,7 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: col.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border(left: BorderSide(color: col, width: 2)),
       ),
       child: Column(

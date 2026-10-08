@@ -57,7 +57,7 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -108,8 +108,8 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: C.surface,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                          borderRadius: S.borderMd,
+                          border: Border.all(color: C.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,7 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         children: [
@@ -170,7 +170,7 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       children: [
@@ -196,7 +196,7 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       children: [
@@ -224,8 +224,8 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,14 +362,14 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isHl ? color.withValues(alpha: 0.06) : C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: isHl ? color.withValues(alpha: 0.22) : Colors.white.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
             Container(
               width: 40, height: 32,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: S.borderSm),
               alignment: Alignment.center,
               child: Text(
                 (term['sym'] as String).length > 3 ? (term['sym'] as String).substring(0, 3) : term['sym'] as String,

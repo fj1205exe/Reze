@@ -92,8 +92,8 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: AspectRatio(
                       aspectRatio: 350 / 200,
@@ -116,8 +116,8 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                           decoration: BoxDecoration(
                             color: C.surface2,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                           ),
                           child: Column(
                             children: [
@@ -238,7 +238,7 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                             color: isHl
                                 ? term.color.withValues(alpha: 0.06)
                                 : C.surface,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: S.borderMd,
                             border: Border.all(
                               color: isHl
                                   ? term.color.withValues(alpha: 0.19)
@@ -253,7 +253,7 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                                 height: 32,
                                 decoration: BoxDecoration(
                                   color: term.color.withValues(alpha: 0.08),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: S.borderSm,
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(

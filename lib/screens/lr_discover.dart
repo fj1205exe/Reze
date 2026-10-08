@@ -115,7 +115,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
@@ -125,7 +125,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       height: 32,
                       decoration: BoxDecoration(
                           color: C.surface2,
-                          borderRadius: BorderRadius.circular(8)),
+                          borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left,
                           color: C.muted, size: 18),
                     ),
@@ -160,7 +160,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
                 border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                    Border.all(color: C.border),
               ),
               child: Stack(
                 children: [
@@ -187,7 +187,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       decoration: BoxDecoration(
                         color: const Color(0xFF14171C)
                             .withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                         border: Border.all(
                             color: zoneColor.withValues(alpha: 0.25)),
                       ),
@@ -237,7 +237,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.06)),
+                          color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,7 +324,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.06)),
+                          color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

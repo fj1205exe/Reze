@@ -77,7 +77,7 @@ class ResultScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: C.surface,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +149,7 @@ class ResultScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: C.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+        border: Border.all(color: C.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +191,7 @@ class ResultScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: C.accent.withValues(alpha: 0.2)),
         ),
         child: Row(

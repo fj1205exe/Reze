@@ -75,8 +75,8 @@ class OFResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class OFResultScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: C.surface2,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                       ),
                       child: RichText(
                         textAlign: TextAlign.center,
@@ -124,7 +124,7 @@ class OFResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: S.borderMd,
                   border: Border.all(
                     color: challengeSuccess
                         ? C.green.withValues(alpha: 0.2)
@@ -186,8 +186,8 @@ class OFResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class OFResultScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +242,7 @@ class OFResultScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border(left: BorderSide(color: color, width: 2)),
       ),
       child: Row(

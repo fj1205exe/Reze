@@ -100,7 +100,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
           MLabHeader(label: 'LR Challenge', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,11 +122,11 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                           color: _succeeded
                               ? C.green.withValues(alpha: 0.12)
                               : C.surface,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                           border: Border.all(
                             color: _succeeded
                                 ? C.green.withValues(alpha: 0.3)
-                                : Colors.white.withValues(alpha: 0.06),
+                                : C.border,
                           ),
                         ),
                         child: Row(
@@ -161,8 +161,8 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: CustomPaint(
                       painter: _ChallengePlotPainter(
@@ -182,8 +182,8 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

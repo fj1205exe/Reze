@@ -92,7 +92,7 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
           MLabHeader(label: 'SGD Challenge', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -116,11 +116,11 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                           color: _converged
                               ? C.green.withValues(alpha: 0.12)
                               : C.surface,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                           border: Border.all(
                             color: _converged
                                 ? C.green.withValues(alpha: 0.3)
-                                : Colors.white.withValues(alpha: 0.06),
+                                : C.border,
                           ),
                         ),
                         child: Row(
@@ -146,8 +146,8 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: LossCurveWidget(
                       theta: _theta,
@@ -186,9 +186,9 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 color: sel ? color.withValues(alpha: 0.15) : C.surface,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: S.borderSm,
                                 border: Border.all(
-                                  color: sel ? color : Colors.white.withValues(alpha: 0.06),
+                                  color: sel ? color : C.border,
                                 ),
                               ),
                               child: Center(
@@ -217,8 +217,8 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +266,7 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                           color: _converged
                               ? C.green.withValues(alpha: 0.1)
                               : C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(
                             color: (_converged ? C.green : C.pink).withValues(alpha: 0.3),
                           ),

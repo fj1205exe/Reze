@@ -78,7 +78,7 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
           MLabHeader(label: 'Vectors', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -95,8 +95,8 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
@@ -195,7 +195,7 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: active ? color.withValues(alpha: 0.12) : color.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border.all(color: active ? color.withValues(alpha: 0.5) : color.withValues(alpha: 0.15)),
       ),
       child: Column(
@@ -243,7 +243,7 @@ class _PlayCanvasPainter extends CustomPainter {
 
     // Grid circles
     final circlePaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.04)
+      ..color = C.dim
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawCircle(origin, scale * 0.5, circlePaint);

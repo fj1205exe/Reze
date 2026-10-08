@@ -143,7 +143,7 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -176,7 +176,7 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
               decoration: BoxDecoration(
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: _showInsight ? C.green.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.06)),
+                border: Border.all(color: _showInsight ? C.green.withValues(alpha: 0.2) : C.border),
               ),
               child: Stack(
                 children: [
@@ -190,7 +190,7 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
                   if (_steps > 0)
                     Positioned(top: 12, right: 12, child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: Text('step $_steps / ${_task.maxSteps}', style: mono(fontSize: 12, color: C.muted)),
                     )),
                   Padding(
@@ -212,8 +212,8 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
                     color: C.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                    borderRadius: S.borderMd,
+                    border: Border.all(color: C.border),
                   ),
                   child: Row(children: [
                     Text('Step size: ', style: inter(fontSize: 13, color: C.muted)),
@@ -229,7 +229,7 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: LrSlider(value: _userLr, onChange: (v) => setState(() => _userLr = v)),
                   ),
@@ -247,7 +247,7 @@ class _GDPlayScreenState extends State<GDPlayScreen> {
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
                       color: C.pink.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: C.pink.withValues(alpha: 0.25)),
                     ),
                     child: Column(

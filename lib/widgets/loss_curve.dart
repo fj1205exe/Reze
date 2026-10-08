@@ -34,7 +34,7 @@ class LossCurvePainter extends CustomPainter {
     canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(pl, pt, iw, ih), const Radius.circular(3)), bgPaint);
 
     // Grid lines
-    final gridPaint = Paint()..color = Colors.white.withValues(alpha: 0.04)..strokeWidth = 1;
+    final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(pl, pt + ih * f), Offset(pl + iw, pt + ih * f), gridPaint);
     }

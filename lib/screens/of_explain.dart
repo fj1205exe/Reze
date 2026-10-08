@@ -61,7 +61,7 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
           MLabHeader(label: 'The Bias-Variance Tradeoff', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,7 +104,7 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: zoneColor.withValues(alpha: 0.3)),
                     ),
                     child: Stack(
@@ -139,7 +139,7 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                                       height: 28,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                        color: isCur ? c.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.04),
+                                        color: isCur ? c.withValues(alpha: 0.2) : C.dim,
                                         borderRadius: BorderRadius.circular(6),
                                         border: Border.all(color: isCur ? c.withValues(alpha: 0.4) : Colors.transparent),
                                       ),
@@ -199,7 +199,7 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         children: [
@@ -306,14 +306,14 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isHl ? color.withValues(alpha: 0.06) : C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: isHl ? color.withValues(alpha: 0.22) : Colors.white.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
             Container(
               width: 32, height: 32,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: S.borderSm),
               alignment: Alignment.center,
               child: Text(term['sym'] as String, style: mono(fontSize: 15, color: color)),
             ),
@@ -361,7 +361,7 @@ class _OFExplainPainter extends CustomPainter {
     double toY(double yNorm) => padT + (1 - yNorm) * ih;
 
     // Grid lines
-    final gridPaint = Paint()..color = Colors.white.withValues(alpha: 0.04)..strokeWidth = 1;
+    final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(padL, padT + ih * f), Offset(padL + iw, padT + ih * f), gridPaint);
     }

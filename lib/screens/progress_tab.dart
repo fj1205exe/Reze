@@ -53,8 +53,8 @@ class ProgressTabScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,8 +96,8 @@ class ProgressTabScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             children: [
@@ -135,7 +135,7 @@ class ProgressTabScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

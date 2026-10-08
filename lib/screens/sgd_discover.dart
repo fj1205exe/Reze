@@ -79,7 +79,7 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
           MLabHeader(label: 'SGD — Discover', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -94,8 +94,8 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: LossCurveWidget(
                       theta: widget.theta,
@@ -133,7 +133,7 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                                     ? color.withValues(alpha: 0.5)
                                     : tried
                                         ? color.withValues(alpha: 0.2)
-                                        : Colors.white.withValues(alpha: 0.06),
+                                        : C.border,
                               ),
                             ),
                             child: Column(
@@ -193,7 +193,7 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,7 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: C.surface,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

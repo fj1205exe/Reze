@@ -79,7 +79,7 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
           MLabHeader(label: 'Neuron Architecture', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,8 +122,8 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                          decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                           child: Column(
                             children: [
                               Row(
@@ -162,7 +162,7 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: Color(selectedTerm['color'] as int).withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: S.borderSm,
                               border: Border.all(color: Color(selectedTerm['color'] as int).withValues(alpha: 0.3)),
                             ),
                             child: Column(
@@ -217,13 +217,13 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: InkWell(
                             onTap: () => setState(() => _activeAct = name),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                             child: Container(
                               height: 38,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: isSel ? C.accent.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.03),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: S.borderSm,
                                 border: Border.all(color: isSel ? C.accent : Colors.transparent),
                               ),
                               child: Text(
@@ -242,7 +242,7 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                     ),
                     child: Text(
                       _activeAct == 'Sigmoid'
@@ -265,8 +265,8 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

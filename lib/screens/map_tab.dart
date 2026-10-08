@@ -57,8 +57,8 @@ class MapTabScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: done ? C.green.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: done ? C.green.withValues(alpha: 0.2) : C.border),
                       ),
                       child: Row(
                         children: [

@@ -72,7 +72,7 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -88,8 +88,8 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: CustomPaint(
                       painter: _NetworkPainter(
@@ -106,7 +106,7 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: C.accent.withValues(alpha: 0.2)),
                     ),
                     child: Column(
@@ -143,7 +143,7 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: C.green.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.green.withValues(alpha: 0.25)),
                         ),
                         child: Text(

@@ -175,7 +175,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: border),
         ),
         child: Text(_q.options[idx], style: inter(fontSize: 14, fontWeight: FontWeight.w400, color: textColor)),

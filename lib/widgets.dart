@@ -83,7 +83,7 @@ class _PrimaryBtnState extends State<PrimaryBtn> {
           height: 52,
           decoration: BoxDecoration(
             color: widget.disabled ? C.surface3 : C.accent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: S.borderMd,
           ),
           alignment: Alignment.center,
           child: Text(widget.label, style: spaceGrotesk(
@@ -124,7 +124,7 @@ class _SecondaryBtnState extends State<SecondaryBtn> {
           width: double.infinity,
           height: 52,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: S.borderMd,
             border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           alignment: Alignment.center,
@@ -154,7 +154,7 @@ class OptionCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: S.borderMd,
             border: Border.all(color: selected ? C.accent : Colors.white.withValues(alpha: 0.07)),
             color: selected ? C.accent.withValues(alpha: 0.05) : C.surface,
           ),
@@ -189,7 +189,7 @@ class MLabHeader extends StatelessWidget {
                     width: 32, height: 32,
                     decoration: BoxDecoration(
                       color: C.surface2,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                     ),
                     child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                   ),
@@ -348,7 +348,7 @@ class StepCounter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: C.surface2,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -372,7 +372,7 @@ class MLabNavBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: C.surface,
-        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.06))),
+        border: Border(top: BorderSide(color: C.border)),
       ),
       child: SafeArea(
         top: false,

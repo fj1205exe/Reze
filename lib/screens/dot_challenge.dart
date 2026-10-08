@@ -112,14 +112,14 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -162,7 +162,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       ? C.green.withValues(alpha: 0.3)
                       : (_outOfAttempts && !_succeeded
                           ? C.pink.withValues(alpha: 0.2)
-                          : Colors.white.withValues(alpha: 0.06)),
+                          : C.border),
                 ),
               ),
               child: Stack(
@@ -179,7 +179,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: const Color(0xFF14171C).withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
                       child: Text('${_maxAttempts - widget.steps} left', style: mono(fontSize: 12, color: C.yellow)),
@@ -213,7 +213,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: C.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.green.withValues(alpha: 0.3)),
                         ),
                         child: Column(
@@ -238,7 +238,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.pink.withValues(alpha: 0.25)),
                         ),
                         child: Text('Out of attempts. Hint: perpendicular vectors have θ = 90°.',
@@ -254,8 +254,8 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,8 +282,8 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +307,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,7 +372,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _succeeded ? C.green : C.accent,
                             foregroundColor: _succeeded ? C.bg : Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                             elevation: 0,
                           ),
                           child: Text('See results', style: spaceGrotesk(
@@ -396,7 +396,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: C.surface2,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -435,7 +435,7 @@ class _DOTChallengePainter extends CustomPainter {
       origin,
       scale,
       Paint()
-        ..color = Colors.white.withValues(alpha: 0.04)
+        ..color = C.dim
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );

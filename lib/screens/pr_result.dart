@@ -66,7 +66,7 @@ class PRResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: passed ? C.green.withValues(alpha: 0.1) : C.pink.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: S.borderMd,
                   border: Border.all(color: passed ? C.green.withValues(alpha: 0.3) : C.pink.withValues(alpha: 0.25)),
                 ),
                 child: Column(
@@ -93,8 +93,8 @@ class PRResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +111,7 @@ class PRResultScreen extends StatelessWidget {
                         Expanded(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                            decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                             child: Text('E[X] = p', textAlign: TextAlign.center, style: mono(fontSize: 14, color: C.purple, fontWeight: FontWeight.w600)),
                           ),
                         ),
@@ -119,7 +119,7 @@ class PRResultScreen extends StatelessWidget {
                         Expanded(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                            decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                             child: Text('Var[X] = p(1 − p)', textAlign: TextAlign.center, style: mono(fontSize: 13, color: C.yellow, fontWeight: FontWeight.w600)),
                           ),
                         ),
@@ -144,8 +144,8 @@ class PRResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +185,7 @@ class PRResultScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border(left: BorderSide(color: color, width: 2)),
       ),
       child: Row(

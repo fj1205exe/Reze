@@ -99,14 +99,14 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -148,7 +148,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: const Color(0xFF14171C).withValues(alpha: 0.9),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                       border: Border.all(color: regColor.withValues(alpha: 0.25)),
                     ),
                     child: Text('θ = ${angleBetween.round()}°', style: inter(fontSize: 12, color: regColor)),
@@ -178,8 +178,8 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,8 +197,8 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +220,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +287,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,7 +394,7 @@ class _DOTDiscoverPainter extends CustomPainter {
       origin,
       scale,
       Paint()
-        ..color = Colors.white.withValues(alpha: 0.04)
+        ..color = C.dim
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );

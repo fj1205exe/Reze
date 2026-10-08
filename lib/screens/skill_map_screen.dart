@@ -69,8 +69,8 @@ class SkillMapScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: CustomPaint(
                         painter: _SkillGraphPainter(skillMap),
@@ -102,7 +102,7 @@ class SkillMapScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: C.accent.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.accent.withValues(alpha: 0.18)),
                         ),
                         child: Row(

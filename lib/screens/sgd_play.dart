@@ -52,7 +52,7 @@ class SGDPlayScreen extends StatelessWidget {
           MLabHeader(label: 'SGD', onBack: onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -67,7 +67,7 @@ class SGDPlayScreen extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: color.withValues(alpha: 0.2)),
                     ),
                     child: Column(
@@ -103,8 +103,8 @@ class SGDPlayScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,13 +124,13 @@ class SGDPlayScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 3),
                                 child: InkWell(
                                   onTap: () => onBatchChange(b),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: S.borderSm,
                                   child: Container(
                                     height: 38,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: active ? bColor.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: S.borderSm,
                                       border: Border.all(
                                         color: active ? bColor.withValues(alpha: 0.5) : Colors.transparent,
                                       ),
@@ -164,8 +164,8 @@ class SGDPlayScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       children: [
@@ -206,7 +206,7 @@ class SGDPlayScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: color,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                         elevation: 0,
                       ),
                       child: Text(

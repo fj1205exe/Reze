@@ -102,14 +102,14 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -147,13 +147,13 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: C.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: S.borderMd,
                 border: Border.all(
                   color: _done && _succeeded
                       ? C.green.withValues(alpha: 0.3)
                       : _done && !_succeeded
                           ? C.pink.withValues(alpha: 0.2)
-                          : Colors.white.withValues(alpha: 0.06),
+                          : C.border,
                 ),
               ),
               child: CustomPaint(
@@ -180,7 +180,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: S.borderMd,
                             border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                           ),
                           child: Column(
@@ -200,8 +200,8 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: _succeeded ? C.green.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: _succeeded ? C.green.withValues(alpha: 0.3) : C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,7 +248,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: C.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.green.withValues(alpha: 0.3)),
                         ),
                         child: Column(
@@ -273,7 +273,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.pink.withValues(alpha: 0.25)),
                         ),
                         child: Text('Ran out of adjustments. Think about how x and y components contribute to magnitude.',
@@ -288,8 +288,8 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       margin: const EdgeInsets.only(bottom: 14),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +318,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                       ),
                       child: Text('${_maxSteps - widget.steps} adjustments remaining',
                           style: mono(fontSize: 12, color: C.yellow)),
@@ -337,7 +337,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _succeeded ? C.green : C.accent,
                             foregroundColor: _succeeded ? C.bg : Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                             elevation: 0,
                           ),
                           child: Text('See results', style: spaceGrotesk(

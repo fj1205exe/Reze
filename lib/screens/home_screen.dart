@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: C.green.withValues(alpha: 0.06),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: S.borderMd,
                             border: Border.all(color: C.green.withValues(alpha: 0.15)),
                           ),
                           child: Text('All $totalConcepts concepts complete. Nice work.',
@@ -146,8 +146,8 @@ class HomeScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: C.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                            borderRadius: S.borderMd,
+                            border: Border.all(color: C.border),
                           ),
                           child: Column(
                             children: [
@@ -197,7 +197,7 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: C.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: C.accent.withValues(alpha: 0.2)),
         ),
         child: Column(
@@ -218,7 +218,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Container(
                   width: 36, height: 36,
-                  decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: C.accent, borderRadius: S.borderSm),
                   child: const Icon(Icons.arrow_forward, color: Colors.white, size: 16),
                 ),
               ],
@@ -260,8 +260,8 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: C.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+          borderRadius: S.borderMd,
+          border: Border.all(color: C.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

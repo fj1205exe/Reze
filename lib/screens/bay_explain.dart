@@ -65,7 +65,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
           MLabHeader(label: "Bayes' Theorem Explained", onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -108,8 +108,8 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                          decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
@@ -152,8 +152,8 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +165,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -180,7 +180,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -199,7 +199,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -214,7 +214,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -250,7 +250,7 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             decoration: BoxDecoration(
                               color: isSel ? col.withValues(alpha: 0.1) : C.surface,
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: isSel ? col.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.06)),
+                              border: Border.all(color: isSel ? col.withValues(alpha: 0.4) : C.border),
                             ),
                             child: Row(
                               children: [
@@ -293,8 +293,8 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -76,14 +76,14 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -122,7 +122,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                         const SizedBox(height: 16),
                         _buildFrequencyTree(stats),
                         const SizedBox(height: 16),
-                        Divider(color: Colors.white.withValues(alpha: 0.06), height: 1),
+                        Divider(color: C.border, height: 1),
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,8 +152,8 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,8 +198,8 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,8 +244,8 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +313,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: C.surface2,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: S.borderSm,
             border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           child: Text('1,000 people', style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600)),
@@ -330,7 +330,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: C.pink.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                       border: Border.all(color: C.pink.withValues(alpha: 0.3)),
                     ),
                     child: Column(
@@ -379,7 +379,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: C.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                       border: Border.all(color: C.green.withValues(alpha: 0.3)),
                     ),
                     child: Column(

@@ -41,7 +41,7 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
           MLabHeader(label: 'Loss Functions Explained', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -84,13 +84,13 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 3),
                           child: InkWell(
                             onTap: () => setState(() => _activeType = type),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                             child: Container(
                               height: 38,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: isCur ? col.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.03),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: S.borderSm,
                                 border: Border.all(color: isCur ? col.withValues(alpha: 0.5) : Colors.transparent),
                               ),
                               child: Text(
@@ -119,7 +119,7 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: S.borderMd,
                         border: Border.all(color: activeCol.withValues(alpha: 0.3)),
                       ),
                       child: Column(
@@ -132,7 +132,7 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                             decoration: BoxDecoration(
                               color: C.surface2,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: S.borderSm,
                             ),
                             child: _buildEquationFormula(_activeType, activeCol),
                           ),
@@ -156,8 +156,8 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,8 +186,8 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

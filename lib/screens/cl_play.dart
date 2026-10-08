@@ -45,7 +45,7 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   _backBtn(widget.onBack),
@@ -74,7 +74,7 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
                   border: Border.all(
                     color: isGood
                         ? C.green.withValues(alpha: 0.3)
-                        : Colors.white.withValues(alpha: 0.06),
+                        : C.border,
                   ),
                 ),
                 child: Stack(
@@ -121,8 +121,8 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: C.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                borderRadius: S.borderMd,
+                border: Border.all(color: C.border),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +168,7 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
                       margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
                         color: C.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: S.borderMd,
                         border: Border.all(color: C.green.withValues(alpha: 0.3)),
                       ),
                       child: Text('Great separation at this angle!', style: inter(fontSize: 14, color: C.green), textAlign: TextAlign.center),
@@ -195,7 +195,7 @@ Widget _backBtn(VoidCallback onBack) {
     onTap: onBack,
     child: Container(
       width: 32, height: 32,
-      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
     ),
   );
@@ -219,7 +219,7 @@ class _CLPlotPainter extends CustomPainter {
     double toY(double yNorm) => h - pad - yNorm * ih;
 
     // Grid lines
-    final gridPaint = Paint()..color = Colors.white.withValues(alpha: 0.04)..strokeWidth = 1;
+    final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (int i = 1; i < 4; i++) {
       final f = i / 4;
       canvas.drawLine(Offset(toX(f), pad), Offset(toX(f), h - pad), gridPaint);

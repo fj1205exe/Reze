@@ -125,14 +125,14 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -159,8 +159,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: C.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                borderRadius: S.borderMd,
+                border: Border.all(color: C.border),
               ),
               child: CustomPaint(
                 painter: _DiscoverCanvasPainter(
@@ -192,7 +192,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: C.accent.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                             border: Border.all(color: C.accent.withValues(alpha: 0.25)),
                           ),
                           child: Column(
@@ -212,7 +212,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: C.blue.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: S.borderSm,
                             border: Border.all(color: C.blue.withValues(alpha: 0.25)),
                           ),
                           child: Column(
@@ -236,13 +236,13 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       Expanded(
                         child: InkWell(
                           onTap: _handleToggleSum,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                           child: Container(
                             height: 38,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: widget.showSum ? C.green.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: S.borderSm,
                               border: Border.all(color: widget.showSum ? C.green.withValues(alpha: 0.5) : Colors.transparent),
                             ),
                             child: Text(
@@ -256,13 +256,13 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       Expanded(
                         child: InkWell(
                           onTap: _handleToggleDiff,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: S.borderSm,
                           child: Container(
                             height: 38,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: widget.showDiff ? C.pink.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: S.borderSm,
                               border: Border.all(color: widget.showDiff ? C.pink.withValues(alpha: 0.5) : Colors.transparent),
                             ),
                             child: Text(
@@ -281,8 +281,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,8 +301,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,8 +321,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -367,7 +367,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: C.purple.withValues(alpha: 0.15),
                                     foregroundColor: C.purple,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    shape: RoundedRectangleBorder(borderRadius: S.borderSm),
                                     elevation: 0,
                                   ),
                                   child: Text('Scale a', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.purple)),
@@ -378,13 +378,13 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                             Expanded(
                               child: InkWell(
                                 onTap: _handleNormalize,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: S.borderSm,
                                 child: Container(
                                   height: 38,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: _normalized ? C.green.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: S.borderSm,
                                     border: Border.all(color: _normalized ? C.green.withValues(alpha: 0.5) : Colors.transparent),
                                   ),
                                   child: Text(
@@ -500,7 +500,7 @@ class _DiscoverCanvasPainter extends CustomPainter {
 
     // Grid circles
     final circlePaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.04)
+      ..color = C.dim
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawCircle(origin, scale * 0.5, circlePaint);

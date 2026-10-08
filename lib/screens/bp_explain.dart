@@ -64,7 +64,7 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
           MLabHeader(label: 'Backpropagation Explained', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -107,8 +107,8 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
                             scrollDirection: Axis.horizontal,
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                              decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                               child: Row(
                                 children: [
                                   Text('∂L/∂w₁ = ', style: mono(fontSize: 14, color: C.txt)),
@@ -183,7 +183,7 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
                                   decoration: BoxDecoration(
                                     color: isSel ? col.withValues(alpha: 0.1) : C.surface,
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: isSel ? col.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.06)),
+                                    border: Border.all(color: isSel ? col.withValues(alpha: 0.4) : C.border),
                                   ),
                                   child: Row(
                                     children: [
@@ -229,8 +229,8 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

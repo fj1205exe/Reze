@@ -17,6 +17,39 @@ class C {
   static const greenLight = Color(0xFF86EFAC);
   static const teal = Color(0xFF6EE7B7);
   static const purple = Color(0xFFA78BFA);
+
+  static final border = Colors.white.withValues(alpha: 0.06);
+  static final dim = Colors.white.withValues(alpha: 0.04);
+}
+
+class S {
+  static const rSm = 8.0;
+  static const rMd = 12.0;
+  static const rLg = 16.0;
+  static final borderSm = BorderRadius.circular(rSm);
+  static final borderMd = BorderRadius.circular(rMd);
+  static final borderLg = BorderRadius.circular(rLg);
+
+  static const screenPad = EdgeInsets.fromLTRB(16, 4, 16, 32);
+  static const headerPad = EdgeInsets.fromLTRB(20, 12, 20, 12);
+  static const cardPad = EdgeInsets.all(14);
+  static const sectionPad = EdgeInsets.all(16);
+
+  static const gap4 = SizedBox(height: 4);
+  static const gap8 = SizedBox(height: 8);
+  static const gap10 = SizedBox(height: 10);
+  static const gap12 = SizedBox(height: 12);
+  static const gap14 = SizedBox(height: 14);
+  static const gap16 = SizedBox(height: 16);
+  static const gap20 = SizedBox(height: 20);
+  static const gap24 = SizedBox(height: 24);
+  static const gap32 = SizedBox(height: 32);
+
+  static BoxDecoration card({Color? fill, BorderRadius? radius}) => BoxDecoration(
+    color: fill ?? C.surface,
+    borderRadius: radius ?? borderMd,
+    border: Border.all(color: C.border),
+  );
 }
 
 TextStyle spaceGrotesk({

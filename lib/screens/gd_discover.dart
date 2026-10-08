@@ -187,7 +187,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -212,7 +212,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
               decoration: BoxDecoration(
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: _showInsight ? C.green.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.06)),
+                border: Border.all(color: _showInsight ? C.green.withValues(alpha: 0.2) : C.border),
               ),
               child: Stack(
                 children: [
@@ -227,7 +227,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: C.surface2,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: S.borderSm,
                       border: Border.all(color: _zoneColor.withValues(alpha: 0.25)),
                     ),
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -254,7 +254,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
                   color: C.accent.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: S.borderMd,
                   border: Border.all(color: C.accent.withValues(alpha: 0.15)),
                 ),
                 child: Column(
@@ -275,7 +275,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(color: C.surface, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: C.surface, borderRadius: S.borderMd),
                     child: Row(children: [
                       Text('η = ', style: inter(fontSize: 13, color: C.muted)),
                       Text(_lr.toStringAsFixed(2), style: mono(fontSize: 15, color: C.accent)),
@@ -289,7 +289,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,7 +304,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                 Row(children: [
                   Expanded(child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: C.surface, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: C.surface, borderRadius: S.borderSm),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -316,7 +316,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                   const SizedBox(width: 8),
                   Expanded(child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: C.surface, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: C.surface, borderRadius: S.borderSm),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -343,7 +343,7 @@ class _GDDiscoverScreenState extends State<GDDiscoverScreen> {
                     margin: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
                       color: C.pink.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: S.borderMd,
                       border: Border.all(color: C.pink.withValues(alpha: 0.25)),
                     ),
                     child: Column(

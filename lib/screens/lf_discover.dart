@@ -93,7 +93,7 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
           MLabHeader(label: 'Loss Functions — Discover', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -109,8 +109,8 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: CustomPaint(
                       painter: _DiscoverPlotPainter(
@@ -137,11 +137,11 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                         color: _outlierOn
                             ? C.pink.withValues(alpha: 0.12)
                             : C.surface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: S.borderMd,
                         border: Border.all(
                           color: _outlierOn
                               ? C.pink.withValues(alpha: 0.4)
-                              : Colors.white.withValues(alpha: 0.06),
+                              : C.border,
                         ),
                       ),
                       child: Row(
@@ -186,8 +186,8 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       children: [
@@ -304,7 +304,7 @@ class _DiscoverPlotPainter extends CustomPainter {
     double toY(double loss) => padT + ih - (loss.clamp(0, yMax) / yMax) * ih;
 
     // Grid
-    final gridPaint = Paint()..color = Colors.white.withValues(alpha: 0.04)..strokeWidth = 1;
+    final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(padL, padT + ih * f), Offset(padL + iw, padT + ih * f), gridPaint);
     }

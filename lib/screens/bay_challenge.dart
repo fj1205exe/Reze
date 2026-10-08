@@ -102,14 +102,14 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -154,8 +154,8 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,14 +193,14 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -251,8 +251,8 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +268,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: C.surface2,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: S.borderSm,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +285,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: C.surface2,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: S.borderSm,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +302,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: C.surface2,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: S.borderSm,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,8 +326,8 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                        borderRadius: S.borderMd,
+                        border: Border.all(color: C.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,7 +372,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                           color: (_userGuess - truePosterior).abs() <= 5.0
                               ? C.green.withValues(alpha: 0.1)
                               : C.pink.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(
                             color: (_userGuess - truePosterior).abs() <= 5.0
                                 ? C.green.withValues(alpha: 0.3)
@@ -409,8 +409,8 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: C.surface,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                          borderRadius: S.borderMd,
+                          border: Border.all(color: C.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,14 +459,14 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -507,7 +507,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: _passed ? C.green.withValues(alpha: 0.1) : C.yellow.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: S.borderMd,
                         border: Border.all(color: _passed ? C.green.withValues(alpha: 0.3) : C.yellow.withValues(alpha: 0.25)),
                       ),
                       child: Column(
@@ -578,7 +578,7 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _passed ? C.green : C.accent,
                           foregroundColor: _passed ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                           elevation: 0,
                         ),
                         child: Text('See results', style: spaceGrotesk(

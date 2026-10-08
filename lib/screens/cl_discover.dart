@@ -75,14 +75,14 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: widget.onBack,
                     child: Container(
                       width: 32, height: 32,
-                      decoration: BoxDecoration(color: C.surface2, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: C.surface2, borderRadius: S.borderSm),
                       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
                     ),
                   ),
@@ -110,7 +110,7 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                 border: Border.all(
                   color: isGood
                       ? C.green.withValues(alpha: 0.3)
-                      : Colors.white.withValues(alpha: 0.06),
+                      : C.border,
                 ),
               ),
               child: Stack(
@@ -161,8 +161,8 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,8 +204,8 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,8 +243,8 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: C.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +337,7 @@ class _CLPlotPainter extends CustomPainter {
     double toX(double xNorm) => pad + xNorm * iw;
     double toY(double yNorm) => h - pad - yNorm * ih;
 
-    final gridPaint = Paint()..color = Colors.white.withValues(alpha: 0.04)..strokeWidth = 1;
+    final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (int i = 1; i < 4; i++) {
       final f = i / 4;
       canvas.drawLine(Offset(toX(f), pad), Offset(toX(f), h - pad), gridPaint);

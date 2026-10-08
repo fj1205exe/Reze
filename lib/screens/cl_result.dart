@@ -68,7 +68,7 @@ class CLResultScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     color: C.green.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: S.borderMd,
                     border: Border.all(color: C.green.withValues(alpha: 0.3)),
                   ),
                   child: Row(
@@ -91,7 +91,7 @@ class CLResultScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
                     color: C.pink.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: S.borderMd,
                     border: Border.all(color: C.pink.withValues(alpha: 0.25)),
                   ),
                   child: Text(
@@ -111,8 +111,8 @@ class CLResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +129,7 @@ class CLResultScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: C.surface2,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: S.borderSm,
                       ),
                       child: RichText(
                         textAlign: TextAlign.center,
@@ -168,8 +168,8 @@ class CLResultScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: C.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  borderRadius: S.borderMd,
+                  border: Border.all(color: C.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class CLResultScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: C.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: S.borderSm,
         border: Border(left: BorderSide(color: color, width: 2)),
       ),
       child: Row(

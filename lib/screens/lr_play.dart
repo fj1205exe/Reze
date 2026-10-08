@@ -51,7 +51,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+              padding: S.headerPad,
               child: Row(
                 children: [
                   _backBtn(widget.onBack),
@@ -88,7 +88,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                 border: Border.all(
                   color: goodFit
                       ? C.green.withValues(alpha: 0.3)
-                      : Colors.white.withValues(alpha: 0.06),
+                      : C.border,
                 ),
               ),
               child: Stack(
@@ -134,7 +134,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      border: Border.all(color: C.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                         margin: const EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
                           color: C.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: S.borderMd,
                           border: Border.all(color: C.green.withValues(alpha: 0.3)),
                         ),
                         child: Text('Good fit! The line matches the data.',
@@ -238,7 +238,7 @@ Widget _backBtn(VoidCallback onBack) {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-          color: C.surface2, borderRadius: BorderRadius.circular(8)),
+          color: C.surface2, borderRadius: S.borderSm),
       child: const Icon(Icons.chevron_left, color: C.muted, size: 18),
     ),
   );
@@ -278,7 +278,7 @@ class LRScatterPainter extends CustomPainter {
 
     // Grid lines
     final gridPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.04)
+      ..color = C.dim
       ..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(padL, padT + ih * f),

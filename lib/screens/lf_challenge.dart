@@ -102,7 +102,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
           MLabHeader(label: 'Loss Functions — Challenge', onBack: widget.onBack),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              padding: S.screenPad,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -147,8 +147,8 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: C.surface,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                          borderRadius: S.borderMd,
+                          border: Border.all(color: C.border),
                         ),
                         child: Text(s.explanation, style: inter(fontSize: 13, color: const Color(0xFFD1D5DB))),
                       ),
@@ -190,7 +190,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
       borderColor = color;
       bgColor = color.withValues(alpha: 0.08);
     } else {
-      borderColor = Colors.white.withValues(alpha: 0.06);
+      borderColor = C.border;
       bgColor = C.surface;
     }
 
@@ -201,7 +201,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: S.borderMd,
           border: Border.all(color: borderColor),
         ),
         child: Row(
@@ -210,7 +210,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
               width: 36, height: 36,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: S.borderSm,
               ),
               alignment: Alignment.center,
               child: Text(label, style: spaceGrotesk(fontSize: 11, fontWeight: FontWeight.w700, color: color)),
