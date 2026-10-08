@@ -3,7 +3,7 @@ import '../theme.dart';
 import '../widgets.dart';
 import '../utils/overfitting.dart' as of_utils;
 
-class OFPlayScreen extends StatelessWidget {
+class OFPlayScreen extends StatefulWidget {
   final int degree;
   final ValueChanged<int> onUpdate;
   final VoidCallback onNext;
@@ -18,11 +18,82 @@ class OFPlayScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, degree);
-    final curvePoints = of_utils.sampleOFCurve(coeffs, 90);
-    final trainMSE = of_utils.calcPolyMSE(coeffs, of_utils.trainPoints);
+  State<OFPlayScreen> createState() => _OFPlayScreenState();
+}
 
+class _OFPlayScreenState extends State<OFPlayScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late List<Map<String, double>> _fromCurve;
+  late List<Map<String, double>> _toCurve;
+  late List<double> _toCoeffs;
+  double _fromMSE = 0;
+  double _toMSE = 0;
+  late Color _fromColor;
+  late Color _toColor;
+
+  static Color _colorFor(int d) => d <= 2 ? C.blue : (d <= 4 ? C.accent : C.pink);
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: this,
+    )..addListener(() => setState(() {}));
+
+    _toCoeffs = of_utils.fitPolynomial(of_utils.trainPoints, widget.degree);
+    _toCurve = of_utils.sampleOFCurve(_toCoeffs, 90);
+    _fromCurve = _toCurve;
+    _toMSE = of_utils.calcPolyMSE(_toCoeffs, of_utils.trainPoints);
+    _fromMSE = _toMSE;
+    _toColor = _colorFor(widget.degree);
+    _fromColor = _toColor;
+  }
+
+  @override
+  void didUpdateWidget(OFPlayScreen old) {
+    super.didUpdateWidget(old);
+    if (old.degree != widget.degree) {
+      _fromCurve = _interpolatedCurve();
+      _fromMSE = _animatedMSE;
+      _fromColor = _animatedColor;
+
+      _toCoeffs = of_utils.fitPolynomial(of_utils.trainPoints, widget.degree);
+      _toCurve = of_utils.sampleOFCurve(_toCoeffs, 90);
+      _toMSE = of_utils.calcPolyMSE(_toCoeffs, of_utils.trainPoints);
+      _toColor = _colorFor(widget.degree);
+
+      _ctrl.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  double get _t => Curves.easeOutCubic.transform(_ctrl.value);
+
+  List<Map<String, double>> _interpolatedCurve() {
+    final t = _t;
+    return List.generate(_fromCurve.length, (i) {
+      final fy = _fromCurve[i]['y']!;
+      final ty = _toCurve[i]['y']!;
+      return {'x': _fromCurve[i]['x']!, 'y': fy + (ty - fy) * t};
+    });
+  }
+
+  double get _animatedMSE => _fromMSE + (_toMSE - _fromMSE) * _t;
+  Color get _animatedColor => Color.lerp(_fromColor, _toColor, _t)!;
+
+  @override
+  Widget build(BuildContext context) {
+    final degree = widget.degree;
+    final curveColor = _animatedColor;
+    final trainMSE = _animatedMSE;
+    final curvePoints = _interpolatedCurve();
     final unlocked = degree >= 3;
 
     String degreeLabel() {
@@ -31,8 +102,6 @@ class OFPlayScreen extends StatelessWidget {
       if (degree == 3) return 'Cubic';
       return 'Degree $degree';
     }
-
-    final curveColor = degree <= 2 ? C.blue : (degree <= 4 ? C.accent : C.pink);
 
     return Container(
       color: C.bg,
@@ -44,7 +113,7 @@ class OFPlayScreen extends StatelessWidget {
               padding: S.headerPad,
               child: Row(
                 children: [
-                  _backBtn(onBack),
+                  _backBtn(widget.onBack),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -91,9 +160,8 @@ class OFPlayScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         child: CustomPaint(
                           painter: _OFPlayPainter(
-                            coeffs: coeffs,
                             curvePoints: curvePoints,
-                            degree: degree,
+                            curveColor: curveColor,
                           ),
                         ),
                       ),
@@ -136,7 +204,7 @@ class OFPlayScreen extends StatelessWidget {
                       min: 1,
                       max: of_utils.maxDegree.toDouble(),
                       divisions: of_utils.maxDegree - 1,
-                      onChanged: (v) => onUpdate(v.round()),
+                      onChanged: (v) => widget.onUpdate(v.round()),
                     ),
                   ),
                   Row(
@@ -193,7 +261,7 @@ class OFPlayScreen extends StatelessWidget {
                     delay: const Duration(milliseconds: 200),
                     duration: const Duration(milliseconds: 400),
                     slideDistance: 12,
-                    child: SecondaryBtn(label: 'What happens with more flexibility? →', onPressed: onNext),
+                    child: SecondaryBtn(label: 'What happens with more flexibility? →', onPressed: widget.onNext),
                   ),
               ],
             ),
@@ -216,14 +284,12 @@ Widget _backBtn(VoidCallback onBack) {
 }
 
 class _OFPlayPainter extends CustomPainter {
-  final List<double> coeffs;
   final List<Map<String, double>> curvePoints;
-  final int degree;
+  final Color curveColor;
 
   _OFPlayPainter({
-    required this.coeffs,
     required this.curvePoints,
-    required this.degree,
+    required this.curveColor,
   });
 
   @override
@@ -240,18 +306,14 @@ class _OFPlayPainter extends CustomPainter {
     double toX(double xNorm) => padL + xNorm * iw;
     double toY(double yNorm) => padT + (1 - yNorm) * ih;
 
-    // Grid lines
     final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(padL, padT + ih * f), Offset(padL + iw, padT + ih * f), gridPaint);
     }
 
-    // Clip curve inside plot rect
     canvas.save();
     canvas.clipRect(Rect.fromLTWH(padL, padT - 2, iw, ih + 4));
 
-    // Fitted curve
-    final curveColor = degree == 1 ? C.blue : (degree <= 4 ? C.accent : C.pink);
     final curvePath = Path();
     for (int i = 0; i < curvePoints.length; i++) {
       final px = toX(curvePoints[i]['x']!);
@@ -271,7 +333,6 @@ class _OFPlayPainter extends CustomPainter {
     );
     canvas.restore();
 
-    // Train points (white circles)
     for (final pt in of_utils.trainPoints) {
       canvas.drawCircle(
         Offset(toX(pt.x), toY(pt.y)),
@@ -280,7 +341,6 @@ class _OFPlayPainter extends CustomPainter {
       );
     }
 
-    // Axis labels
     _drawText(canvas, 'y', Offset(padL + 2, padT + 2), 8, Colors.grey.withValues(alpha: 0.4));
     _drawText(canvas, 'x', Offset(padL + iw - 8, padT + ih - 10), 8, Colors.grey.withValues(alpha: 0.4));
   }
@@ -297,5 +357,6 @@ class _OFPlayPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_OFPlayPainter old) => degree != old.degree;
+  bool shouldRepaint(_OFPlayPainter old) =>
+      curvePoints != old.curvePoints || curveColor != old.curveColor;
 }
