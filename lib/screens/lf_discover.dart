@@ -3,8 +3,6 @@ import '../theme.dart';
 import '../widgets.dart';
 import '../utils/loss_fns.dart' as lf;
 
-const _outlierY = 0.95;
-
 class LFDiscoverScreen extends StatefulWidget {
   final String selectedLoss;
   final double prediction;
@@ -27,12 +25,17 @@ class LFDiscoverScreen extends StatefulWidget {
 
 class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
   bool _outlierOn = false;
-  bool _triedNearOutlier = false;
-  bool _triedFarFromOutlier = false;
+  double _outlierPos = 0.92;
+  bool _isDragging = false;
   bool _toggledOutlier = false;
+  bool _draggedFar = false;
+  int _predMovesWithOutlier = 0;
+
+  static const _padL = 32.0;
+  static const _padR = 16.0;
 
   double _lossFor(String type, double pred) {
-    final targets = _outlierOn ? [lf.truth, _outlierY] : [lf.truth];
+    final targets = _outlierOn ? [lf.truth, _outlierPos] : [lf.truth];
     double total = 0;
     for (final t in targets) {
       if (type == 'mse') {
@@ -54,8 +57,13 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
       if ((pred - lf.truth).abs() < 0.08) return 'All three losses agree near the truth.';
       return 'Move the prediction — watch how each loss reacts differently to distance.';
     }
+    if (_isDragging) {
+      final dist = (_outlierPos - lf.truth).abs();
+      if (dist > 0.3) return 'MSE is going wild — it squares the outlier distance.';
+      return 'Keep dragging the outlier further from the truth.';
+    }
     if (mseLoss > maeLoss * 2.5) return 'MSE explodes near outliers — it squares the error.';
-    if ((pred - _outlierY).abs() < 0.15) return 'Prediction near the outlier: MSE is dragged up hard.';
+    if ((pred - _outlierPos).abs() < 0.15) return 'Prediction near the outlier: MSE is dragged up hard.';
     return 'With outliers, robust losses (MAE, Huber) stay calm while MSE panics.';
   }
 
@@ -69,15 +77,33 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
 
   void _handleSlider(double v) {
     widget.onUpdate(v, widget.selectedLoss);
+    if (_outlierOn) {
+      setState(() => _predMovesWithOutlier++);
+    }
+  }
+
+  void _onDragStart(DragStartDetails details, double plotWidth) {
+    if (!_outlierOn) return;
+    final iw = plotWidth - _padL - _padR;
+    final outlierPx = _padL + _outlierPos * iw;
+    if ((details.localPosition.dx - outlierPx).abs() < 28) {
+      setState(() => _isDragging = true);
+    }
+  }
+
+  void _onDragUpdate(DragUpdateDetails details, double plotWidth) {
+    if (!_isDragging) return;
+    final iw = plotWidth - _padL - _padR;
+    final pos = ((details.localPosition.dx - _padL) / iw).clamp(0.02, 0.98);
     setState(() {
-      if (_outlierOn) {
-        if ((v - _outlierY).abs() < 0.15) _triedNearOutlier = true;
-        if ((v - _outlierY).abs() > 0.4) _triedFarFromOutlier = true;
-      }
+      _outlierPos = pos;
+      if ((_outlierPos - lf.truth).abs() > 0.25) _draggedFar = true;
     });
   }
 
-  bool get _unlocked => _toggledOutlier && _triedNearOutlier && _triedFarFromOutlier;
+  void _onDragEnd() {
+    setState(() => _isDragging = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +126,12 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                   Text('Why do different losses exist?',
                       style: spaceGrotesk(fontSize: 20, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
-                  Text('Toggle the outlier and drag the prediction.',
-                      style: inter(fontSize: 14)),
+                  Text(
+                    _outlierOn
+                        ? 'Drag the pink dot to move the outlier.'
+                        : 'Toggle the outlier and drag it around.',
+                    style: inter(fontSize: 14),
+                  ),
                   const SizedBox(height: 16),
 
                   Container(
@@ -112,23 +142,36 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                       borderRadius: S.borderMd,
                       border: Border.all(color: C.border),
                     ),
-                    child: CustomPaint(
-                      painter: _DiscoverPlotPainter(
-                        prediction: pred,
-                        outlierOn: _outlierOn,
-                        mseLoss: mseLoss,
-                        maeLoss: maeLoss,
-                        huberLoss: huberLoss,
-                      ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final plotWidth = constraints.maxWidth;
+                        return GestureDetector(
+                          onHorizontalDragStart: (d) => _onDragStart(d, plotWidth),
+                          onHorizontalDragUpdate: (d) => _onDragUpdate(d, plotWidth),
+                          onHorizontalDragEnd: (_) => _onDragEnd(),
+                          child: CustomPaint(
+                            size: Size(plotWidth, 220),
+                            painter: _DiscoverPlotPainter(
+                              prediction: pred,
+                              outlierOn: _outlierOn,
+                              outlierPos: _outlierPos,
+                              isDragging: _isDragging,
+                              mseLoss: mseLoss,
+                              maeLoss: maeLoss,
+                              huberLoss: huberLoss,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 12),
 
-                  // Outlier toggle
                   GestureDetector(
                     onTap: () => setState(() {
                       _outlierOn = !_outlierOn;
                       _toggledOutlier = true;
+                      if (_outlierOn) _outlierPos = 0.92;
                     }),
                     child: Container(
                       width: double.infinity,
@@ -154,7 +197,9 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              _outlierOn ? 'Outlier ON at y = $_outlierY' : 'Tap to add an outlier',
+                              _outlierOn
+                                  ? 'Outlier at ${_outlierPos.toStringAsFixed(2)} — drag it on the graph'
+                                  : 'Tap to add an outlier',
                               style: spaceGrotesk(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -181,9 +226,8 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Prediction slider
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: S.cardPad,
                     decoration: BoxDecoration(
                       color: C.surface,
                       borderRadius: S.borderMd,
@@ -218,10 +262,10 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Loss comparison cards
                   Row(
                     children: [
-                      _lossCard('MSE', mseLoss, const Color(0xFF8B5CF6)),
+                      _lossCard('MSE', mseLoss, const Color(0xFF8B5CF6),
+                          highlight: _outlierOn && mseLoss > maeLoss * 2),
                       const SizedBox(width: 6),
                       _lossCard('MAE', maeLoss, const Color(0xFF38BDF8)),
                       const SizedBox(width: 6),
@@ -235,9 +279,15 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
 
                   if (!_toggledOutlier)
                     PrimaryBtn(label: 'Toggle the outlier first', disabled: true, onPressed: null)
-                  else if (!_unlocked)
+                  else if (!_draggedFar)
                     PrimaryBtn(
-                      label: 'Move prediction near & far from outlier',
+                      label: 'Drag the outlier far from the truth',
+                      disabled: true,
+                      onPressed: null,
+                    )
+                  else if (_predMovesWithOutlier < 3)
+                    PrimaryBtn(
+                      label: 'Now move the prediction slider',
                       disabled: true,
                       onPressed: null,
                     )
@@ -257,14 +307,22 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
     );
   }
 
-  Widget _lossCard(String label, double value, Color color) {
+  Widget _lossCard(String label, double value, Color color, {bool highlight = false}) {
     return Expanded(
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.08),
+          color: highlight
+              ? color.withValues(alpha: 0.18)
+              : color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
+          border: Border.all(
+            color: highlight
+                ? color.withValues(alpha: 0.5)
+                : color.withValues(alpha: 0.2),
+            width: highlight ? 1.5 : 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,11 +340,15 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
 class _DiscoverPlotPainter extends CustomPainter {
   final double prediction;
   final bool outlierOn;
+  final double outlierPos;
+  final bool isDragging;
   final double mseLoss, maeLoss, huberLoss;
 
   _DiscoverPlotPainter({
     required this.prediction,
     required this.outlierOn,
+    required this.outlierPos,
+    required this.isDragging,
     required this.mseLoss,
     required this.maeLoss,
     required this.huberLoss,
@@ -303,13 +365,11 @@ class _DiscoverPlotPainter extends CustomPainter {
     double toX(double v) => padL + v * iw;
     double toY(double loss) => padT + ih - (loss.clamp(0, yMax) / yMax) * ih;
 
-    // Grid
     final gridPaint = Paint()..color = C.dim..strokeWidth = 1;
     for (final f in [0.25, 0.5, 0.75]) {
       canvas.drawLine(Offset(padL, padT + ih * f), Offset(padL + iw, padT + ih * f), gridPaint);
     }
 
-    // Truth marker
     final truthX = toX(lf.truth);
     canvas.drawLine(
       Offset(truthX, padT), Offset(truthX, padT + ih),
@@ -318,21 +378,33 @@ class _DiscoverPlotPainter extends CustomPainter {
     canvas.drawCircle(Offset(truthX, toY(0)), 5, Paint()..color = C.green);
     _text(canvas, 'y=${lf.truth}', Offset(truthX + 4, padT + ih + 4), 8, C.green);
 
-    // Outlier marker
     if (outlierOn) {
-      final ox = toX(_outlierY);
+      final ox = toX(outlierPos);
+
       canvas.drawLine(
         Offset(ox, padT), Offset(ox, padT + ih),
-        Paint()..color = C.pink.withValues(alpha: 0.4)..strokeWidth = 1,
+        Paint()
+          ..color = C.pink.withValues(alpha: isDragging ? 0.6 : 0.35)
+          ..strokeWidth = isDragging ? 2 : 1,
       );
-      canvas.drawCircle(Offset(ox, toY(0)), 5, Paint()..color = C.pink);
-      _text(canvas, 'outlier', Offset(ox - 16, padT + ih + 4), 8, C.pink);
+
+      if (isDragging) {
+        canvas.drawCircle(
+          Offset(ox, toY(0)), 18,
+          Paint()..color = C.pink.withValues(alpha: 0.10),
+        );
+      }
+
+      final dotR = isDragging ? 10.0 : 7.0;
+      canvas.drawCircle(Offset(ox, toY(0)), dotR, Paint()..color = C.pink);
+      canvas.drawCircle(Offset(ox, toY(0)), dotR * 0.35, Paint()..color = Colors.white);
+
+      _text(canvas, outlierPos.toStringAsFixed(2), Offset(ox - 12, padT + ih + 4), 8, C.pink);
     }
 
-    // Draw all 3 loss curves
-    final targets = outlierOn ? [lf.truth, _outlierY] : [lf.truth];
-    final types = ['mse', 'mae', 'huber'];
-    final colors = [const Color(0xFF8B5CF6), const Color(0xFF38BDF8), const Color(0xFFFBBF24)];
+    final targets = outlierOn ? [lf.truth, outlierPos] : [lf.truth];
+    const types = ['mse', 'mae', 'huber'];
+    const colors = [Color(0xFF8B5CF6), Color(0xFF38BDF8), Color(0xFFFBBF24)];
 
     canvas.save();
     canvas.clipRect(Rect.fromLTWH(padL, padT - 2, iw, ih + 4));
@@ -366,7 +438,6 @@ class _DiscoverPlotPainter extends CustomPainter {
     }
     canvas.restore();
 
-    // Prediction line + dots
     final predX = toX(prediction);
     canvas.drawLine(
       Offset(predX, padT), Offset(predX, padT + ih),
@@ -379,8 +450,7 @@ class _DiscoverPlotPainter extends CustomPainter {
       canvas.drawCircle(Offset(predX, py), 2, Paint()..color = Colors.white);
     }
 
-    // Legend
-    final labels = ['MSE', 'MAE', 'Huber'];
+    const labels = ['MSE', 'MAE', 'Huber'];
     for (int i = 0; i < 3; i++) {
       final lx = padL + iw - 58.0;
       final ly = padT + 6.0 + i * 14;
@@ -399,5 +469,6 @@ class _DiscoverPlotPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_DiscoverPlotPainter old) =>
-      prediction != old.prediction || outlierOn != old.outlierOn;
+      prediction != old.prediction || outlierOn != old.outlierOn ||
+      outlierPos != old.outlierPos || isDragging != old.isDragging;
 }
