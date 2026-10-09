@@ -11,7 +11,7 @@ class VECChallengeScreen extends StatefulWidget {
   final double targetMag;
   final int steps;
   final void Function(double x, double y) onUpdateA;
-  final VoidCallback onNext;
+  final void Function(bool success, int steps) onComplete;
   final VoidCallback onBack;
   final VoidCallback onRetry;
 
@@ -22,7 +22,7 @@ class VECChallengeScreen extends StatefulWidget {
     required this.targetMag,
     required this.steps,
     required this.onUpdateA,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
     required this.onRetry,
   });
@@ -34,6 +34,7 @@ class VECChallengeScreen extends StatefulWidget {
 class _VECChallengeScreenState extends State<VECChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  int _localSteps = 0;
   late double _ax;
   late double _ay;
 
@@ -47,7 +48,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
   double get _currentMag => vec_utils.vecMagnitude(vec_utils.Vec2(_ax, _ay));
   double get _delta => (_currentMag - widget.targetMag).abs();
   bool get _succeeded => _delta < 0.05;
-  bool get _outOfSteps => widget.steps >= _maxSteps;
+  bool get _outOfSteps => _localSteps >= _maxSteps;
   bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
 
   void _onXChanged(double v) {
@@ -70,8 +71,9 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
 
   void _handleSliderCommit(double x, double y) {
     if (_done) return;
+    setState(() => _localSteps++);
     widget.onUpdateA(x, y);
-    if (_succeeded || widget.steps + 1 >= _maxSteps) {
+    if (_succeeded || _localSteps >= _maxSteps) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) setState(() => _finished = true);
       });
@@ -133,7 +135,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps, max: _maxSteps),
+                  StepCounter(steps: _localSteps, max: _maxSteps),
                 ],
               ),
             ),
@@ -254,7 +256,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Target matched in ${widget.steps} adjustments.',
+                            Text('Target matched in $_localSteps adjustments.',
                                 style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('You understand magnitude.', style: inter(fontSize: 12, color: C.greenLight)),
@@ -320,7 +322,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         color: C.surface,
                         borderRadius: S.borderSm,
                       ),
-                      child: Text('${_maxSteps - widget.steps} adjustments remaining',
+                      child: Text('${_maxSteps - _localSteps} adjustments remaining',
                           style: mono(fontSize: 12, color: C.yellow)),
                     ),
 
@@ -333,7 +335,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: widget.onNext,
+                          onPressed: () => widget.onComplete(_succeeded, _localSteps),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _succeeded ? C.green : C.accent,
                             foregroundColor: _succeeded ? C.bg : Colors.white,

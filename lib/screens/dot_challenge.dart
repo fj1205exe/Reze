@@ -11,7 +11,7 @@ class DOTChallengeScreen extends StatefulWidget {
   final double angleA, angleB, magA, magB;
   final int steps;
   final void Function(double aA, double aB, double mA, double mB) onUpdate;
-  final VoidCallback onNext;
+  final void Function(bool success, int attempts) onComplete;
   final VoidCallback onBack;
 
   const DOTChallengeScreen({
@@ -22,7 +22,7 @@ class DOTChallengeScreen extends StatefulWidget {
     required this.magB,
     required this.steps,
     required this.onUpdate,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
   });
 
@@ -33,6 +33,7 @@ class DOTChallengeScreen extends StatefulWidget {
 class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  int _localAttempts = 0;
   late double _angleB;
 
   @override
@@ -52,8 +53,8 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
   }
 
   bool get _succeeded => _currentDot.abs() <= _targetTolerance;
-  bool get _outOfAttempts => widget.steps >= _maxAttempts;
-  bool get _done => _finished || (_outOfAttempts && !_succeeded) || _succeeded;
+  bool get _outOfAttempts => _localAttempts >= _maxAttempts;
+  bool get _done => _finished || (_started && _outOfAttempts && !_succeeded) || _succeeded;
 
   String get _feedbackType {
     final dotVal = _currentDot;
@@ -78,11 +79,12 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
 
   void _onAngleBChangeEnd(double v) {
     if (_done) return;
+    setState(() => _localAttempts++);
     widget.onUpdate(widget.angleA, v, widget.magA, widget.magB);
 
     Future.delayed(const Duration(milliseconds: 300), () {
       if (!mounted) return;
-      if (_currentDot.abs() <= _targetTolerance || widget.steps >= _maxAttempts) {
+      if (_currentDot.abs() <= _targetTolerance || _localAttempts >= _maxAttempts) {
         setState(() => _finished = true);
       }
     });
@@ -143,7 +145,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       ],
                     ),
                   ),
-                  _attemptCounter(widget.steps),
+                  _attemptCounter(_localAttempts),
                 ],
               ),
             ),
@@ -182,7 +184,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${_maxAttempts - widget.steps} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${_maxAttempts - _localAttempts} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   Positioned.fill(
                     child: Padding(
@@ -219,7 +221,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Perpendicular found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
+                            Text('Perpendicular found in $_localAttempts attempt${_localAttempts == 1 ? '' : 's'}!',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('The angle between vectors is ${angleBetween.round()}°, close to 90°.',
@@ -367,7 +369,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: widget.onNext,
+                          onPressed: () => widget.onComplete(_succeeded, _localAttempts),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _succeeded ? C.green : C.accent,
                             foregroundColor: _succeeded ? C.bg : Colors.white,

@@ -10,7 +10,7 @@ class OFChallengeScreen extends StatefulWidget {
   final int degree;
   final int steps;
   final ValueChanged<int> onUpdate;
-  final VoidCallback onNext;
+  final void Function(bool success, int attempts) onComplete;
   final VoidCallback onBack;
 
   const OFChallengeScreen({
@@ -18,7 +18,7 @@ class OFChallengeScreen extends StatefulWidget {
     required this.degree,
     required this.steps,
     required this.onUpdate,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
   });
 
@@ -29,6 +29,7 @@ class OFChallengeScreen extends StatefulWidget {
 class _OFChallengeScreenState extends State<OFChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  int _localAttempts = 0;
 
   double get _targetMSE {
     final sweetCoeffs = of_utils.fitPolynomial(of_utils.trainPoints, of_utils.sweetSpot);
@@ -46,8 +47,8 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
   }
 
   bool get _succeeded => _currentTestMSE <= _targetMSE;
-  bool get _outOfAttempts => widget.steps >= _maxAttempts;
-  bool get _done => _finished || (_outOfAttempts && !_succeeded) || _succeeded;
+  bool get _outOfAttempts => _localAttempts >= _maxAttempts;
+  bool get _done => _finished || (_started && _outOfAttempts && !_succeeded) || _succeeded;
 
   String get _feedbackType {
     final trainMSE = _currentTrainMSE;
@@ -64,12 +65,13 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
     if (testMSE <= _targetMSE) return 'Good generalization! The model balances bias and variance.';
     if (trainMSE < 0.001 && testMSE > _targetMSE) return 'Train error is low but test error is high — the model is overfitting.';
     if (trainMSE > 0.002 && testMSE > 0.003) return 'Both errors are high — the model is too simple (underfitting).';
-    return '${_maxAttempts - widget.steps} attempts remaining. Find the degree with lowest test error.';
+    return '${_maxAttempts - _localAttempts} attempts remaining. Find the degree with lowest test error.';
   }
 
   void _handleSelect(int d) {
     if (_done || !_started) return;
     if (d == widget.degree) return;
+    setState(() => _localAttempts++);
     widget.onUpdate(d);
 
     // Check if succeeded or ran out
@@ -77,7 +79,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
       if (!mounted) return;
       final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, d);
       final testMSE = of_utils.calcPolyMSE(coeffs, of_utils.testPoints);
-      if (testMSE <= _targetMSE || widget.steps >= _maxAttempts) {
+      if (testMSE <= _targetMSE || _localAttempts >= _maxAttempts) {
         setState(() => _finished = true);
       }
     });
@@ -132,7 +134,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                       ],
                     ),
                   ),
-                  _attemptCounter(widget.steps),
+                  _attemptCounter(_localAttempts),
                 ],
               ),
             ),
@@ -171,7 +173,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${_maxAttempts - widget.steps} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${_maxAttempts - _localAttempts} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   // Legend
                   Positioned(
@@ -231,7 +233,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Best degree found in ${widget.steps} attempt${widget.steps == 1 ? '' : 's'}!',
+                            Text('Best degree found in $_localAttempts attempt${_localAttempts == 1 ? '' : 's'}!',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('Degree $degree balances bias and variance.',
@@ -389,7 +391,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: widget.onNext,
+                          onPressed: () => widget.onComplete(_succeeded, _localAttempts),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _succeeded ? C.green : C.accent,
                             foregroundColor: _succeeded ? C.bg : Colors.white,

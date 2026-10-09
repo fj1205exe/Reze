@@ -11,7 +11,7 @@ class CLChallengeScreen extends StatefulWidget {
   final double offset;
   final int steps;
   final void Function(double a, double o) onUpdate;
-  final VoidCallback onNext;
+  final void Function(bool success, int steps, double accuracy) onComplete;
   final VoidCallback onBack;
 
   const CLChallengeScreen({
@@ -20,7 +20,7 @@ class CLChallengeScreen extends StatefulWidget {
     required this.offset,
     required this.steps,
     required this.onUpdate,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
   });
 
@@ -31,6 +31,7 @@ class CLChallengeScreen extends StatefulWidget {
 class _CLChallengeScreenState extends State<CLChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  int _localSteps = 0;
   late double _angle;
   late double _offset;
 
@@ -46,7 +47,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
   );
 
   bool get _succeeded => _accuracy >= 90.0;
-  bool get _outOfSteps => widget.steps >= _stepLimit;
+  bool get _outOfSteps => _localSteps >= _stepLimit;
   bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
 
   void _onAngleChanged(double v) {
@@ -70,10 +71,11 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
   void _handleUpdate(double a, double o) {
     if (!_started) setState(() => _started = true);
     if (_done) return;
+    setState(() => _localSteps++);
     widget.onUpdate(a, o);
 
     final acc = cl_utils.calcAccuracyForDataset(a, o, cl_utils.challengeClassA, cl_utils.challengeClassB);
-    if (acc >= 90.0 || widget.steps + 1 >= _stepLimit) {
+    if (acc >= 90.0 || _localSteps >= _stepLimit) {
       Future.delayed(const Duration(milliseconds: 400), () {
         if (mounted) setState(() => _finished = true);
       });
@@ -123,7 +125,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps, max: _stepLimit),
+                  StepCounter(steps: _localSteps, max: _stepLimit),
                 ],
               ),
             ),
@@ -167,7 +169,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${max(0, _stepLimit - widget.steps)} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${max(0, _stepLimit - _localSteps)} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   Padding(
                     padding: const EdgeInsets.all(4),
@@ -201,7 +203,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${accuracy.round()}% accuracy in ${widget.steps} adjustments.',
+                            Text('${accuracy.round()}% accuracy in $_localSteps adjustments.',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('You found the right boundary.', style: inter(fontSize: 12, color: C.greenLight)),
@@ -314,7 +316,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: FeedbackBar(
                           type: accuracy >= 80 ? 'ok' : 'info',
-                          message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - widget.steps)} adjustments remaining.',
+                          message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - _localSteps)} adjustments remaining.',
                         ),
                       ),
                     ),
@@ -327,7 +329,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: widget.onNext,
+                        onPressed: () => widget.onComplete(_succeeded, _localSteps, _accuracy),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _succeeded ? C.green : C.accent,
                           foregroundColor: _succeeded ? C.bg : Colors.white,

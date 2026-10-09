@@ -203,7 +203,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                          'Round ${_roundIdx + 3}: ${_round.title}',
+                          'Round ${_roundIdx + 1}: ${_round.title}',
                           style: spaceGrotesk(
                               fontSize: 18,
                               fontWeight: FontWeight.w700)),

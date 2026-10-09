@@ -484,6 +484,19 @@ class _MLabHomeState extends State<MLabHome> {
   int _nnChalAttempts = 0;
   bool _bpChalSuccess = false;
   int _bpChalCorrect = 0;
+  bool _lrChalSuccess = false;
+  int _lrChalSteps = 0;
+  bool _ofChalSuccess = false;
+  int _ofChalSteps = 0;
+  bool _vecChalSuccess = false;
+  int _vecChalSteps = 0;
+  bool _dotChalSuccess = false;
+  int _dotChalSteps = 0;
+  bool _clChalSuccess = false;
+  int _clChalSteps = 0;
+  double _clChalAccuracy = 0.0;
+  int _prChalCorrect = 0;
+  int _prChalTotal = 3;
   @override
   void initState() {
     super.initState();
@@ -941,10 +954,13 @@ class _MLabHomeState extends State<MLabHome> {
           steps: _of.steps,
           onUpdate: (d) => setState(() {
             _of.degree = d;
-            _of.steps++;
           }),
-          onNext: () {
-            _completeOF();
+          onComplete: (success, attempts) {
+            setState(() {
+              _ofChalSuccess = success;
+              _ofChalSteps = attempts;
+            });
+            if (success) _completeOF();
             _nav(AppScreen.ofResult);
           },
           onBack: () => _back(AppScreen.ofExplain),
@@ -1150,15 +1166,18 @@ class _MLabHomeState extends State<MLabHome> {
           key: const ValueKey('vec-ch'),
           ax: _vec.ax,
           ay: _vec.ay,
-          targetMag: 5.0,
+          targetMag: 2.5,
           steps: _vecSteps,
           onUpdateA: (x, y) => setState(() {
             _vec.ax = x;
             _vec.ay = y;
-            _vecSteps++;
           }),
-          onNext: () {
-            _completeVEC();
+          onComplete: (success, steps) {
+            setState(() {
+              _vecChalSuccess = success;
+              _vecChalSteps = steps;
+            });
+            if (success) _completeVEC();
             _nav(AppScreen.vecResult);
           },
           onBack: () => _back(AppScreen.vecExplain),
@@ -1237,10 +1256,13 @@ class _MLabHomeState extends State<MLabHome> {
             _dot.angleB = aB;
             _dot.magA = mA;
             _dot.magB = mB;
-            _dot.steps++;
           }),
-          onNext: () {
-            _completeDOT();
+          onComplete: (success, attempts) {
+            setState(() {
+              _dotChalSuccess = success;
+              _dotChalSteps = attempts;
+            });
+            if (success) _completeDOT();
             _nav(AppScreen.dotResult);
           },
           onBack: () => _back(AppScreen.dotExplain),
@@ -1293,10 +1315,14 @@ class _MLabHomeState extends State<MLabHome> {
           steps: _clSteps,
           onUpdate: (a, o) => setState(() {
             _cl = cl.CLState(angle: a, offset: o);
-            _clSteps++;
           }),
-          onNext: () {
-            _completeCL();
+          onComplete: (success, steps, accuracy) {
+            setState(() {
+              _clChalSuccess = success;
+              _clChalSteps = steps;
+              _clChalAccuracy = accuracy;
+            });
+            if (success) _completeCL();
             _nav(AppScreen.clResult);
           },
           onBack: () => _back(AppScreen.clExplain),

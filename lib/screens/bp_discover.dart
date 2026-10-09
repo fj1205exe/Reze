@@ -26,6 +26,12 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
   int _maxSeen = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _maxSeen = widget.bp.step;
+  }
+
+  @override
   void didUpdateWidget(covariant BPDiscoverScreen old) {
     super.didUpdateWidget(old);
     if (widget.bp.step > _maxSeen) _maxSeen = widget.bp.step;
