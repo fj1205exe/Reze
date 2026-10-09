@@ -5,12 +5,12 @@ import '../widgets.dart';
 import '../utils/probability.dart' as pr_utils;
 
 class PRChallengeScreen extends StatefulWidget {
-  final VoidCallback onNext;
+  final void Function(int correct, int total) onComplete;
   final VoidCallback onBack;
 
   const PRChallengeScreen({
     super.key,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
   });
 
@@ -305,7 +305,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                         label: _round < 2 ? 'Next Round' : 'See Results',
                         onPressed: _round < 2 ? _nextRound : () {
                           _gameFinished = true;
-                          widget.onNext();
+                          widget.onComplete(_correctGuesses, 3);
                         },
                       ),
                     ),
@@ -342,7 +342,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
-                      child: PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                      child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_correctGuesses, 3)),
                     ),
                   ],
                 ],

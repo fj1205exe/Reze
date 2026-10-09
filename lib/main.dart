@@ -902,8 +902,12 @@ class _MLabHomeState extends State<MLabHome> {
             _lr.intercept = i;
             _lr.steps++;
           }),
-          onNext: () {
-            _completeLR();
+          onComplete: (success, steps) {
+            setState(() {
+              _lrChalSuccess = success;
+              _lrChalSteps = steps;
+            });
+            if (success) _completeLR();
             _nav(AppScreen.lrResult);
           },
           onBack: () => _back(AppScreen.lrExplain),
@@ -912,6 +916,9 @@ class _MLabHomeState extends State<MLabHome> {
         return LRResultScreen(
           key: const ValueKey('lr-res'),
           progress: _progress,
+          challengeSuccess: _lrChalSuccess,
+          challengeSteps: _lrChalSteps,
+          onRetry: () => _nav(AppScreen.lrChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayOF: () {
             _of = OFState();
@@ -969,6 +976,9 @@ class _MLabHomeState extends State<MLabHome> {
         return OFResultScreen(
           key: const ValueKey('of-res'),
           progress: _progress,
+          challengeSuccess: _ofChalSuccess,
+          challengeSteps: _ofChalSteps,
+          onRetry: () => _nav(AppScreen.ofChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayLF: () {
             _lf = LFState();
@@ -1018,7 +1028,7 @@ class _MLabHomeState extends State<MLabHome> {
               _lfChalCorrect = correct;
               _lfChalTotal = total;
             });
-            _completeLF();
+            if (success) _completeLF();
             _nav(AppScreen.lfResult);
           },
           onBack: () => _back(AppScreen.lfExplain),
@@ -1084,7 +1094,7 @@ class _MLabHomeState extends State<MLabHome> {
               _sgdChalSteps = steps;
               _sgdChalLoss = loss;
             });
-            _completeSGD();
+            if (success) _completeSGD();
             _nav(AppScreen.sgdResult);
           },
           onBack: () => _back(AppScreen.sgdExplain),
@@ -1191,6 +1201,9 @@ class _MLabHomeState extends State<MLabHome> {
         return VECResultScreen(
           key: const ValueKey('vec-res'),
           progress: _progress,
+          challengeSuccess: _vecChalSuccess,
+          challengeSteps: _vecChalSteps,
+          onRetry: () => _nav(AppScreen.vecChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayDOT: () {
             _dot = DOTState();
@@ -1271,6 +1284,9 @@ class _MLabHomeState extends State<MLabHome> {
         return DOTResultScreen(
           key: const ValueKey('dot-res'),
           progress: _progress,
+          challengeSuccess: _dotChalSuccess,
+          challengeSteps: _dotChalSteps,
+          onRetry: () => _nav(AppScreen.dotChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayPR: () {
             setState(() => _pr = const pr.PRState());
@@ -1331,6 +1347,10 @@ class _MLabHomeState extends State<MLabHome> {
         return CLResultScreen(
           key: const ValueKey('cl-res'),
           progress: _progress,
+          challengeSuccess: _clChalSuccess,
+          challengeAccuracy: _clChalAccuracy,
+          challengeSteps: _clChalSteps,
+          onRetryChallenge: () => _nav(AppScreen.clChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayPR: () {
             setState(() => _pr = const pr.PRState());
@@ -1384,8 +1404,12 @@ class _MLabHomeState extends State<MLabHome> {
       case AppScreen.prChallenge:
         return PRChallengeScreen(
           key: const ValueKey('pr-ch'),
-          onNext: () {
-            _completePR();
+          onComplete: (correct, total) {
+            setState(() {
+              _prChalCorrect = correct;
+              _prChalTotal = total;
+            });
+            if (correct >= 2) _completePR();
             _nav(AppScreen.prResult);
           },
           onBack: () => _back(AppScreen.prExplain),
@@ -1394,6 +1418,9 @@ class _MLabHomeState extends State<MLabHome> {
         return PRResultScreen(
           key: const ValueKey('pr-res'),
           progress: _progress,
+          challengeCorrect: _prChalCorrect,
+          challengeTotal: _prChalTotal,
+          onRetryChallenge: () => _nav(AppScreen.prChallenge),
           onNext: () => _nav(AppScreen.home),
           onPlayBAY: () {
             setState(() => _bay = bay.bayInit);
@@ -1448,7 +1475,7 @@ class _MLabHomeState extends State<MLabHome> {
               _bayChalCorrect = correct;
               _bayChalTotal = total;
             });
-            _completeBAY();
+            if (success) _completeBAY();
             _nav(AppScreen.bayResult);
           },
           onBack: () => _back(AppScreen.bayExplain),
@@ -1517,7 +1544,7 @@ class _MLabHomeState extends State<MLabHome> {
               _nnChalSuccess = success;
               _nnChalAttempts = attempts;
             });
-            _completeNN();
+            if (success) _completeNN();
             _nav(AppScreen.nnResult);
           },
           onBack: () => _back(AppScreen.nnExplain),
@@ -1577,7 +1604,7 @@ class _MLabHomeState extends State<MLabHome> {
               _bpChalSuccess = success;
               _bpChalCorrect = correct;
             });
-            _completeBP();
+            if (success) _completeBP();
             _nav(AppScreen.bpResult);
           },
           onBack: () => _back(AppScreen.bpExplain),

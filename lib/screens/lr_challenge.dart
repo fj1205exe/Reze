@@ -11,7 +11,7 @@ class LRChallengeScreen extends StatefulWidget {
   final double intercept;
   final int steps;
   final void Function(double slope, double intercept) onUpdate;
-  final VoidCallback onNext;
+  final void Function(bool success, int steps) onComplete;
   final VoidCallback onBack;
 
   const LRChallengeScreen({
@@ -20,7 +20,7 @@ class LRChallengeScreen extends StatefulWidget {
     required this.intercept,
     required this.steps,
     required this.onUpdate,
-    required this.onNext,
+    required this.onComplete,
     required this.onBack,
   });
 
@@ -245,7 +245,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
-                      child: PrimaryBtn(label: 'See results', onPressed: widget.onNext),
+                      child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_succeeded, _adjustments)),
                     ),
                 ],
               ),
