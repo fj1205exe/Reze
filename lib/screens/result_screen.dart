@@ -23,7 +23,9 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Stack(
+      children: [
+      Container(
       color: C.bg,
       child: SafeArea(
         child: SingleChildScrollView(
@@ -144,6 +146,9 @@ class ResultScreen extends StatelessWidget {
           ),
         ),
       ),
+      ),
+      if (succeeded) const ConfettiBurst(),
+      ],
     );
   }
 

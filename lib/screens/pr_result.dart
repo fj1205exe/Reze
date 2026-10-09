@@ -25,7 +25,9 @@ class PRResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final passed = challengeCorrect >= 2;
 
-    return Container(
+    return Stack(
+      children: [
+      Container(
       color: C.bg,
       child: SafeArea(
         child: SingleChildScrollView(
@@ -179,6 +181,9 @@ class PRResultScreen extends StatelessWidget {
           ),
         ),
       ),
+    ),
+      if (passed) const ConfettiBurst(),
+      ],
     );
   }
 

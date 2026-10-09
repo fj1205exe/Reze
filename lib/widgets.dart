@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'theme.dart';
 
@@ -520,4 +521,109 @@ class MLabNavBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class ConfettiBurst extends StatefulWidget {
+  final Duration delay;
+  const ConfettiBurst({super.key, this.delay = const Duration(milliseconds: 200)});
+  @override
+  State<ConfettiBurst> createState() => _ConfettiBurstState();
+}
+
+class _ConfettiBurstState extends State<ConfettiBurst>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late List<_Particle> _particles;
+
+  static const _colors = [C.accent, C.blue, C.green, C.yellow, C.pink, C.accentLight];
+
+  @override
+  void initState() {
+    super.initState();
+    final rng = Random();
+    _particles = List.generate(48, (_) => _Particle(rng));
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 2200),
+      vsync: this,
+    )..addListener(() => setState(() {}));
+    Future.delayed(widget.delay, () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_ctrl.value == 0) return const SizedBox.expand();
+    return IgnorePointer(
+      child: CustomPaint(
+        size: Size.infinite,
+        painter: _ConfettiPainter(_particles, _ctrl.value, _colors),
+      ),
+    );
+  }
+}
+
+class _Particle {
+  final double angle;
+  final double speed;
+  final double rotSpeed;
+  final double size;
+  final int colorIdx;
+  final bool isCircle;
+
+  _Particle(Random rng)
+      : angle = -pi / 2 + (rng.nextDouble() - 0.5) * pi * 0.8,
+        speed = 300 + rng.nextDouble() * 500,
+        rotSpeed = (rng.nextDouble() - 0.5) * 12,
+        size = 4 + rng.nextDouble() * 6,
+        colorIdx = rng.nextInt(6),
+        isCircle = rng.nextBool();
+}
+
+class _ConfettiPainter extends CustomPainter {
+  final List<_Particle> particles;
+  final double t;
+  final List<Color> colors;
+  _ConfettiPainter(this.particles, this.t, this.colors);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height * 0.35;
+    const gravity = 600.0;
+    final fade = t > 0.7 ? 1.0 - (t - 0.7) / 0.3 : 1.0;
+
+    for (final p in particles) {
+      final vx = cos(p.angle) * p.speed;
+      final vy = sin(p.angle) * p.speed;
+      final x = cx + vx * t;
+      final y = cy + vy * t + 0.5 * gravity * t * t;
+      if (y > size.height + 20) continue;
+
+      final paint = Paint()
+        ..color = colors[p.colorIdx].withValues(alpha: fade * 0.9);
+
+      canvas.save();
+      canvas.translate(x, y);
+      canvas.rotate(p.rotSpeed * t);
+      if (p.isCircle) {
+        canvas.drawCircle(Offset.zero, p.size / 2, paint);
+      } else {
+        canvas.drawRect(
+          Rect.fromCenter(center: Offset.zero, width: p.size, height: p.size * 0.6),
+          paint,
+        );
+      }
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ConfettiPainter old) => old.t != t;
 }

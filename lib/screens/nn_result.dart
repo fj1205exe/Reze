@@ -23,7 +23,9 @@ class NNResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Stack(
+      children: [
+      Container(
       color: C.bg,
       child: SafeArea(
         child: SingleChildScrollView(
@@ -196,6 +198,9 @@ class NNResultScreen extends StatelessWidget {
           ),
         ),
       ),
+    ),
+      if (challengeSuccess) const ConfettiBurst(),
+      ],
     );
   }
 
