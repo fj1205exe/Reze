@@ -34,6 +34,7 @@ class SGDDiscoverScreen extends StatefulWidget {
 
 class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
   final Set<sgd.BatchSize> _tried = {};
+  double? _lastDelta;
 
   @override
   void initState() {
@@ -45,6 +46,9 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
   void didUpdateWidget(SGDDiscoverScreen old) {
     super.didUpdateWidget(old);
     _tried.add(widget.batchSize);
+    if (widget.history.length > old.history.length && widget.history.length >= 2) {
+      _lastDelta = widget.history.last - widget.history[widget.history.length - 2];
+    }
   }
 
   bool get _allTried => _tried.length >= 3;
@@ -231,6 +235,22 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                           ],
                         ),
                       ),
+                      if (_lastDelta != null) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: _lastDelta! < 0
+                                ? C.green.withValues(alpha: 0.1)
+                                : C.pink.withValues(alpha: 0.08),
+                            borderRadius: S.borderSm,
+                          ),
+                          child: Text(
+                            '${_lastDelta! < 0 ? '↓' : '↑'} ${_lastDelta!.abs().toStringAsFixed(3)}',
+                            style: mono(fontSize: 11, color: _lastDelta! < 0 ? C.green : C.pink),
+                          ),
+                        ),
+                      ],
                       const Spacer(),
                       Text(
                         '${_tried.length}/3 tried',

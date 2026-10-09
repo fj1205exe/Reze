@@ -38,8 +38,8 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
   @override
   void initState() {
     super.initState();
-    _angle = widget.angle;
-    _offset = widget.offset;
+    _angle = -20;
+    _offset = 0.1;
   }
 
   double get _accuracy => cl_utils.calcAccuracyForDataset(

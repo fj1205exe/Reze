@@ -85,7 +85,7 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
 
                   // 2D XOR plane
                   Container(
-                    height: 230,
+                    height: 170,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: C.surface,
@@ -143,14 +143,23 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  // w1 slider
-                  _buildSlider('Weight w₁', w1, -2.0, 2.0, C.green, (v) => _handleUpdate(w1: v)),
-                  const SizedBox(height: 8),
-                  // w2 slider
-                  _buildSlider('Weight w₂', w2, -2.0, 2.0, C.blue, (v) => _handleUpdate(w2: v)),
-                  const SizedBox(height: 8),
-                  // bias slider
-                  _buildSlider('Bias b', b, -2.0, 2.0, C.yellow, (v) => _handleUpdate(b: v)),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: C.surface,
+                      borderRadius: S.borderMd,
+                      border: Border.all(color: C.border),
+                    ),
+                    child: Column(
+                      children: [
+                        _sliderRow('Weight w₁', w1, -2.0, 2.0, C.green, (v) => _handleUpdate(w1: v)),
+                        const SizedBox(height: 4),
+                        _sliderRow('Weight w₂', w2, -2.0, 2.0, C.blue, (v) => _handleUpdate(w2: v)),
+                        const SizedBox(height: 4),
+                        _sliderRow('Bias b', b, -2.0, 2.0, C.yellow, (v) => _handleUpdate(b: v)),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 20),
 
                   if (canAdvance)
@@ -178,32 +187,24 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
     );
   }
 
-  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: C.surface,
-        borderRadius: S.borderMd,
-        border: Border.all(color: C.border),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label, style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-              Text('${val >= 0 ? "+" : ""}${val.toStringAsFixed(2)}', style: mono(fontSize: 13, color: color)),
-            ],
-          ),
-          Slider(
-            value: val.clamp(min, max),
-            min: min,
-            max: max,
-            activeColor: color,
-            onChanged: onChange,
-          ),
-        ],
-      ),
+  Widget _sliderRow(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
+            Text('${val >= 0 ? "+" : ""}${val.toStringAsFixed(2)}', style: mono(fontSize: 13, color: color)),
+          ],
+        ),
+        Slider(
+          value: val.clamp(min, max),
+          min: min,
+          max: max,
+          activeColor: color,
+          onChanged: onChange,
+        ),
+      ],
     );
   }
 }
