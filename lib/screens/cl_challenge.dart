@@ -255,7 +255,6 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               thumbColor: C.accent,
                               overlayColor: C.accent.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
                               value: _angle,
@@ -294,7 +293,6 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               thumbColor: C.yellow,
                               overlayColor: C.yellow.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
                               value: _offset,

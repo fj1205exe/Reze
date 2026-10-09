@@ -270,7 +270,6 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                             thumbColor: C.accent,
                             overlayColor: C.accent.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.p.clamp(0.0, 1.0),

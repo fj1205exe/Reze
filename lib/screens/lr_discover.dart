@@ -265,9 +265,6 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                             overlayColor:
                                 C.accent.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape:
-                                const RoundSliderThumbShape(
-                                    enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.slope.clamp(-1.0, 2.0),
@@ -300,9 +297,6 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                             overlayColor:
                                 C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape:
-                                const RoundSliderThumbShape(
-                                    enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value:

@@ -265,7 +265,6 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.15),
               trackHeight: 6,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             ),
             child: Slider(
               value: value,

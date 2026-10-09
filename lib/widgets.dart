@@ -392,21 +392,11 @@ class LrSlider extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        SliderTheme(
-          data: SliderThemeData(
-            activeTrackColor: C.accent,
-            inactiveTrackColor: C.surface3,
-            thumbColor: C.accent,
-            overlayColor: C.accent.withValues(alpha: 0.15),
-            trackHeight: 6,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-          ),
-          child: Slider(
-            value: value.clamp(min, max),
-            min: min,
-            max: max,
-            onChanged: onChange,
-          ),
+        Slider(
+          value: value.clamp(min, max),
+          min: min,
+          max: max,
+          onChanged: onChange,
         ),
       ],
     );

@@ -242,7 +242,6 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             thumbColor: C.accentLight,
                             overlayColor: C.accentLight.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.angleA,
@@ -267,7 +266,6 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             thumbColor: C.accentLight,
                             overlayColor: C.accentLight.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.magA,
@@ -309,7 +307,6 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             thumbColor: C.blue,
                             overlayColor: C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.angleB,
@@ -334,7 +331,6 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             thumbColor: C.blue,
                             overlayColor: C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.magB,

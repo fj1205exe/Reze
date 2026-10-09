@@ -173,7 +173,6 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             thumbColor: C.yellow,
                             overlayColor: C.yellow.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.prior.clamp(0.005, 0.30),
@@ -219,7 +218,6 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             thumbColor: C.purple,
                             overlayColor: C.purple.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.sensitivity.clamp(0.70, 0.99),
@@ -265,7 +263,6 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             thumbColor: C.blue,
                             overlayColor: C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.specificity.clamp(0.70, 0.99),

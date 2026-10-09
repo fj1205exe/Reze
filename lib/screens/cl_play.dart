@@ -141,7 +141,6 @@ class _CLPlayScreenState extends State<CLPlayScreen> {
                       thumbColor: C.accent,
                       overlayColor: C.accent.withValues(alpha: 0.15),
                       trackHeight: 6,
-                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                     ),
                     child: Slider(
                       value: widget.angle,

@@ -228,7 +228,6 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                               thumbColor: C.accent,
                               overlayColor: C.accent.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
                               value: _guess ?? 0.5,

@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -109,5 +110,139 @@ ThemeData mlabTheme() {
       backgroundColor: C.bg,
       elevation: 0,
     ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: C.accent,
+      inactiveTrackColor: C.surface3,
+      thumbColor: C.accent,
+      overlayColor: C.accent.withValues(alpha: 0.12),
+      trackHeight: 6,
+      thumbShape: const GlowThumbShape(thumbRadius: 10),
+      trackShape: const GradientTrackShape(),
+      overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+    ),
   );
+}
+
+class GlowThumbShape extends SliderComponentShape {
+  final double thumbRadius;
+  const GlowThumbShape({this.thumbRadius = 10});
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      Size.fromRadius(thumbRadius + 4);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final canvas = context.canvas;
+    final color = sliderTheme.thumbColor ?? C.accent;
+    final t = activationAnimation.value;
+
+    final glowRadius = thumbRadius + 3 + t * 3;
+    canvas.drawCircle(
+      center,
+      glowRadius,
+      Paint()..color = color.withValues(alpha: 0.15 + t * 0.1),
+    );
+
+    canvas.drawCircle(
+      center,
+      thumbRadius,
+      Paint()..color = color,
+    );
+
+    canvas.drawCircle(
+      center,
+      thumbRadius - 1.5,
+      Paint()
+        ..color = Colors.white.withValues(alpha: 0.15)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1,
+    );
+
+    final gripPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.3)
+      ..strokeWidth = 1.2
+      ..strokeCap = StrokeCap.round;
+    for (final dy in [-2.5, 0.0, 2.5]) {
+      canvas.drawLine(
+        center + Offset(-3, dy),
+        center + Offset(3, dy),
+        gripPaint,
+      );
+    }
+  }
+}
+
+class GradientTrackShape extends SliderTrackShape {
+  const GradientTrackShape();
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final trackHeight = sliderTheme.trackHeight ?? 6;
+    final trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final trackLeft = offset.dx + 14;
+    final trackWidth = parentBox.size.width - 28;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+    required TextDirection textDirection,
+  }) {
+    final rect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+    );
+    final radius = Radius.circular(rect.height / 2);
+
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, radius),
+      Paint()..color = sliderTheme.inactiveTrackColor ?? C.surface3,
+    );
+
+    final activeRect = Rect.fromLTRB(
+      rect.left, rect.top, thumbCenter.dx, rect.bottom,
+    );
+    if (activeRect.width > 0) {
+      final activeColor = sliderTheme.activeTrackColor ?? C.accent;
+      context.canvas.drawRRect(
+        RRect.fromRectAndRadius(activeRect, radius),
+        Paint()
+          ..shader = ui.Gradient.linear(
+            activeRect.centerLeft,
+            activeRect.centerRight,
+            [activeColor.withValues(alpha: 0.5), activeColor],
+          ),
+      );
+    }
+  }
 }

@@ -329,7 +329,6 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                               thumbColor: C.blue,
                               overlayColor: C.blue.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
                               value: _angleB,

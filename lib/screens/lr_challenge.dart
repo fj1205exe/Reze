@@ -202,7 +202,6 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               thumbColor: C.accentLight,
                               overlayColor: C.accentLight.withValues(alpha: 0.15),
                               trackHeight: 4,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                             ),
                             child: Slider(
                               value: _slope.clamp(-0.5, 2.0),
@@ -227,7 +226,6 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               thumbColor: C.blue,
                               overlayColor: C.blue.withValues(alpha: 0.15),
                               trackHeight: 4,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                             ),
                             child: Slider(
                               value: _intercept.clamp(-0.5, 1.5),

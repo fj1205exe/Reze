@@ -375,7 +375,6 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.15),
               trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
             ),
             child: Slider(
               value: val.clamp(min, max),

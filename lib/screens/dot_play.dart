@@ -170,7 +170,6 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                             thumbColor: C.accentLight,
                             overlayColor: C.accentLight.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.angleA,
@@ -211,7 +210,6 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                             thumbColor: C.blue,
                             overlayColor: C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.angleB,

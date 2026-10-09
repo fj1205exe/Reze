@@ -154,7 +154,6 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                             thumbColor: C.accent,
                             overlayColor: C.accent.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.slope.clamp(-1.0, 2.0),
@@ -180,7 +179,6 @@ class _LRPlayScreenState extends State<LRPlayScreen> {
                             thumbColor: C.blue,
                             overlayColor: C.blue.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: widget.intercept.clamp(-0.3, 1.2),

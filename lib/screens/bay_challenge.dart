@@ -347,7 +347,6 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                               thumbColor: C.accent,
                               overlayColor: C.accent.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
                             ),
                             child: Slider(
                               value: _userGuess,

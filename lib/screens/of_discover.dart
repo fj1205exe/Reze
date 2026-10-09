@@ -259,7 +259,6 @@ class _OFDiscoverScreenState extends State<OFDiscoverScreen> {
                             thumbColor: curveColor,
                             overlayColor: curveColor.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: degree.toDouble(),

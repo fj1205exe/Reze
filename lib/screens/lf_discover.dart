@@ -249,7 +249,6 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
                             thumbColor: C.accent,
                             overlayColor: C.accent.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: pred.clamp(0.0, 1.0),

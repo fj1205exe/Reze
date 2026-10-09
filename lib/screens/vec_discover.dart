@@ -340,7 +340,6 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                                   thumbColor: C.purple,
                                   overlayColor: C.purple.withValues(alpha: 0.15),
                                   trackHeight: 4,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                                 ),
                                 child: Slider(
                                   value: _scaleFactor.clamp(0.1, 3.0),
@@ -453,7 +452,6 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.15),
               trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
             ),
             child: Slider(
               value: val.clamp(min, max),

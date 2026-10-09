@@ -237,7 +237,6 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                               thumbColor: C.accentLight,
                               overlayColor: C.accentLight.withValues(alpha: 0.15),
                               trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                             ),
                             child: Slider(
                               value: _lr,

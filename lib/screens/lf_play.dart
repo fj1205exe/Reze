@@ -208,7 +208,6 @@ class _LFPlayScreenState extends State<LFPlayScreen> {
                             thumbColor: lossColor,
                             overlayColor: lossColor.withValues(alpha: 0.15),
                             trackHeight: 6,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                           ),
                           child: Slider(
                             value: prediction.clamp(0.0, 1.0),
