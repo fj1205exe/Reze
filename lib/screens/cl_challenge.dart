@@ -29,10 +29,9 @@ class CLChallengeScreen extends StatefulWidget {
 }
 
 class _CLChallengeScreenState extends State<CLChallengeScreen> {
-  bool _started = false;
-  bool _finished = false;
   bool _hasSucceeded = false;
-  int _localSteps = 0;
+  bool _hasMoved = false;
+  int _lockIns = 0;
   late double _angle;
   late double _offset;
 
@@ -47,41 +46,17 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
     _angle, _offset, cl_utils.challengeClassA, cl_utils.challengeClassB,
   );
 
-  bool get _outOfSteps => _localSteps >= _stepLimit;
-  bool get _done => _finished || (_started && (_hasSucceeded || _outOfSteps));
+  bool get _exhausted => _lockIns >= _stepLimit && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
-  void _onAngleChanged(double v) {
-    if (!_started) setState(() => _started = true);
-    setState(() => _angle = v);
-  }
-
-  void _onOffsetChanged(double v) {
-    if (!_started) setState(() => _started = true);
-    setState(() => _offset = v);
-  }
-
-  void _onAngleChangeEnd(double v) {
-    _handleUpdate(v, _offset);
-  }
-
-  void _onOffsetChangeEnd(double v) {
-    _handleUpdate(_angle, v);
-  }
-
-  void _handleUpdate(double a, double o) {
-    if (!_started) setState(() => _started = true);
-    if (_done) return;
+  void _lockIn() {
+    if (_done || !_hasMoved) return;
     setState(() {
-      _localSteps++;
-      _hasSucceeded = _accuracy >= 90.0;
+      _lockIns++;
+      _hasMoved = false;
+      if (_accuracy >= 90.0) _hasSucceeded = true;
     });
-    widget.onUpdate(a, o);
-
-    if (_hasSucceeded || _localSteps >= _stepLimit) {
-      Future.delayed(const Duration(milliseconds: 400), () {
-        if (mounted) setState(() => _finished = true);
-      });
-    }
+    widget.onUpdate(_angle, _offset);
   }
 
   @override
@@ -127,7 +102,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: _localSteps, max: _stepLimit),
+                  StepCounter(steps: _lockIns, max: _stepLimit),
                 ],
               ),
             ),
@@ -163,7 +138,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       ),
                     ],
                   )),
-                  if (_started && !_done)
+                  if (!_done)
                     Positioned(top: 12, right: 12, child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -171,7 +146,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${max(0, _stepLimit - _localSteps)} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${max(0, _stepLimit - _lockIns)} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   Padding(
                     padding: const EdgeInsets.all(4),
@@ -205,7 +180,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${accuracy.round()}% accuracy in $_localSteps adjustments.',
+                            Text('${accuracy.round()}% accuracy in $_lockIns lock-in${_lockIns == 1 ? '' : 's'}.',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('You found the right boundary.', style: inter(fontSize: 12, color: C.greenLight)),
@@ -232,11 +207,10 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         ),
                       ),
                     ),
-                  if (!_done) ...[
-                    // Angle slider
+                  if (!_done)
                     Container(
                       padding: const EdgeInsets.all(14),
-                      margin: const EdgeInsets.only(bottom: 10),
+                      margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
                         color: C.surface,
                         borderRadius: S.borderMd,
@@ -264,25 +238,10 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               value: _angle,
                               min: -90,
                               max: 90,
-                              onChanged: _onAngleChanged,
-                              onChangeEnd: _onAngleChangeEnd,
+                              onChanged: (v) => setState(() { _angle = v; _hasMoved = true; }),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    // Offset slider
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: C.surface,
-                        borderRadius: S.borderMd,
-                        border: Border.all(color: C.border),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -302,24 +261,38 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                               value: _offset,
                               min: -0.5,
                               max: 0.5,
-                              onChanged: _onOffsetChanged,
-                              onChangeEnd: _onOffsetChangeEnd,
+                              onChanged: (v) => setState(() { _offset = v; _hasMoved = true; }),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: _hasMoved ? _lockIn : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: C.yellow,
+                                disabledBackgroundColor: C.surface3,
+                                foregroundColor: C.bg,
+                                shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'LOCK IN  (${_stepLimit - _lockIns} left)',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                                    color: _hasMoved ? C.bg : C.muted),
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                  if (_started && !_done)
-                    FadeSlideIn(
-                      duration: const Duration(milliseconds: 400),
-                      slideDistance: 14,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: FeedbackBar(
-                          type: accuracy >= 80 ? 'ok' : 'info',
-                          message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - _localSteps)} adjustments remaining.',
-                        ),
+                  if (!_done)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: FeedbackBar(
+                        type: accuracy >= 80 ? 'ok' : 'info',
+                        message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - _lockIns)} lock-ins remaining.',
                       ),
                     ),
                   if (_done)
@@ -331,7 +304,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: () => widget.onComplete(_hasSucceeded, _localSteps, _accuracy),
+                        onPressed: () => widget.onComplete(_hasSucceeded, _lockIns, _accuracy),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _hasSucceeded ? C.green : C.accent,
                           foregroundColor: _hasSucceeded ? C.bg : Colors.white,

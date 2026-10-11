@@ -31,7 +31,9 @@ class LRChallengeScreen extends StatefulWidget {
 class _LRChallengeScreenState extends State<LRChallengeScreen> {
   late double _slope;
   late double _intercept;
-  int _adjustments = 0;
+  int _lockIns = 0;
+  bool _hasSucceeded = false;
+  bool _hasMoved = false;
 
   @override
   void initState() {
@@ -41,11 +43,11 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
   }
 
   double get _mse => lr.calcMSE(_slope, _intercept);
-  bool get _succeeded => _mse < _targetMSE;
-  bool get _exhausted => _adjustments >= _maxSteps;
+  bool get _exhausted => _lockIns >= _maxSteps && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
   String get _feedback {
-    if (_succeeded) return 'Excellent fit! MSE is below the target.';
+    if (_hasSucceeded) return 'Excellent fit! MSE is below the target.';
     if (_exhausted) return 'Out of adjustments. Try again!';
     final mse = _mse;
     if (mse > 0.3) return 'Way off — the line is far from the data.';
@@ -55,43 +57,25 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
   }
 
   String get _feedbackType {
-    if (_succeeded) return 'ok';
+    if (_hasSucceeded) return 'ok';
     if (_exhausted) return 'warn';
     if (_mse > 0.15) return 'warn';
     return 'info';
   }
 
-  void _handleSlopeChange(double v) {
+  void _lockIn() {
+    if (_done) return;
     setState(() {
-      _slope = v;
+      _lockIns++;
+      _hasMoved = false;
+      if (_mse < _targetMSE) _hasSucceeded = true;
     });
-  }
-
-  void _handleSlopeChangeEnd(double v) {
-    setState(() {
-      _slope = v;
-      _adjustments++;
-    });
-    widget.onUpdate(v, _intercept);
-  }
-
-  void _handleInterceptChange(double v) {
-    setState(() {
-      _intercept = v;
-    });
-  }
-
-  void _handleInterceptChangeEnd(double v) {
-    setState(() {
-      _intercept = v;
-      _adjustments++;
-    });
-    widget.onUpdate(_slope, v);
+    widget.onUpdate(_slope, _intercept);
   }
 
   @override
   Widget build(BuildContext context) {
-    final done = _succeeded || _exhausted;
+    final mseBelow = _mse < _targetMSE;
 
     return Container(
       color: C.bg,
@@ -107,24 +91,24 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                   Text('Fit the line.',
                       style: spaceGrotesk(fontSize: 22, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 4),
-                  Text('Get MSE below ${_targetMSE.toStringAsFixed(2)} in $_maxSteps adjustments.',
+                  Text('Get MSE below ${_targetMSE.toStringAsFixed(2)} in $_maxSteps lock-ins.',
                       style: inter(fontSize: 14, color: C.muted)),
                   const SizedBox(height: 12),
 
                   // Metrics row
                   Row(
                     children: [
-                      StepCounter(steps: _adjustments, max: _maxSteps),
+                      StepCounter(steps: _lockIns, max: _maxSteps),
                       const SizedBox(width: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _succeeded
+                          color: mseBelow
                               ? C.green.withValues(alpha: 0.12)
                               : C.surface,
                           borderRadius: S.borderSm,
                           border: Border.all(
-                            color: _succeeded
+                            color: mseBelow
                                 ? C.green.withValues(alpha: 0.3)
                                 : C.border,
                           ),
@@ -137,7 +121,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                                 style: mono(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: _succeeded ? C.green : C.accentLight)),
+                                    color: mseBelow ? C.green : C.accentLight)),
                           ],
                         ),
                       ),
@@ -176,8 +160,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                   FeedbackBar(message: _feedback, type: _feedbackType),
                   const SizedBox(height: 14),
 
-                  // Slope slider
-                  if (!done)
+                  if (!_done)
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -207,8 +190,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               value: _slope.clamp(-0.5, 2.0),
                               min: -0.5,
                               max: 2.0,
-                              onChanged: _handleSlopeChange,
-                              onChangeEnd: _handleSlopeChangeEnd,
+                              onChanged: (v) => setState(() { _slope = v; _hasMoved = true; }),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -231,8 +213,27 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                               value: _intercept.clamp(-0.5, 1.5),
                               min: -0.5,
                               max: 1.5,
-                              onChanged: _handleInterceptChange,
-                              onChangeEnd: _handleInterceptChangeEnd,
+                              onChanged: (v) => setState(() { _intercept = v; _hasMoved = true; }),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: _hasMoved ? _lockIn : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: C.yellow,
+                                disabledBackgroundColor: C.surface3,
+                                foregroundColor: C.bg,
+                                shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'LOCK IN  (${_maxSteps - _lockIns} left)',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                                    color: _hasMoved ? C.bg : C.muted),
+                              ),
                             ),
                           ),
                         ],
@@ -240,12 +241,12 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                     ),
                   const SizedBox(height: 20),
 
-                  if (done)
+                  if (_done)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
-                      child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_succeeded, _adjustments)),
+                      child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_hasSucceeded, _lockIns)),
                     ),
                 ],
               ),

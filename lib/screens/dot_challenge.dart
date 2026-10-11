@@ -31,9 +31,9 @@ class DOTChallengeScreen extends StatefulWidget {
 }
 
 class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
-  bool _started = false;
-  bool _finished = false;
-  int _localAttempts = 0;
+  int _lockIns = 0;
+  bool _hasSucceeded = false;
+  bool _hasMoved = false;
   late double _angleB;
 
   @override
@@ -52,42 +52,35 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
     return ax * bx + ay * by;
   }
 
-  bool get _succeeded => _currentDot.abs() <= _targetTolerance;
-  bool get _outOfAttempts => _localAttempts >= _maxAttempts;
-  bool get _done => _finished || (_started && _outOfAttempts && !_succeeded) || _succeeded;
+  bool get _dotClose => _currentDot.abs() <= _targetTolerance;
+  bool get _exhausted => _lockIns >= _maxAttempts && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
   String get _feedbackType {
+    if (_hasSucceeded) return 'ok';
     final dotVal = _currentDot;
-    if (dotVal.abs() <= _targetTolerance) return 'ok';
     if (dotVal.abs() <= 0.15) return 'info';
     return 'warn';
   }
 
   String get _feedbackMsg {
+    if (_hasSucceeded) return 'Perfect! The vectors are perpendicular. Dot product ≈ 0.';
+    if (_exhausted) return 'Out of lock-ins. Hint: perpendicular vectors have θ = 90°.';
     final dotVal = _currentDot;
     final absVal = dotVal.abs();
-    if (absVal <= _targetTolerance) return 'Perfect! The vectors are perpendicular. Dot product ≈ 0.';
     if (absVal <= 0.15) return 'Very close! Adjust the angle slightly to reach zero.';
     if (dotVal > 0) return 'The vectors are too aligned. Try rotating b by 90° from a.';
     return 'The vectors are pointing away. Rotate b closer to perpendicular.';
   }
 
-  void _onAngleBChanged(double v) {
-    if (!_started) setState(() => _started = true);
-    setState(() => _angleB = v);
-  }
-
-  void _onAngleBChangeEnd(double v) {
-    if (_done) return;
-    setState(() => _localAttempts++);
-    widget.onUpdate(widget.angleA, v, widget.magA, widget.magB);
-
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (!mounted) return;
-      if (_currentDot.abs() <= _targetTolerance || _localAttempts >= _maxAttempts) {
-        setState(() => _finished = true);
-      }
+  void _lockIn() {
+    if (_done || !_hasMoved) return;
+    setState(() {
+      _lockIns++;
+      _hasMoved = false;
+      if (_dotClose) _hasSucceeded = true;
     });
+    widget.onUpdate(widget.angleA, _angleB, widget.magA, widget.magB);
   }
 
   @override
@@ -145,7 +138,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       ],
                     ),
                   ),
-                  _attemptCounter(_localAttempts),
+                  _attemptCounter(_lockIns),
                 ],
               ),
             ),
@@ -160,9 +153,9 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: _succeeded
+                  color: _hasSucceeded
                       ? C.green.withValues(alpha: 0.3)
-                      : (_outOfAttempts && !_succeeded
+                      : (_exhausted
                           ? C.pink.withValues(alpha: 0.2)
                           : C.border),
                 ),
@@ -176,7 +169,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       Text(dotVal.toStringAsFixed(3), style: mono(fontSize: 17, color: regColor, fontWeight: FontWeight.w700)),
                     ],
                   )),
-                  if (_started && !_done)
+                  if (!_done)
                     Positioned(top: 12, right: 12, child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -184,7 +177,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${_maxAttempts - _localAttempts} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${_maxAttempts - _lockIns} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   Positioned.fill(
                     child: Padding(
@@ -205,7 +198,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
               child: Column(
                 children: [
                   // Success / failure cards
-                  if (_done && _succeeded)
+                  if (_done && _hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 450),
                       slideDistance: 16,
@@ -221,7 +214,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Perpendicular found in $_localAttempts attempt${_localAttempts == 1 ? '' : 's'}!',
+                            Text('Perpendicular found in $_lockIns lock-in${_lockIns == 1 ? '' : 's'}!',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('The angle between vectors is ${angleBetween.round()}°, close to 90°.',
@@ -230,7 +223,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         ),
                       ),
                     ),
-                  if (_done && !_succeeded)
+                  if (_done && !_hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 14,
@@ -272,7 +265,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 dotVal.toStringAsFixed(3),
-                                style: mono(fontSize: 16, color: _succeeded ? C.green : regColor),
+                                style: mono(fontSize: 16, color: _hasSucceeded ? C.green : regColor),
                               ),
                             ],
                           ),
@@ -301,7 +294,6 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Angle slider for vector b
                   if (!_done)
                     Container(
                       padding: const EdgeInsets.all(14),
@@ -336,31 +328,40 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                               value: _angleB,
                               min: 0,
                               max: 360,
-                              onChanged: _onAngleBChanged,
-                              onChangeEnd: _onAngleBChangeEnd,
+                              onChanged: (v) => setState(() { _angleB = v; _hasMoved = true; }),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: _hasMoved ? _lockIn : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: C.yellow,
+                                disabledBackgroundColor: C.surface3,
+                                foregroundColor: C.bg,
+                                shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'LOCK IN  (${_maxAttempts - _lockIns} left)',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                                    color: _hasMoved ? C.bg : C.muted),
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
 
-                  // Feedback
-                  if (_started && !_done)
-                    FadeSlideIn(
-                      duration: const Duration(milliseconds: 400),
-                      slideDistance: 14,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
-                      ),
+                  if (!_done)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
                     ),
 
-                  if (!_done && !_started)
-                    PrimaryBtn(
-                      label: 'Start',
-                      onPressed: () => setState(() => _started = true),
-                    )
-                  else if (_done)
+                  if (_done)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
@@ -369,16 +370,16 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () => widget.onComplete(_succeeded, _localAttempts),
+                          onPressed: () => widget.onComplete(_hasSucceeded, _lockIns),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _succeeded ? C.green : C.accent,
-                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            backgroundColor: _hasSucceeded ? C.green : C.accent,
+                            foregroundColor: _hasSucceeded ? C.bg : Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                             elevation: 0,
                           ),
                           child: Text('See results', style: spaceGrotesk(
                             fontSize: 15, fontWeight: FontWeight.w600,
-                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                            color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
                           )),
                         ),
                       ),

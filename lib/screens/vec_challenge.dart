@@ -32,9 +32,9 @@ class VECChallengeScreen extends StatefulWidget {
 }
 
 class _VECChallengeScreenState extends State<VECChallengeScreen> {
-  bool _started = false;
-  bool _finished = false;
-  int _localSteps = 0;
+  int _lockIns = 0;
+  bool _hasSucceeded = false;
+  bool _hasMoved = false;
   late double _ax;
   late double _ay;
 
@@ -47,48 +47,31 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
 
   double get _currentMag => vec_utils.vecMagnitude(vec_utils.Vec2(_ax, _ay));
   double get _delta => (_currentMag - widget.targetMag).abs();
-  bool get _succeeded => _delta < 0.05;
-  bool get _outOfSteps => _localSteps >= _maxSteps;
-  bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
+  bool get _magClose => _delta < 0.05;
+  bool get _exhausted => _lockIns >= _maxSteps && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
-  void _onXChanged(double v) {
-    if (!_started) setState(() => _started = true);
-    setState(() => _ax = v);
-  }
-
-  void _onYChanged(double v) {
-    if (!_started) setState(() => _started = true);
-    setState(() => _ay = v);
-  }
-
-  void _onXChangeEnd(double v) {
-    _handleSliderCommit(v, _ay);
-  }
-
-  void _onYChangeEnd(double v) {
-    _handleSliderCommit(_ax, v);
-  }
-
-  void _handleSliderCommit(double x, double y) {
-    if (_done) return;
-    setState(() => _localSteps++);
-    widget.onUpdateA(x, y);
-    if (_succeeded || _localSteps >= _maxSteps) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) setState(() => _finished = true);
-      });
-    }
+  void _lockIn() {
+    if (_done || !_hasMoved) return;
+    setState(() {
+      _lockIns++;
+      _hasMoved = false;
+      if (_magClose) _hasSucceeded = true;
+    });
+    widget.onUpdateA(_ax, _ay);
   }
 
   String get _feedbackMsg {
-    if (_delta <= 0.05) return 'Perfect!';
+    if (_hasSucceeded) return 'Perfect!';
+    if (_exhausted) return 'Out of lock-ins. Think about how x and y affect magnitude.';
     if (_delta < 0.3) return 'Close! Fine-tune it';
     if (_currentMag < widget.targetMag) return 'Too short — increase a component';
     return 'Too long — decrease a component';
   }
 
   String get _feedbackType {
-    if (_delta <= 0.05) return 'ok';
+    if (_hasSucceeded) return 'ok';
+    if (_exhausted) return 'warn';
     if (_delta < 0.3) return 'info';
     return 'warn';
   }
@@ -135,7 +118,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: _localSteps, max: _maxSteps),
+                  StepCounter(steps: _lockIns, max: _maxSteps),
                 ],
               ),
             ),
@@ -151,9 +134,9 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                 color: C.surface,
                 borderRadius: S.borderMd,
                 border: Border.all(
-                  color: _done && _succeeded
+                  color: _done && _hasSucceeded
                       ? C.green.withValues(alpha: 0.3)
-                      : _done && !_succeeded
+                      : _done && !_hasSucceeded
                           ? C.pink.withValues(alpha: 0.2)
                           : C.border,
                 ),
@@ -162,7 +145,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                 painter: _VectorChallengePainter(
                   a: a,
                   targetMag: widget.targetMag,
-                  succeeded: _succeeded,
+                  succeeded: _magClose,
                 ),
               ),
             ),
@@ -203,7 +186,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                           decoration: BoxDecoration(
                             color: C.surface,
                             borderRadius: S.borderMd,
-                            border: Border.all(color: _succeeded ? C.green.withValues(alpha: 0.3) : C.border),
+                            border: Border.all(color: _hasSucceeded ? C.green.withValues(alpha: 0.3) : C.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +194,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                               Text('Current', style: inter(fontSize: 12, color: C.muted)),
                               const SizedBox(height: 4),
                               Text('|a| = ${_currentMag.toStringAsFixed(2)}',
-                                  style: mono(fontSize: 16, fontWeight: FontWeight.w600, color: _succeeded ? C.green : C.accentLight)),
+                                  style: mono(fontSize: 16, fontWeight: FontWeight.w600, color: _hasSucceeded ? C.green : C.accentLight)),
                             ],
                           ),
                         ),
@@ -240,7 +223,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                   const SizedBox(height: 14),
 
                   // Result banners
-                  if (_done && _succeeded)
+                  if (_done && _hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 450),
                       slideDistance: 16,
@@ -256,7 +239,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Target matched in $_localSteps adjustments.',
+                            Text('Target matched in $_lockIns lock-in${_lockIns == 1 ? '' : 's'}.',
                                 style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('You understand magnitude.', style: inter(fontSize: 12, color: C.greenLight)),
@@ -265,7 +248,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       ),
                     ),
 
-                  if (_done && !_succeeded)
+                  if (_done && !_hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 14,
@@ -283,7 +266,6 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       ),
                     ),
 
-                  // Sliders (only when not done)
                   if (!_done)
                     Container(
                       padding: const EdgeInsets.all(14),
@@ -298,32 +280,36 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         children: [
                           Text('Adjust vector a', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.accentLight)),
                           const SizedBox(height: 8),
-                          _buildSlider('x', _ax, -2.0, 2.0, C.accentLight, _onXChanged, _onXChangeEnd),
-                          _buildSlider('y', _ay, -2.0, 2.0, C.accentLight, _onYChanged, _onYChangeEnd),
+                          _buildSlider('x', _ax, -2.0, 2.0, C.accentLight, (v) => setState(() { _ax = v; _hasMoved = true; })),
+                          _buildSlider('y', _ay, -2.0, 2.0, C.accentLight, (v) => setState(() { _ay = v; _hasMoved = true; })),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: _hasMoved ? _lockIn : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: C.yellow,
+                                disabledBackgroundColor: C.surface3,
+                                foregroundColor: C.bg,
+                                shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'LOCK IN  (${_maxSteps - _lockIns} left)',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                                    color: _hasMoved ? C.bg : C.muted),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
 
-                  // Feedback
-                  if (_started && !_done)
-                    FadeSlideIn(
-                      duration: const Duration(milliseconds: 400),
-                      slideDistance: 14,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
-                      ),
-                    ),
-
-                  if (_started && !_done)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: C.surface,
-                        borderRadius: S.borderSm,
-                      ),
-                      child: Text('${_maxSteps - _localSteps} adjustments remaining',
-                          style: mono(fontSize: 12, color: C.yellow)),
+                  if (!_done)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
                     ),
 
                   if (_done)
@@ -335,26 +321,19 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () => widget.onComplete(_succeeded, _localSteps),
+                          onPressed: () => widget.onComplete(_hasSucceeded, _lockIns),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _succeeded ? C.green : C.accent,
-                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            backgroundColor: _hasSucceeded ? C.green : C.accent,
+                            foregroundColor: _hasSucceeded ? C.bg : Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                             elevation: 0,
                           ),
                           child: Text('See results', style: spaceGrotesk(
                             fontSize: 15, fontWeight: FontWeight.w600,
-                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                            color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
                           )),
                         ),
                       ),
-                    ),
-
-                  if (!_done && !_started)
-                    PrimaryBtn(
-                      label: 'Adjust a slider to begin',
-                      disabled: true,
-                      onPressed: null,
                     ),
                 ],
               ),
@@ -365,7 +344,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
     );
   }
 
-  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange, ValueChanged<double> onChangeEnd) {
+  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
     return Row(
       children: [
         SizedBox(width: 14, child: Text(label, style: mono(fontSize: 12, color: C.muted))),
@@ -383,7 +362,6 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
               min: min,
               max: max,
               onChanged: onChange,
-              onChangeEnd: onChangeEnd,
             ),
           ),
         ),

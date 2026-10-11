@@ -26,23 +26,23 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
   double _w1 = 0.0;
   double _w2 = 0.0;
   double _bias = 0.0;
-  int _attempts = 0;
-  bool _locked = false;
+  int _lockIns = 0;
   bool _hasSucceeded = false;
+  bool _hasMoved = false;
 
   Map<String, double> get _fwd => nn.neuronForward(_x1, _x2, _w1, _w2, _bias);
   double get _z => _fwd['z']!;
   double get _output => _fwd['output']!;
-  bool get _exhausted => _attempts >= _maxAttempts && !_hasSucceeded;
+  bool get _exhausted => _lockIns >= _maxAttempts && !_hasSucceeded;
   bool get _done => _hasSucceeded || _exhausted;
 
   String get _feedback {
     if (_hasSucceeded) return 'Output ≥ $_targetOutput — neuron activated!';
-    if (_exhausted) return 'Out of adjustments. Retry with a fresh start.';
+    if (_exhausted) return 'Out of lock-ins. Retry with a fresh start.';
     if (_output < 0.3) return 'Output very low. Increase weights or add positive bias.';
     if (_output < 0.5) return 'Getting warmer. The weighted sum z needs to be higher for sigmoid to push past 0.5.';
     if (_output < _targetOutput) return 'Almost there! A small bias increase can push you over the threshold.';
-    return 'Adjust the sliders.';
+    return 'Adjust the sliders, then lock in.';
   }
 
   String get _feedbackType {
@@ -52,28 +52,12 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
     return 'warn';
   }
 
-  void _handleSliderChange(String param, double value) {
-    if (_locked || _done) return;
+  void _lockIn() {
+    if (_done || !_hasMoved) return;
     setState(() {
-      switch (param) {
-        case 'w1': _w1 = value;
-        case 'w2': _w2 = value;
-        case 'bias': _bias = value;
-      }
-    });
-  }
-
-  void _handleSliderChangeEnd(String param, double value) {
-    if (_locked || _done) return;
-    setState(() {
-      switch (param) {
-        case 'w1': _w1 = value;
-        case 'w2': _w2 = value;
-        case 'bias': _bias = value;
-      }
-      _attempts++;
-      _hasSucceeded = _output >= _targetOutput;
-      if (_hasSucceeded) _locked = true;
+      _lockIns++;
+      _hasMoved = false;
+      if (_output >= _targetOutput) _hasSucceeded = true;
     });
   }
 
@@ -82,9 +66,9 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
       _w1 = 0.0;
       _w2 = 0.0;
       _bias = 0.0;
-      _attempts = 0;
-      _locked = false;
+      _lockIns = 0;
       _hasSucceeded = false;
+      _hasMoved = false;
     });
   }
 
@@ -99,7 +83,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
           MLabHeader(
             label: 'NN Challenge',
             onBack: widget.onBack,
-            right: StepCounter(steps: _attempts, max: _maxAttempts),
+            right: StepCounter(steps: _lockIns, max: _maxAttempts),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -188,13 +172,32 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
                   FeedbackBar(message: _feedback, type: _feedbackType),
                   const SizedBox(height: 14),
 
-                  // Sliders
                   if (!_done) ...[
-                    _sliderCard('w₁', _w1, C.blue, (v) => _handleSliderChange('w1', v), (v) => _handleSliderChangeEnd('w1', v)),
+                    _sliderCard('w₁', _w1, C.blue, (v) => setState(() { _w1 = v; _hasMoved = true; })),
                     const SizedBox(height: 10),
-                    _sliderCard('w₂', _w2, C.accentLight, (v) => _handleSliderChange('w2', v), (v) => _handleSliderChangeEnd('w2', v)),
+                    _sliderCard('w₂', _w2, C.accentLight, (v) => setState(() { _w2 = v; _hasMoved = true; })),
                     const SizedBox(height: 10),
-                    _sliderCard('bias', _bias, C.yellow, (v) => _handleSliderChange('bias', v), (v) => _handleSliderChangeEnd('bias', v)),
+                    _sliderCard('bias', _bias, C.yellow, (v) => setState(() { _bias = v; _hasMoved = true; })),
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 44,
+                      child: ElevatedButton(
+                        onPressed: _hasMoved ? _lockIn : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: C.yellow,
+                          disabledBackgroundColor: C.surface3,
+                          foregroundColor: C.bg,
+                          shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          'LOCK IN  (${_maxAttempts - _lockIns} left)',
+                          style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                              color: _hasMoved ? C.bg : C.muted),
+                        ),
+                      ),
+                    ),
                   ],
                   const SizedBox(height: 20),
 
@@ -203,7 +206,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
-                      child: PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _attempts)),
+                      child: PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _lockIns)),
                     ),
                   if (_exhausted) ...[
                     FadeSlideIn(
@@ -217,7 +220,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
                       delay: const Duration(milliseconds: 250),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
-                      child: PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _attempts)),
+                      child: PrimaryBtn(label: 'Continue anyway', onPressed: () => widget.onComplete(false, _lockIns)),
                     ),
                   ],
                 ],
@@ -241,7 +244,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
     );
   }
 
-  Widget _sliderCard(String label, double value, Color color, ValueChanged<double> onChange, ValueChanged<double> onChangeEnd) {
+  Widget _sliderCard(String label, double value, Color color, ValueChanged<double> onChange) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -273,7 +276,6 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
               min: -2.0,
               max: 2.0,
               onChanged: _done ? null : onChange,
-              onChangeEnd: _done ? null : onChangeEnd,
             ),
           ),
         ],

@@ -27,9 +27,16 @@ class OFChallengeScreen extends StatefulWidget {
 }
 
 class _OFChallengeScreenState extends State<OFChallengeScreen> {
-  bool _started = false;
-  bool _finished = false;
-  int _localAttempts = 0;
+  late int _previewDegree;
+  int _lockIns = 0;
+  bool _hasSucceeded = false;
+  bool _hasMoved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _previewDegree = 1;
+  }
 
   double get _targetMSE {
     final sweetCoeffs = of_utils.fitPolynomial(of_utils.trainPoints, of_utils.sweetSpot);
@@ -37,23 +44,22 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
   }
 
   double get _currentTestMSE {
-    final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, widget.degree);
+    final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, _previewDegree);
     return of_utils.calcPolyMSE(coeffs, of_utils.testPoints);
   }
 
   double get _currentTrainMSE {
-    final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, widget.degree);
+    final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, _previewDegree);
     return of_utils.calcPolyMSE(coeffs, of_utils.trainPoints);
   }
 
-  bool get _succeeded => _currentTestMSE <= _targetMSE;
-  bool get _outOfAttempts => _localAttempts >= _maxAttempts;
-  bool get _done => _finished || (_started && _outOfAttempts && !_succeeded) || _succeeded;
+  bool get _exhausted => _lockIns >= _maxAttempts && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
   String get _feedbackType {
     final trainMSE = _currentTrainMSE;
     final testMSE = _currentTestMSE;
-    if (testMSE <= _targetMSE) return 'ok';
+    if (_hasSucceeded) return 'ok';
     if (trainMSE < 0.001 && testMSE > _targetMSE) return 'warn';
     if (trainMSE > 0.002 && testMSE > 0.003) return 'info';
     return 'info';
@@ -62,32 +68,33 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
   String get _feedbackMsg {
     final trainMSE = _currentTrainMSE;
     final testMSE = _currentTestMSE;
-    if (testMSE <= _targetMSE) return 'Good generalization! The model balances bias and variance.';
+    if (_hasSucceeded) return 'Good generalization! The model balances bias and variance.';
     if (trainMSE < 0.001 && testMSE > _targetMSE) return 'Train error is low but test error is high — the model is overfitting.';
     if (trainMSE > 0.002 && testMSE > 0.003) return 'Both errors are high — the model is too simple (underfitting).';
-    return '${_maxAttempts - _localAttempts} attempts remaining. Find the degree with lowest test error.';
+    return 'Tap a degree to preview, then lock in.';
   }
 
-  void _handleSelect(int d) {
-    if (_done || !_started) return;
-    if (d == widget.degree) return;
-    setState(() => _localAttempts++);
-    widget.onUpdate(d);
-
-    // Check if succeeded or ran out
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (!mounted) return;
-      final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, d);
-      final testMSE = of_utils.calcPolyMSE(coeffs, of_utils.testPoints);
-      if (testMSE <= _targetMSE || _localAttempts >= _maxAttempts) {
-        setState(() => _finished = true);
-      }
+  void _selectDegree(int d) {
+    if (_done) return;
+    setState(() {
+      _previewDegree = d;
+      _hasMoved = true;
     });
+  }
+
+  void _lockIn() {
+    if (_done || !_hasMoved) return;
+    setState(() {
+      _lockIns++;
+      _hasMoved = false;
+      if (_currentTestMSE <= _targetMSE) _hasSucceeded = true;
+    });
+    widget.onUpdate(_previewDegree);
   }
 
   @override
   Widget build(BuildContext context) {
-    final degree = widget.degree;
+    final degree = _previewDegree;
     final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, degree);
     final curvePoints = of_utils.sampleOFCurve(coeffs, 90);
     final trainMSE = of_utils.calcPolyMSE(coeffs, of_utils.trainPoints);
@@ -134,7 +141,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                       ],
                     ),
                   ),
-                  _attemptCounter(_localAttempts),
+                  _attemptCounter(_lockIns),
                 ],
               ),
             ),
@@ -149,9 +156,9 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: _succeeded
+                  color: _hasSucceeded
                       ? C.green.withValues(alpha: 0.3)
-                      : (_outOfAttempts && !_succeeded
+                      : (_exhausted
                           ? C.pink.withValues(alpha: 0.2)
                           : C.border),
                 ),
@@ -165,7 +172,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                       Text('$degree', style: mono(fontSize: 17, color: C.purple, fontWeight: FontWeight.w700)),
                     ],
                   )),
-                  if (_started && !_done)
+                  if (!_done)
                     Positioned(top: 12, right: 12, child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -173,7 +180,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         borderRadius: S.borderSm,
                         border: Border.all(color: C.yellow.withValues(alpha: 0.25)),
                       ),
-                      child: Text('${_maxAttempts - _localAttempts} left', style: mono(fontSize: 12, color: C.yellow)),
+                      child: Text('${_maxAttempts - _lockIns} left', style: mono(fontSize: 12, color: C.yellow)),
                     )),
                   // Legend
                   Positioned(
@@ -217,7 +224,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
               child: Column(
                 children: [
                   // Success / failure cards
-                  if (_done && _succeeded)
+                  if (_done && _hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 450),
                       slideDistance: 16,
@@ -233,7 +240,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Best degree found in $_localAttempts attempt${_localAttempts == 1 ? '' : 's'}!',
+                            Text('Best degree found in $_lockIns attempt${_lockIns == 1 ? '' : 's'}!',
                               style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600, color: C.green)),
                             const SizedBox(height: 4),
                             Text('Degree $degree balances bias and variance.',
@@ -242,7 +249,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         ),
                       ),
                     ),
-                  if (_done && !_succeeded)
+                  if (_done && !_hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 14,
@@ -303,7 +310,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 testMSE.toStringAsFixed(4),
-                                style: mono(fontSize: 16, color: _succeeded ? C.green : (testMSE > _targetMSE * 2 ? C.pink : C.yellow)),
+                                style: mono(fontSize: 16, color: _hasSucceeded ? C.green : (testMSE > _targetMSE * 2 ? C.pink : C.yellow)),
                               ),
                             ],
                           ),
@@ -335,7 +342,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                               final d = i + 1;
                               final isActive = d == degree;
                               return InkWell(
-                                onTap: () => _handleSelect(d),
+                                onTap: () => _selectDegree(d),
                                 borderRadius: S.borderSm,
                                 child: Container(
                                   width: 44,
@@ -362,27 +369,34 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                               );
                             }),
                           ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: _hasMoved ? _lockIn : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: C.yellow,
+                                disabledBackgroundColor: C.surface3,
+                                foregroundColor: C.bg,
+                                shape: RoundedRectangleBorder(borderRadius: S.borderSm),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'LOCK IN  (${_maxAttempts - _lockIns} left)',
+                                style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600,
+                                    color: _hasMoved ? C.bg : C.muted),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
 
-                  // Feedback
-                  if (_started && !_done)
-                    FadeSlideIn(
-                      duration: const Duration(milliseconds: 400),
-                      slideDistance: 14,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
-                      ),
-                    ),
+                  if (!_done)
+                    FeedbackBar(type: _feedbackType, message: _feedbackMsg),
 
-                  if (!_done && !_started)
-                    PrimaryBtn(
-                      label: 'Start',
-                      onPressed: () => setState(() => _started = true),
-                    )
-                  else if (_done)
+                  if (_done)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
@@ -391,16 +405,16 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () => widget.onComplete(_succeeded, _localAttempts),
+                          onPressed: () => widget.onComplete(_hasSucceeded, _lockIns),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _succeeded ? C.green : C.accent,
-                            foregroundColor: _succeeded ? C.bg : Colors.white,
+                            backgroundColor: _hasSucceeded ? C.green : C.accent,
+                            foregroundColor: _hasSucceeded ? C.bg : Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                             elevation: 0,
                           ),
                           child: Text('See results', style: spaceGrotesk(
                             fontSize: 15, fontWeight: FontWeight.w600,
-                            color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                            color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
                           )),
                         ),
                       ),
