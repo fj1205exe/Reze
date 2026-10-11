@@ -1352,9 +1352,8 @@ class _MLabHomeState extends State<MLabHome> {
           challengeSteps: _clChalSteps,
           onRetryChallenge: () => _nav(AppScreen.clChallenge),
           onNext: () => _nav(AppScreen.home),
-          onPlayPR: () {
-            setState(() => _pr = const pr.PRState());
-            _nav(AppScreen.prPlay);
+          onPlayVEC: () {
+            _nav(AppScreen.vecPlay);
           },
         );
 

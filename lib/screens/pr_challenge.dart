@@ -184,6 +184,18 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                             Text('$_roundHeads H', style: mono(fontSize: 13, color: C.accentLight)),
                             Text(' / ', style: mono(fontSize: 13, color: C.muted)),
                             Text('$_roundTails T', style: mono(fontSize: 13, color: C.blue)),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: C.surface2,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'P(H) = ${(_roundHeads / 20).toStringAsFixed(2)}',
+                                style: mono(fontSize: 12, color: C.yellow),
+                              ),
+                            ),
                           ],
                         ),
                       ],

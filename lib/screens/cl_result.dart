@@ -10,7 +10,7 @@ class CLResultScreen extends StatelessWidget {
   final int challengeSteps;
   final VoidCallback? onRetryChallenge;
   final VoidCallback onNext;
-  final VoidCallback onPlayPR;
+  final VoidCallback onPlayVEC;
 
   const CLResultScreen({
     super.key,
@@ -20,7 +20,7 @@ class CLResultScreen extends StatelessWidget {
     this.challengeSteps = 0,
     this.onRetryChallenge,
     required this.onNext,
-    required this.onPlayPR,
+    required this.onPlayVEC,
   });
 
   @override
@@ -194,7 +194,7 @@ class CLResultScreen extends StatelessWidget {
                 delay: const Duration(milliseconds: 250),
                 duration: const Duration(milliseconds: 400),
                 slideDistance: 12,
-                child: PrimaryBtn(label: 'NEXT: PROBABILITY', onPressed: onPlayPR),
+                child: PrimaryBtn(label: 'NEXT: VECTORS', onPressed: onPlayVEC),
               ),
               const SizedBox(height: 12),
               FadeSlideIn(

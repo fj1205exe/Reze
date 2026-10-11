@@ -238,19 +238,27 @@ class _NNXorPainter extends CustomPainter {
     canvas.clipRect(Rect.fromLTWH(pad, pad, iw, ih));
 
     // Decision boundary line w1*x1 + w2*x2 + b = 0
-    if (w2.abs() > 1e-4) {
+    if (w1.abs() < 1e-4 && w2.abs() < 1e-4) {
+      // No boundary — draw faint dashed midline as placeholder
+      final midY = toY(0.5);
+      final dashPaint = Paint()..color = Colors.white.withValues(alpha: 0.15)..strokeWidth = 1;
+      for (double dx = pad; dx < w - pad; dx += 8) {
+        canvas.drawLine(Offset(dx, midY), Offset(dx + 4, midY), dashPaint);
+      }
+    } else if (w1.abs() > w2.abs()) {
+      final x0 = (-bias) / w1;
+      final x1 = (-w2 - bias) / w1;
+      canvas.drawLine(
+        Offset(toX(x0), toY(0)),
+        Offset(toX(x1), toY(1)),
+        Paint()..color = Colors.white..strokeWidth = 2,
+      );
+    } else {
       final y0 = (-bias) / w2;
       final y1 = (-w1 - bias) / w2;
       canvas.drawLine(
         Offset(toX(0), toY(y0)),
         Offset(toX(1), toY(y1)),
-        Paint()..color = Colors.white..strokeWidth = 2,
-      );
-    } else if (w1.abs() > 1e-4) {
-      final x0 = (-bias) / w1;
-      canvas.drawLine(
-        Offset(toX(x0), toY(0)),
-        Offset(toX(x0), toY(1)),
         Paint()..color = Colors.white..strokeWidth = 2,
       );
     }

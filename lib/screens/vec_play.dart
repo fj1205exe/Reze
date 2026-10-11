@@ -108,6 +108,8 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
                               b: b,
                               highlightA: _inspecting == 'a',
                               highlightB: _inspecting == 'b',
+                              hintA: !_tappedA,
+                              hintB: !_tappedB,
                             ),
                           ),
                         );
@@ -219,12 +221,15 @@ class _VECPlayScreenState extends State<VECPlayScreen> {
 class _PlayCanvasPainter extends CustomPainter {
   final vec_utils.Vec2 a, b;
   final bool highlightA, highlightB;
+  final bool hintA, hintB;
 
   _PlayCanvasPainter({
     required this.a,
     required this.b,
     required this.highlightA,
     required this.highlightB,
+    this.hintA = false,
+    this.hintB = false,
   });
 
   @override
@@ -277,6 +282,14 @@ class _PlayCanvasPainter extends CustomPainter {
     _drawArrow(canvas, origin, toScreen(a), C.accentLight);
     _drawText(canvas, 'a', toScreen(a) + const Offset(4, -8), C.accentLight);
 
+    // Tap hints on untapped vector tips
+    if (hintA) {
+      _drawTapHint(canvas, toScreen(a), C.accentLight);
+    }
+    if (hintB) {
+      _drawTapHint(canvas, toScreen(b), C.blue);
+    }
+
     // Origin dot
     canvas.drawCircle(origin, 3, Paint()..color = Colors.white.withValues(alpha: 0.5));
   }
@@ -310,7 +323,19 @@ class _PlayCanvasPainter extends CustomPainter {
     tp.paint(canvas, offset);
   }
 
+  void _drawTapHint(Canvas canvas, Offset center, Color color) {
+    canvas.drawCircle(center, 18, Paint()
+      ..color = color.withValues(alpha: 0.12)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2);
+    canvas.drawCircle(center, 26, Paint()
+      ..color = color.withValues(alpha: 0.06)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5);
+  }
+
   @override
   bool shouldRepaint(_PlayCanvasPainter old) =>
-      highlightA != old.highlightA || highlightB != old.highlightB;
+      highlightA != old.highlightA || highlightB != old.highlightB ||
+      hintA != old.hintA || hintB != old.hintB;
 }

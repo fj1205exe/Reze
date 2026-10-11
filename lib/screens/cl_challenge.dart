@@ -31,6 +31,7 @@ class CLChallengeScreen extends StatefulWidget {
 class _CLChallengeScreenState extends State<CLChallengeScreen> {
   bool _started = false;
   bool _finished = false;
+  bool _hasSucceeded = false;
   int _localSteps = 0;
   late double _angle;
   late double _offset;
@@ -46,9 +47,8 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
     _angle, _offset, cl_utils.challengeClassA, cl_utils.challengeClassB,
   );
 
-  bool get _succeeded => _accuracy >= 90.0;
   bool get _outOfSteps => _localSteps >= _stepLimit;
-  bool get _done => _finished || (_started && (_succeeded || _outOfSteps));
+  bool get _done => _finished || (_started && (_hasSucceeded || _outOfSteps));
 
   void _onAngleChanged(double v) {
     if (!_started) setState(() => _started = true);
@@ -71,11 +71,13 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
   void _handleUpdate(double a, double o) {
     if (!_started) setState(() => _started = true);
     if (_done) return;
-    setState(() => _localSteps++);
+    setState(() {
+      _localSteps++;
+      _hasSucceeded = _accuracy >= 90.0;
+    });
     widget.onUpdate(a, o);
 
-    final acc = cl_utils.calcAccuracyForDataset(a, o, cl_utils.challengeClassA, cl_utils.challengeClassB);
-    if (acc >= 90.0 || _localSteps >= _stepLimit) {
+    if (_hasSucceeded || _localSteps >= _stepLimit) {
       Future.delayed(const Duration(milliseconds: 400), () {
         if (mounted) setState(() => _finished = true);
       });
@@ -138,9 +140,9 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                 color: C.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: _done && _succeeded
+                  color: _done && _hasSucceeded
                       ? C.green.withValues(alpha: 0.3)
-                      : _done && !_succeeded
+                      : _done && !_hasSucceeded
                           ? C.pink.withValues(alpha: 0.2)
                           : C.border,
                 ),
@@ -187,7 +189,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
               child: Column(
                 children: [
-                  if (_done && _succeeded)
+                  if (_done && _hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 450),
                       slideDistance: 16,
@@ -211,7 +213,7 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         ),
                       ),
                     ),
-                  if (_done && !_succeeded)
+                  if (_done && !_hasSucceeded)
                     FadeSlideIn(
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 14,
@@ -329,16 +331,16 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: () => widget.onComplete(_succeeded, _localSteps, _accuracy),
+                        onPressed: () => widget.onComplete(_hasSucceeded, _localSteps, _accuracy),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _succeeded ? C.green : C.accent,
-                          foregroundColor: _succeeded ? C.bg : Colors.white,
+                          backgroundColor: _hasSucceeded ? C.green : C.accent,
+                          foregroundColor: _hasSucceeded ? C.bg : Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: S.borderMd),
                           elevation: 0,
                         ),
                         child: Text('See results', style: spaceGrotesk(
                           fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _succeeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                          color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
                         )),
                       ),
                     ),

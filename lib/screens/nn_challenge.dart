@@ -28,16 +28,16 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
   double _bias = 0.0;
   int _attempts = 0;
   bool _locked = false;
+  bool _hasSucceeded = false;
 
   Map<String, double> get _fwd => nn.neuronForward(_x1, _x2, _w1, _w2, _bias);
   double get _z => _fwd['z']!;
   double get _output => _fwd['output']!;
-  bool get _succeeded => _output >= _targetOutput;
-  bool get _exhausted => _attempts >= _maxAttempts && !_succeeded;
-  bool get _done => _succeeded || _exhausted;
+  bool get _exhausted => _attempts >= _maxAttempts && !_hasSucceeded;
+  bool get _done => _hasSucceeded || _exhausted;
 
   String get _feedback {
-    if (_succeeded) return 'Output ≥ $_targetOutput — neuron activated!';
+    if (_hasSucceeded) return 'Output ≥ $_targetOutput — neuron activated!';
     if (_exhausted) return 'Out of adjustments. Retry with a fresh start.';
     if (_output < 0.3) return 'Output very low. Increase weights or add positive bias.';
     if (_output < 0.5) return 'Getting warmer. The weighted sum z needs to be higher for sigmoid to push past 0.5.';
@@ -46,7 +46,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
   }
 
   String get _feedbackType {
-    if (_succeeded) return 'ok';
+    if (_hasSucceeded) return 'ok';
     if (_exhausted) return 'warn';
     if (_output >= 0.5) return 'info';
     return 'warn';
@@ -72,7 +72,8 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
         case 'bias': _bias = value;
       }
       _attempts++;
-      if (_succeeded) _locked = true;
+      _hasSucceeded = _output >= _targetOutput;
+      if (_hasSucceeded) _locked = true;
     });
   }
 
@@ -83,12 +84,13 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
       _bias = 0.0;
       _attempts = 0;
       _locked = false;
+      _hasSucceeded = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final outputColor = _succeeded ? C.green : (_output >= 0.5 ? C.yellow : C.pink);
+    final outputColor = _output >= _targetOutput ? C.green : (_output >= 0.5 ? C.yellow : C.pink);
 
     return Container(
       color: C.bg,
@@ -196,7 +198,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
                   ],
                   const SizedBox(height: 20),
 
-                  if (_succeeded)
+                  if (_hasSucceeded)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
