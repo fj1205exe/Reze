@@ -43,31 +43,52 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
   bool _sumToggled = false;
   bool _diffToggled = false;
 
+  late double _ax, _ay, _bx, _by;
+  bool _showSum = false;
+  bool _showDiff = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ax = -0.5;
+    _ay = 1.2;
+    _bx = 0.8;
+    _by = -0.6;
+  }
+
   void _handleSliderA(double x, double y) {
-    widget.onUpdateA(x, y);
     setState(() {
+      _ax = x;
+      _ay = y;
       _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Adjust components to see how vectors change';
     });
+    widget.onUpdateA(x, y);
   }
 
   void _handleSliderB(double x, double y) {
-    widget.onUpdateB(x, y);
     setState(() {
+      _bx = x;
+      _by = y;
       _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Adjust components to see how vectors change';
     });
+    widget.onUpdateB(x, y);
   }
 
   void _handleScale() {
-    widget.onUpdateA(widget.ax * _scaleFactor, widget.ay * _scaleFactor);
+    final newAx = _ax * _scaleFactor;
+    final newAy = _ay * _scaleFactor;
     setState(() {
+      _ax = newAx;
+      _ay = newAy;
       _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Scaling changes magnitude but not direction';
     });
+    widget.onUpdateA(newAx, newAy);
   }
 
   void _handleNormalize() {
@@ -84,29 +105,31 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
   }
 
   void _handleToggleSum() {
-    widget.onToggleSum();
     setState(() {
+      _showSum = !_showSum;
       _sumToggled = true;
       _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Sum of two vectors follows the parallelogram rule';
     });
+    widget.onToggleSum();
   }
 
   void _handleToggleDiff() {
-    widget.onToggleDiff();
     setState(() {
+      _showDiff = !_showDiff;
       _diffToggled = true;
       _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Difference gives the displacement from b to a';
     });
+    widget.onToggleDiff();
   }
 
   @override
   Widget build(BuildContext context) {
-    final a = vec_utils.Vec2(widget.ax, widget.ay);
-    final b = vec_utils.Vec2(widget.bx, widget.by);
+    final a = vec_utils.Vec2(_ax, _ay);
+    final b = vec_utils.Vec2(_bx, _by);
     final sumVec = vec_utils.vecAdd(a, b);
     final diffVec = vec_utils.vecSub(a, b);
     final magA = vec_utils.vecMagnitude(a);
@@ -116,7 +139,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
     final normA = vec_utils.vecNormalize(a);
 
     final unlocked = _sliderMoves >= 8 &&
-        (_sumToggled || widget.showSum || _diffToggled || widget.showDiff);
+        (_sumToggled || _showSum || _diffToggled || _showDiff);
 
     return Container(
       color: C.bg,
@@ -168,8 +191,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                   b: b,
                   sumVec: sumVec,
                   diffVec: diffVec,
-                  showSum: widget.showSum,
-                  showDiff: widget.showDiff,
+                  showSum: _showSum,
+                  showDiff: _showDiff,
                   showNormalized: _normalized,
                   normA: normA,
                 ),
@@ -241,13 +264,13 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                             height: 38,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: widget.showSum ? C.green.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
+                              color: _showSum ? C.green.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
                               borderRadius: S.borderSm,
-                              border: Border.all(color: widget.showSum ? C.green.withValues(alpha: 0.5) : Colors.transparent),
+                              border: Border.all(color: _showSum ? C.green.withValues(alpha: 0.5) : Colors.transparent),
                             ),
                             child: Text(
-                              '${widget.showSum ? "Hide" : "Show"} a + b (${magSum.toStringAsFixed(2)})',
-                              style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: widget.showSum ? C.green : C.muted),
+                              '${_showSum ? "Hide" : "Show"} a + b (${magSum.toStringAsFixed(2)})',
+                              style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: _showSum ? C.green : C.muted),
                             ),
                           ),
                         ),
@@ -261,13 +284,13 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                             height: 38,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: widget.showDiff ? C.pink.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
+                              color: _showDiff ? C.pink.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.03),
                               borderRadius: S.borderSm,
-                              border: Border.all(color: widget.showDiff ? C.pink.withValues(alpha: 0.5) : Colors.transparent),
+                              border: Border.all(color: _showDiff ? C.pink.withValues(alpha: 0.5) : Colors.transparent),
                             ),
                             child: Text(
-                              '${widget.showDiff ? "Hide" : "Show"} a − b (${magDiff.toStringAsFixed(2)})',
-                              style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: widget.showDiff ? C.pink : C.muted),
+                              '${_showDiff ? "Hide" : "Show"} a − b (${magDiff.toStringAsFixed(2)})',
+                              style: spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: _showDiff ? C.pink : C.muted),
                             ),
                           ),
                         ),
@@ -289,8 +312,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       children: [
                         Text('Vector a controls', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.accentLight)),
                         const SizedBox(height: 6),
-                        _buildSlider('x', widget.ax, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(v, widget.ay)),
-                        _buildSlider('y', widget.ay, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(widget.ax, v)),
+                        _buildSlider('x', _ax, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(v, _ay)),
+                        _buildSlider('y', _ay, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(_ax, v)),
                       ],
                     ),
                   ),
@@ -309,8 +332,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       children: [
                         Text('Vector b controls', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.blue)),
                         const SizedBox(height: 6),
-                        _buildSlider('x', widget.bx, -1.2, 1.2, C.blue, (v) => _handleSliderB(v, widget.by)),
-                        _buildSlider('y', widget.by, -1.2, 1.2, C.blue, (v) => _handleSliderB(widget.bx, v)),
+                        _buildSlider('x', _bx, -1.2, 1.2, C.blue, (v) => _handleSliderB(v, _by)),
+                        _buildSlider('y', _by, -1.2, 1.2, C.blue, (v) => _handleSliderB(_bx, v)),
                       ],
                     ),
                   ),

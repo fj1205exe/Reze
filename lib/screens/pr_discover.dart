@@ -31,14 +31,25 @@ class PRDiscoverScreen extends StatefulWidget {
 }
 
 class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
+  late double _p;
   bool _changedP = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _p = 0.7;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onChangeP(_p);
+      widget.onReset();
+    });
+  }
 
   String get _feedbackMsg {
     final n = widget.flips.length;
     if (n < 10) return 'With few flips, anything can happen';
     if (n < 30) return 'More flips → proportion approaches true probability';
     if (n < 50) return 'This is the Law of Large Numbers';
-    return 'Expected value = n × p = ${(n * widget.p).toStringAsFixed(1)}';
+    return 'Expected value = n × p = ${(n * _p).toStringAsFixed(1)}';
   }
 
   String get _feedbackType {
@@ -51,7 +62,10 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
   bool get _canAdvance => widget.flips.length >= 50 && _changedP;
 
   void _handlePChange(double v) {
-    setState(() => _changedP = true);
+    setState(() {
+      _p = v;
+      _changedP = true;
+    });
     widget.onReset();
     widget.onChangeP(v);
   }
@@ -115,7 +129,7 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                     child: CustomPaint(
                       painter: _PRDiscoverChartPainter(
                         runningProbs: running,
-                        trueP: widget.p,
+                        trueP: _p,
                         totalFlips: n,
                       ),
                     ),
@@ -162,10 +176,10 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                               Text('True P(H)', style: inter(fontSize: 12, color: C.muted)),
                               const SizedBox(height: 4),
                               Text(
-                                '${(widget.p * 100).toStringAsFixed(0)}%',
+                                '${(_p * 100).toStringAsFixed(0)}%',
                                 style: mono(fontSize: 18, color: C.accentLight, fontWeight: FontWeight.w700),
                               ),
-                              Text('Expected: ${(widget.p * n).toStringAsFixed(1)} H', style: mono(fontSize: 10, color: C.muted)),
+                              Text('Expected: ${(_p * n).toStringAsFixed(1)} H', style: mono(fontSize: 10, color: C.muted)),
                             ],
                           ),
                         ),
@@ -252,7 +266,7 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Coin bias P(H)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text(widget.p.toStringAsFixed(2), style: mono(fontSize: 13, color: C.accentLight)),
+                            Text(_p.toStringAsFixed(2), style: mono(fontSize: 13, color: C.accentLight)),
                           ],
                         ),
                         const SizedBox(height: 4),
@@ -272,7 +286,7 @@ class _PRDiscoverScreenState extends State<PRDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.p.clamp(0.0, 1.0),
+                            value: _p.clamp(0.0, 1.0),
                             min: 0.0,
                             max: 1.0,
                             onChanged: _handlePChange,

@@ -38,6 +38,18 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
   String _feedbackMsg = '';
   double _prevMSE = double.infinity;
 
+  late double _slope;
+  late double _intercept;
+  late double _lr;
+
+  @override
+  void initState() {
+    super.initState();
+    _slope = 1.5;
+    _intercept = -0.1;
+    _lr = 0.1;
+  }
+
   void _updateFeedback(double mse, {bool wasGradientStep = false}) {
     setState(() {
       if (mse < 0.005) {
@@ -58,7 +70,11 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
   }
 
   void _handleSliderUpdate(double slope, double intercept) {
-    setState(() => _discoverSteps++);
+    setState(() {
+      _slope = slope;
+      _intercept = intercept;
+      _discoverSteps++;
+    });
     final mse = lr_utils.calcMSE(slope, intercept);
     _updateFeedback(mse);
     widget.onUpdate(slope, intercept);
@@ -70,18 +86,22 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
     double dIntercept = 0;
 
     for (final pt in lr_utils.dataPoints) {
-      final pred = widget.slope * pt.x + widget.intercept;
+      final pred = _slope * pt.x + _intercept;
       dSlope += (pred - pt.y) * pt.x;
       dIntercept += (pred - pt.y);
     }
     dSlope = (2.0 / n) * dSlope;
     dIntercept = (2.0 / n) * dIntercept;
 
-    final newSlope = (widget.slope - widget.lr * dSlope).clamp(-1.0, 2.0);
+    final newSlope = (_slope - _lr * dSlope).clamp(-1.0, 2.0);
     final newIntercept =
-        (widget.intercept - widget.lr * dIntercept).clamp(-0.3, 1.2);
+        (_intercept - _lr * dIntercept).clamp(-0.3, 1.2);
 
-    setState(() => _discoverSteps++);
+    setState(() {
+      _slope = newSlope;
+      _intercept = newIntercept;
+      _discoverSteps++;
+    });
     final mse = lr_utils.calcMSE(newSlope, newIntercept);
     _updateFeedback(mse, wasGradientStep: true);
     widget.onGradientStep(newSlope, newIntercept);
@@ -89,8 +109,8 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mse = lr_utils.calcMSE(widget.slope, widget.intercept);
-    final goodFit = lr_utils.isGoodFit(widget.slope, widget.intercept);
+    final mse = lr_utils.calcMSE(_slope, _intercept);
+    final goodFit = lr_utils.isGoodFit(_slope, _intercept);
 
     String mseZone;
     Color zoneColor;
@@ -146,7 +166,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps),
+                  StepCounter(steps: _discoverSteps),
                 ],
               ),
             ),
@@ -214,8 +234,8 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                       aspectRatio: 350 / 200,
                       child: CustomPaint(
                         painter: LRScatterPainter(
-                          slope: widget.slope,
-                          intercept: widget.intercept,
+                          slope: _slope,
+                          intercept: _intercept,
                           goodFit: goodFit,
                         ),
                       ),
@@ -250,7 +270,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500)),
                             Text(
-                                'm = ${widget.slope.toStringAsFixed(2)}',
+                                'm = ${_slope.toStringAsFixed(2)}',
                                 style: mono(
                                     fontSize: 13,
                                     color: C.accentLight)),
@@ -267,11 +287,11 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.slope.clamp(-1.0, 2.0),
+                            value: _slope.clamp(-1.0, 2.0),
                             min: -1,
                             max: 2,
                             onChanged: (v) =>
-                                _handleSliderUpdate(v, widget.intercept),
+                                _handleSliderUpdate(v, _intercept),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -283,7 +303,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500)),
                             Text(
-                                'b = ${widget.intercept.toStringAsFixed(2)}',
+                                'b = ${_intercept.toStringAsFixed(2)}',
                                 style:
                                     mono(fontSize: 13, color: C.blue)),
                           ],
@@ -300,11 +320,11 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                           ),
                           child: Slider(
                             value:
-                                widget.intercept.clamp(-0.3, 1.2),
+                                _intercept.clamp(-0.3, 1.2),
                             min: -0.3,
                             max: 1.2,
                             onChanged: (v) =>
-                                _handleSliderUpdate(widget.slope, v),
+                                _handleSliderUpdate(_slope, v),
                           ),
                         ),
                       ],
@@ -329,9 +349,12 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                                 fontWeight: FontWeight.w500)),
                         const SizedBox(height: 12),
                         LrSlider(
-                          value: widget.lr,
+                          value: _lr,
                           onChange: (v) {
-                            setState(() => _feedbackType = null);
+                            setState(() {
+                              _lr = v;
+                              _feedbackType = null;
+                            });
                             widget.onLrChange(v);
                           },
                           min: 0.01,

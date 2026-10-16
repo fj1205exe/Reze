@@ -29,12 +29,23 @@ class NNDiscoverScreen extends StatefulWidget {
 
 class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
   int _discoverSteps = 0;
+  late double _w1, _w2, _bias;
+  final double _x1 = 0.6;
+  final double _x2 = 0.9;
+
+  @override
+  void initState() {
+    super.initState();
+    _w1 = 0.5;
+    _w2 = -0.3;
+    _bias = 0.2;
+  }
 
   String get _feedbackMsg {
-    final w1 = widget.w1;
-    final w2 = widget.w2;
-    final bias = widget.bias;
-    final fwd = nn_utils.neuronForward(widget.x1, widget.x2, w1, w2, bias);
+    final w1 = _w1;
+    final w2 = _w2;
+    final bias = _bias;
+    final fwd = nn_utils.neuronForward(_x1, _x2, w1, w2, bias);
     final output = fwd['output']!;
 
     if (w1.abs() > 1.5 || w2.abs() > 1.5) {
@@ -53,7 +64,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
   }
 
   String get _feedbackType {
-    final fwd = nn_utils.neuronForward(widget.x1, widget.x2, widget.w1, widget.w2, widget.bias);
+    final fwd = nn_utils.neuronForward(_x1, _x2, _w1, _w2, _bias);
     final output = fwd['output']!;
     if (output > 0.8 || output < 0.2) return 'ok';
     return 'info';
@@ -61,7 +72,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fwd = nn_utils.neuronForward(widget.x1, widget.x2, widget.w1, widget.w2, widget.bias);
+    final fwd = nn_utils.neuronForward(_x1, _x2, _w1, _w2, _bias);
     final z = fwd['z']!;
     final output = fwd['output']!;
     final unlocked = _discoverSteps >= 8;
@@ -94,7 +105,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps),
+                  StepCounter(steps: _discoverSteps),
                 ],
               ),
             ),
@@ -125,9 +136,9 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                         CustomPaint(
                           size: const Size(double.infinity, 240),
                           painter: _NeuronDiagramPainter(
-                            x1: widget.x1, x2: widget.x2,
-                            w1: widget.w1, w2: widget.w2,
-                            bias: widget.bias, z: z, output: output,
+                            x1: _x1, x2: _x2,
+                            w1: _w1, w2: _w2,
+                            bias: _bias, z: z, output: output,
                           ),
                         ),
                       ],
@@ -221,7 +232,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('x₁', style: inter(fontSize: 11, color: C.muted)),
-                                  Text(widget.x1.toStringAsFixed(2), style: mono(fontSize: 14, color: C.blue)),
+                                  Text(_x1.toStringAsFixed(2), style: mono(fontSize: 14, color: C.blue)),
                                 ],
                               ),
                             ),
@@ -230,7 +241,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('x₂', style: inter(fontSize: 11, color: C.muted)),
-                                  Text(widget.x2.toStringAsFixed(2), style: mono(fontSize: 14, color: C.blue)),
+                                  Text(_x2.toStringAsFixed(2), style: mono(fontSize: 14, color: C.blue)),
                                 ],
                               ),
                             ),
@@ -242,21 +253,21 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                   const SizedBox(height: 12),
 
                   // Weight sliders
-                  _buildSlider('Weight w₁', widget.w1, -2.0, 2.0, C.green, (v) {
-                    setState(() => _discoverSteps++);
-                    widget.onUpdate(v, widget.w2, widget.bias);
+                  _buildSlider('Weight w₁', _w1, -2.0, 2.0, C.green, (v) {
+                    setState(() { _w1 = v; _discoverSteps++; });
+                    widget.onUpdate(v, _w2, _bias);
                   }),
                   const SizedBox(height: 8),
 
-                  _buildSlider('Weight w₂', widget.w2, -2.0, 2.0, C.green, (v) {
-                    setState(() => _discoverSteps++);
-                    widget.onUpdate(widget.w1, v, widget.bias);
+                  _buildSlider('Weight w₂', _w2, -2.0, 2.0, C.green, (v) {
+                    setState(() { _w2 = v; _discoverSteps++; });
+                    widget.onUpdate(_w1, v, _bias);
                   }),
                   const SizedBox(height: 8),
 
-                  _buildSlider('Bias b', widget.bias, -2.0, 2.0, C.yellow, (v) {
-                    setState(() => _discoverSteps++);
-                    widget.onUpdate(widget.w1, widget.w2, v);
+                  _buildSlider('Bias b', _bias, -2.0, 2.0, C.yellow, (v) {
+                    setState(() { _bias = v; _discoverSteps++; });
+                    widget.onUpdate(_w1, _w2, v);
                   }),
                   const SizedBox(height: 16),
 

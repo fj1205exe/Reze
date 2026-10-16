@@ -26,16 +26,23 @@ class OFDiscoverScreen extends StatefulWidget {
 
 class _OFDiscoverScreenState extends State<OFDiscoverScreen> {
   int _discoverSteps = 0;
+  late int _degree;
+
+  @override
+  void initState() {
+    super.initState();
+    _degree = 1;
+  }
 
   String get _feedbackType {
-    final d = widget.degree;
+    final d = _degree;
     if (d == 1) return 'info';
     if (d >= 2 && d <= 4) return 'ok';
     return 'warn';
   }
 
   String get _feedbackMsg {
-    final d = widget.degree;
+    final d = _degree;
     if (d == 1) return 'Low degree = high bias (underfitting)';
     if (d >= 2 && d <= 4) return 'Sweet spot: lowest test error';
     if (d >= 5 && d <= 8) return 'High degree = high variance (overfitting)';
@@ -43,15 +50,18 @@ class _OFDiscoverScreenState extends State<OFDiscoverScreen> {
   }
 
   void _handleDegreeChange(int newDegree) {
-    if (newDegree != widget.degree) {
-      setState(() => _discoverSteps++);
+    if (newDegree != _degree) {
+      setState(() {
+        _degree = newDegree;
+        _discoverSteps++;
+      });
       widget.onUpdate(newDegree);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final degree = widget.degree;
+    final degree = _degree;
     final coeffs = of_utils.fitPolynomial(of_utils.trainPoints, degree);
     final curvePoints = of_utils.sampleOFCurve(coeffs, 90);
     final trainMSE = of_utils.calcPolyMSE(coeffs, of_utils.trainPoints);
@@ -89,7 +99,7 @@ class _OFDiscoverScreenState extends State<OFDiscoverScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps),
+                  StepCounter(steps: _discoverSteps),
                 ],
               ),
             ),

@@ -29,14 +29,24 @@ class DOTDiscoverScreen extends StatefulWidget {
 
 class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
   int _discoverSteps = 0;
+  late double _angleA, _angleB, _magA, _magB;
+
+  @override
+  void initState() {
+    super.initState();
+    _angleA = 30.0;
+    _angleB = 150.0;
+    _magA = 1.2;
+    _magB = 0.8;
+  }
 
   String get _feedbackType {
-    final aRad = widget.angleA * pi / 180;
-    final bRad = widget.angleB * pi / 180;
-    final ax = widget.magA * cos(aRad);
-    final ay = widget.magA * sin(aRad);
-    final bx = widget.magB * cos(bRad);
-    final by = widget.magB * sin(bRad);
+    final aRad = _angleA * pi / 180;
+    final bRad = _angleB * pi / 180;
+    final ax = _magA * cos(aRad);
+    final ay = _magA * sin(aRad);
+    final bx = _magB * cos(bRad);
+    final by = _magB * sin(bRad);
     final dotVal = ax * bx + ay * by;
 
     if (dotVal.abs() < 0.1) return 'ok';
@@ -46,12 +56,12 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
   }
 
   String get _feedbackMsg {
-    final aRad = widget.angleA * pi / 180;
-    final bRad = widget.angleB * pi / 180;
-    final ax = widget.magA * cos(aRad);
-    final ay = widget.magA * sin(aRad);
-    final bx = widget.magB * cos(bRad);
-    final by = widget.magB * sin(bRad);
+    final aRad = _angleA * pi / 180;
+    final bRad = _angleB * pi / 180;
+    final ax = _magA * cos(aRad);
+    final ay = _magA * sin(aRad);
+    final bx = _magB * cos(bRad);
+    final by = _magB * sin(bRad);
     final dotVal = ax * bx + ay * by;
     final angle = vec_utils.vecAngle(vec_utils.Vec2(ax, ay), vec_utils.Vec2(bx, by));
 
@@ -62,25 +72,31 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
   }
 
   void _handleUpdate({double? aA, double? aB, double? mA, double? mB}) {
-    final nextAA = aA ?? widget.angleA;
-    final nextAB = aB ?? widget.angleB;
-    final nextMA = mA ?? widget.magA;
-    final nextMB = mB ?? widget.magB;
+    final nextAA = aA ?? _angleA;
+    final nextAB = aB ?? _angleB;
+    final nextMA = mA ?? _magA;
+    final nextMB = mB ?? _magB;
 
-    if (nextAA != widget.angleA || nextAB != widget.angleB || nextMA != widget.magA || nextMB != widget.magB) {
-      setState(() => _discoverSteps++);
+    if (nextAA != _angleA || nextAB != _angleB || nextMA != _magA || nextMB != _magB) {
+      setState(() {
+        _angleA = nextAA;
+        _angleB = nextAB;
+        _magA = nextMA;
+        _magB = nextMB;
+        _discoverSteps++;
+      });
       widget.onUpdate(nextAA, nextAB, nextMA, nextMB);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final aRad = widget.angleA * pi / 180;
-    final bRad = widget.angleB * pi / 180;
-    final ax = widget.magA * cos(aRad);
-    final ay = widget.magA * sin(aRad);
-    final bx = widget.magB * cos(bRad);
-    final by = widget.magB * sin(bRad);
+    final aRad = _angleA * pi / 180;
+    final bRad = _angleB * pi / 180;
+    final ax = _magA * cos(aRad);
+    final ay = _magA * sin(aRad);
+    final bx = _magB * cos(bRad);
+    final by = _magB * sin(bRad);
     final a = vec_utils.Vec2(ax, ay);
     final b = vec_utils.Vec2(bx, by);
 
@@ -120,7 +136,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps),
+                  StepCounter(steps: _discoverSteps),
                 ],
               ),
             ),
@@ -231,7 +247,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('angle', style: inter(fontSize: 12, color: C.muted)),
-                            Text('${widget.angleA.round()}°', style: mono(fontSize: 14, color: C.accentLight)),
+                            Text('${_angleA.round()}°', style: mono(fontSize: 14, color: C.accentLight)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -244,7 +260,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.angleA,
+                            value: _angleA,
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aA: v),
@@ -255,7 +271,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('magnitude', style: inter(fontSize: 12, color: C.muted)),
-                            Text('|a| = ${widget.magA.toStringAsFixed(2)}', style: mono(fontSize: 14, color: C.accentLight)),
+                            Text('|a| = ${_magA.toStringAsFixed(2)}', style: mono(fontSize: 14, color: C.accentLight)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -268,7 +284,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.magA,
+                            value: _magA,
                             min: 0.2,
                             max: 1.5,
                             onChanged: (v) => _handleUpdate(mA: v),
@@ -296,7 +312,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('angle', style: inter(fontSize: 12, color: C.muted)),
-                            Text('${widget.angleB.round()}°', style: mono(fontSize: 14, color: C.blue)),
+                            Text('${_angleB.round()}°', style: mono(fontSize: 14, color: C.blue)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -309,7 +325,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.angleB,
+                            value: _angleB,
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aB: v),
@@ -320,7 +336,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('magnitude', style: inter(fontSize: 12, color: C.muted)),
-                            Text('|b| = ${widget.magB.toStringAsFixed(2)}', style: mono(fontSize: 14, color: C.blue)),
+                            Text('|b| = ${_magB.toStringAsFixed(2)}', style: mono(fontSize: 14, color: C.blue)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -333,7 +349,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.magB,
+                            value: _magB,
                             min: 0.2,
                             max: 1.5,
                             onChanged: (v) => _handleUpdate(mB: v),

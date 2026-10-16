@@ -28,21 +28,27 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
   late double _bestAccuracy;
   String? _feedbackType;
   String _feedbackMsg = '';
+  late double _angle;
+  late double _offset;
 
   @override
   void initState() {
     super.initState();
-    _bestAccuracy = cl_utils.calcAccuracy(widget.angle, widget.offset);
-    _updateFeedback(cl_utils.calcAccuracy(widget.angle, widget.offset));
+    _angle = 45.0;
+    _offset = 0.3;
+    _bestAccuracy = cl_utils.calcAccuracy(_angle, _offset);
+    _updateFeedback(cl_utils.calcAccuracy(_angle, _offset));
   }
 
   void _handleUpdate(double a, double o) {
-    widget.onUpdate(a, o);
     final acc = cl_utils.calcAccuracy(a, o);
     setState(() {
+      _angle = a;
+      _offset = o;
       _bestAccuracy = max(_bestAccuracy, acc);
       _updateFeedback(acc);
     });
+    widget.onUpdate(a, o);
   }
 
   void _updateFeedback(double accuracy) {
@@ -63,9 +69,9 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final accuracy = cl_utils.calcAccuracy(widget.angle, widget.offset);
+    final accuracy = cl_utils.calcAccuracy(_angle, _offset);
     final isGood = accuracy >= 90.0;
-    final cm = cl_utils.confusionMatrix(widget.angle, widget.offset);
+    final cm = cl_utils.confusionMatrix(_angle, _offset);
     final unlocked = _bestAccuracy >= 80;
 
     return Container(
@@ -144,7 +150,7 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                     padding: const EdgeInsets.all(4),
                     child: CustomPaint(
                       size: Size.infinite,
-                      painter: _CLPlotPainter(angle: widget.angle, offset: widget.offset),
+                      painter: _CLPlotPainter(angle: _angle, offset: _offset),
                     ),
                   ),
                 ],
@@ -214,7 +220,7 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Angle (w)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text('${widget.angle.round()}', style: mono(fontSize: 13, color: C.accentLight)),
+                            Text('${_angle.round()}', style: mono(fontSize: 13, color: C.accentLight)),
                           ],
                         ),
                         SliderTheme(
@@ -226,10 +232,10 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.angle,
+                            value: _angle,
                             min: -90,
                             max: 90,
-                            onChanged: (v) => _handleUpdate(v, widget.offset),
+                            onChanged: (v) => _handleUpdate(v, _offset),
                           ),
                         ),
                       ],
@@ -252,7 +258,7 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Bias / Offset (b)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text(widget.offset.toStringAsFixed(2), style: mono(fontSize: 13, color: C.yellow)),
+                            Text(_offset.toStringAsFixed(2), style: mono(fontSize: 13, color: C.yellow)),
                           ],
                         ),
                         SliderTheme(
@@ -264,10 +270,10 @@ class _CLDiscoverScreenState extends State<CLDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.offset,
+                            value: _offset,
                             min: -0.5,
                             max: 0.5,
-                            onChanged: (v) => _handleUpdate(widget.angle, v),
+                            onChanged: (v) => _handleUpdate(_angle, v),
                           ),
                         ),
                       ],

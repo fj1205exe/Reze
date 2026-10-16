@@ -24,7 +24,16 @@ class LFDiscoverScreen extends StatefulWidget {
 }
 
 class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
+  late double _prediction;
+  late String _selectedLoss;
   bool _outlierOn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _prediction = 0.3;
+    _selectedLoss = 'mae';
+  }
   double _outlierPos = 0.92;
   bool _isDragging = false;
   bool _toggledOutlier = false;
@@ -50,7 +59,7 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
   }
 
   String get _feedback {
-    final pred = widget.prediction;
+    final pred = _prediction;
     final mseLoss = _lossFor('mse', pred);
     final maeLoss = _lossFor('mae', pred);
     if (!_outlierOn) {
@@ -69,17 +78,18 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
 
   String get _feedbackType {
     if (!_outlierOn) return 'info';
-    final mseLoss = _lossFor('mse', widget.prediction);
-    final maeLoss = _lossFor('mae', widget.prediction);
+    final mseLoss = _lossFor('mse', _prediction);
+    final maeLoss = _lossFor('mae', _prediction);
     if (mseLoss > maeLoss * 2.5) return 'warn';
     return 'info';
   }
 
   void _handleSlider(double v) {
-    widget.onUpdate(v, widget.selectedLoss);
-    if (_outlierOn) {
-      setState(() => _predMovesWithOutlier++);
-    }
+    setState(() {
+      _prediction = v;
+      if (_outlierOn) _predMovesWithOutlier++;
+    });
+    widget.onUpdate(v, _selectedLoss);
   }
 
   void _onDragStart(DragStartDetails details, double plotWidth) {
@@ -107,7 +117,7 @@ class _LFDiscoverScreenState extends State<LFDiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pred = widget.prediction;
+    final pred = _prediction;
     final mseLoss = _lossFor('mse', pred);
     final maeLoss = _lossFor('mae', pred);
     final huberLoss = _lossFor('huber', pred);

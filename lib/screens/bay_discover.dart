@@ -30,11 +30,20 @@ class BAYDiscoverScreen extends StatefulWidget {
 class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
   int _discoverSteps = 0;
   final Set<String> _adjustedSliders = {};
+  late double _prior, _sensitivity, _specificity;
+
+  @override
+  void initState() {
+    super.initState();
+    _prior = 0.05;
+    _sensitivity = 0.80;
+    _specificity = 0.90;
+  }
 
   String get _feedbackMsg {
-    final prior = widget.prior;
-    final sensitivity = widget.sensitivity;
-    final specificity = widget.specificity;
+    final prior = _prior;
+    final sensitivity = _sensitivity;
+    final specificity = _specificity;
 
     if (prior < 0.02 && sensitivity > 0.90) {
       return 'Low prior + positive test ≠ high probability — the base rate matters!';
@@ -55,8 +64,8 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
   }
 
   String get _feedbackType {
-    final prior = widget.prior;
-    final posterior = bay_utils.calcPosterior(prior, widget.sensitivity, widget.specificity);
+    final prior = _prior;
+    final posterior = bay_utils.calcPosterior(prior, _sensitivity, _specificity);
     if (posterior > 0.7) return 'ok';
     if (prior < 0.02) return 'warn';
     return 'info';
@@ -64,7 +73,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final stats = bay_utils.calcPopStats(widget.prior, widget.sensitivity, widget.specificity);
+    final stats = bay_utils.calcPopStats(_prior, _sensitivity, _specificity);
     final posterior = stats.posterior;
     final postColor = posterior < 0.3 ? C.pink : (posterior < 0.7 ? C.yellow : C.green);
     final unlocked = _adjustedSliders.length >= 3 && _discoverSteps >= 5;
@@ -97,7 +106,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                       ],
                     ),
                   ),
-                  StepCounter(steps: widget.steps),
+                  StepCounter(steps: _discoverSteps),
                 ],
               ),
             ),
@@ -162,7 +171,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Prior P(Disease)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text('${(widget.prior * 100).toStringAsFixed(1)}%', style: mono(fontSize: 13, color: C.yellow)),
+                            Text('${(_prior * 100).toStringAsFixed(1)}%', style: mono(fontSize: 13, color: C.yellow)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -175,15 +184,16 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.prior.clamp(0.005, 0.30),
+                            value: _prior.clamp(0.005, 0.30),
                             min: 0.005,
                             max: 0.30,
                             onChanged: (v) {
                               setState(() {
+                                _prior = v;
                                 _discoverSteps++;
                                 _adjustedSliders.add('prior');
                               });
-                              widget.onUpdate(v, widget.sensitivity, widget.specificity);
+                              widget.onUpdate(v, _sensitivity, _specificity);
                             },
                           ),
                         ),
@@ -207,7 +217,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Sensitivity (True + rate)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text('${(widget.sensitivity * 100).toStringAsFixed(0)}%', style: mono(fontSize: 13, color: C.purple)),
+                            Text('${(_sensitivity * 100).toStringAsFixed(0)}%', style: mono(fontSize: 13, color: C.purple)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -220,15 +230,16 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.sensitivity.clamp(0.70, 0.99),
+                            value: _sensitivity.clamp(0.70, 0.99),
                             min: 0.70,
                             max: 0.99,
                             onChanged: (v) {
                               setState(() {
+                                _sensitivity = v;
                                 _discoverSteps++;
                                 _adjustedSliders.add('sensitivity');
                               });
-                              widget.onUpdate(widget.prior, v, widget.specificity);
+                              widget.onUpdate(_prior, v, _specificity);
                             },
                           ),
                         ),
@@ -252,7 +263,7 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Specificity (True − rate)', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w500)),
-                            Text('${(widget.specificity * 100).toStringAsFixed(0)}%', style: mono(fontSize: 13, color: C.blue)),
+                            Text('${(_specificity * 100).toStringAsFixed(0)}%', style: mono(fontSize: 13, color: C.blue)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -265,15 +276,16 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             trackHeight: 6,
                           ),
                           child: Slider(
-                            value: widget.specificity.clamp(0.70, 0.99),
+                            value: _specificity.clamp(0.70, 0.99),
                             min: 0.70,
                             max: 0.99,
                             onChanged: (v) {
                               setState(() {
+                                _specificity = v;
                                 _discoverSteps++;
                                 _adjustedSliders.add('specificity');
                               });
-                              widget.onUpdate(widget.prior, widget.sensitivity, v);
+                              widget.onUpdate(_prior, _sensitivity, v);
                             },
                           ),
                         ),
