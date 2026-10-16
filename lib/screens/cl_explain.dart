@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../utils/content.dart';
 
 class CLExplainScreen extends StatefulWidget {
   final VoidCallback onNext;
@@ -111,9 +112,11 @@ class _CLExplainScreenState extends State<CLExplainScreen> {
                           style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
                         const SizedBox(height: 20),
                         Text(
-                          'Classification is about finding a decision boundary that separates classes. '
-                          'A linear classifier draws a straight line (or hyperplane in higher dimensions). '
-                          'Points on each side receive a prediction label.',
+                          tiered(context,
+                            beginner: 'Classification means sorting things into groups. A linear classifier draws a straight line to separate two categories — points on one side are one group, points on the other side are the other.',
+                            intermediate: 'Classification is about finding a decision boundary that separates classes. A linear classifier draws a straight line (or hyperplane in higher dimensions). Points on each side receive a prediction label.',
+                            advanced: 'Classification learns a decision boundary in feature space. A linear classifier partitions ℝⁿ with a hyperplane w·x + b = 0. The sigmoid σ(w·x + b) maps the signed distance to a calibrated probability.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

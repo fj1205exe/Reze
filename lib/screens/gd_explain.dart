@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../utils/content.dart';
 
 class _QuizQ {
   final String question;
@@ -146,7 +147,10 @@ class _GDExplainScreenState extends State<GDExplainScreen> {
                 Text('You just performed\nGradient Descent.',
                   style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
                 const SizedBox(height: 8),
-                Text('Each step followed one simple rule:',
+                Text(tiered(context,
+                    beginner: 'Each step followed one simple rule — move downhill:',
+                    intermediate: 'Each step followed one simple rule:',
+                    advanced: 'Each step applied first-order optimization via the update rule:'),
                   style: inter(fontSize: 14, color: const Color(0xFFD1D5DB))),
                 const SizedBox(height: 20),
 

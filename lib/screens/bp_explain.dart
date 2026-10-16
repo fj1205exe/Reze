@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/neuralnet.dart' as nn_utils;
+import '../utils/content.dart';
 
 class BPExplainScreen extends StatefulWidget {
   final nn_utils.BPState bp;
@@ -89,7 +90,11 @@ class _BPExplainScreenState extends State<BPExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'Backpropagation is simply the multivariate chain rule from calculus applied repeatedly from output to input. It calculates exactly how much blame each parameter carries for the error.',
+                          tiered(context,
+                            beginner: 'Backpropagation answers one question: which weights caused the most error? It works backward from the output, passing blame to each weight based on how much it contributed.',
+                            intermediate: 'Backpropagation is simply the multivariate chain rule from calculus applied repeatedly from output to input. It calculates exactly how much blame each parameter carries for the error.',
+                            advanced: 'Backpropagation implements reverse-mode automatic differentiation. Each node caches its local Jacobian during the forward pass; the backward pass multiplies these via the chain rule in O(n) time, matching forward cost regardless of parameter count.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/probability.dart' as pr_utils;
+import '../utils/content.dart';
 
 class PRExplainScreen extends StatefulWidget {
   final double p;
@@ -91,7 +92,11 @@ class _PRExplainScreenState extends State<PRExplainScreen> {
                           style: spaceGrotesk(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
                         const SizedBox(height: 20),
                         Text(
-                          'As you collect more observations, empirical frequencies converge to true underlying probabilities. This guarantee underpins all of data science, sampling, and model evaluation.',
+                          tiered(context,
+                            beginner: 'The more coin flips you do, the closer your results get to the true odds. This is the law of large numbers — and it is why we need lots of data in machine learning.',
+                            intermediate: 'As you collect more observations, empirical frequencies converge to true underlying probabilities. This guarantee underpins all of data science, sampling, and model evaluation.',
+                            advanced: 'The Law of Large Numbers guarantees sample means converge to expected values as n → ∞. The Central Limit Theorem governs the rate: error scales as σ/√n. This is why larger datasets reduce generalization error.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

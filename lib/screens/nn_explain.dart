@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/neuralnet.dart' as nn_utils;
+import '../utils/content.dart';
 
 class NNExplainScreen extends StatefulWidget {
   final double w1, w2, bias, x1, x2;
@@ -104,7 +105,11 @@ class _NNExplainScreenState extends State<NNExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'A biological metaphor, but mathematical in practice: dot product of inputs and weights, shifted by bias, squashed by an activation function.',
+                          tiered(context,
+                            beginner: 'Despite the name, an artificial neuron is just multiplication and addition. It multiplies each input by a weight, adds them up with a bias, then passes the result through a special function.',
+                            intermediate: 'A biological metaphor, but mathematical in practice: dot product of inputs and weights, shifted by bias, squashed by an activation function.',
+                            advanced: 'A neuron computes σ(wᵀx + b): an affine transformation followed by a pointwise nonlinearity. Without activation functions, any depth of composition collapses to a single linear map.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

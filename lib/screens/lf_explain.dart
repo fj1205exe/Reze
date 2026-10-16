@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/loss_fns.dart' as lf_utils;
+import '../utils/content.dart';
 
 class LFExplainScreen extends StatefulWidget {
   final String selectedLoss;
@@ -66,7 +67,11 @@ class _LFExplainScreenState extends State<LFExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'A loss function assigns a single number to how wrong a prediction is. Optimization algorithms do one thing: push this number toward zero.',
+                          tiered(context,
+                            beginner: 'A loss function is a score for how wrong a prediction is. The goal of training is to make this score as small as possible.',
+                            intermediate: 'A loss function assigns a single number to how wrong a prediction is. Optimization algorithms do one thing: push this number toward zero.',
+                            advanced: 'A loss function maps predictions to a scalar penalty that defines the optimization landscape. MSE is smooth and convex for linear models; cross-entropy provides better gradients for classification.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

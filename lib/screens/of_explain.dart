@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/overfitting.dart' as of_utils;
+import '../utils/content.dart';
 
 class OFExplainScreen extends StatefulWidget {
   final int degree;
@@ -86,7 +87,11 @@ class _OFExplainScreenState extends State<OFExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'Every model lives somewhere between two failure modes. Too simple — it misses the pattern entirely. Too complex — it memorizes the training data and fails on anything new.',
+                          tiered(context,
+                            beginner: 'A model can fail in two ways: too simple and it misses the pattern, or too complex and it just memorizes the examples instead of learning.',
+                            intermediate: 'Every model lives somewhere between two failure modes. Too simple — it misses the pattern entirely. Too complex — it memorizes the training data and fails on anything new.',
+                            advanced: 'Every model lives on the bias-variance spectrum. High bias (underfitting) means systematic error from wrong assumptions. High variance (overfitting) means sensitivity to training noise. Total error = Bias² + Variance + irreducible noise.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

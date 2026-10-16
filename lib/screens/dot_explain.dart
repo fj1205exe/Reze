@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/vectors.dart';
+import '../utils/content.dart';
 
 class DOTExplainScreen extends StatelessWidget {
   final double angleA, angleB, magA, magB;
@@ -62,7 +63,11 @@ class DOTExplainScreen extends StatelessWidget {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'The dot product has two equivalent formulas — one geometric (angles and lengths) and one algebraic (multiplying coordinates). Modern deep learning is largely millions of dot products evaluated per second.',
+                          tiered(context,
+                            beginner: 'The dot product is a way to multiply two lists of numbers and get a single number back. It tells you how much two vectors point in the same direction — the most fundamental operation in machine learning.',
+                            intermediate: 'The dot product has two equivalent formulas — one geometric (angles and lengths) and one algebraic (multiplying coordinates). Modern deep learning is largely millions of dot products evaluated per second.',
+                            advanced: 'The dot product projects one vector onto another: a·b = ‖a‖‖b‖cos θ = Σaᵢbᵢ. This geometry-algebra duality is why neural networks are both mathematical objects and GPU-friendly — GEMM operations dominate training compute.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

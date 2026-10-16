@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/sgd.dart' as sgd;
+import '../utils/content.dart';
 
 class SGDExplainScreen extends StatelessWidget {
   final double theta;
@@ -53,7 +54,11 @@ class SGDExplainScreen extends StatelessWidget {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'Classic gradient descent computes the exact gradient over the entire dataset on every step. That is computationally prohibitive on millions of items. SGD trades precision for speed by estimating the gradient from small random batches.',
+                          tiered(context,
+                            beginner: 'Normal gradient descent looks at ALL the data before taking one step — way too slow for big datasets. SGD looks at a small random sample instead, trading perfect accuracy for massive speed.',
+                            intermediate: 'Classic gradient descent computes the exact gradient over the entire dataset on every step. That is computationally prohibitive on millions of items. SGD trades precision for speed by estimating the gradient from small random batches.',
+                            advanced: 'Full-batch GD computes ∇J(θ) over all N samples per step — O(N) per iteration. SGD approximates the gradient from a mini-batch of size B, introducing variance σ²/B but reducing cost to O(B). The noise regularizes implicitly and helps escape sharp minima.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../utils/content.dart';
 
 class VECExplainScreen extends StatefulWidget {
   final double ax, ay, bx, by;
@@ -113,7 +114,11 @@ class _VECExplainScreenState extends State<VECExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'Images are pixel vectors. Text tokens are embedding vectors. Model weights are parameter vectors. All machine learning algorithms are geometry performed on vectors.',
+                          tiered(context,
+                            beginner: 'A vector is just an ordered list of numbers. In machine learning, everything gets turned into vectors — images become lists of pixel values, words become lists of numbers, and models are giant vectors of weights.',
+                            intermediate: 'Images are pixel vectors. Text tokens are embedding vectors. Model weights are parameter vectors. All machine learning algorithms are geometry performed on vectors.',
+                            advanced: 'Vectors are elements of ℝⁿ with addition and scalar multiplication. In high dimensions, random vectors are nearly orthogonal and volume concentrates in a thin shell — phenomena that shape how embeddings, attention, and optimization behave.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

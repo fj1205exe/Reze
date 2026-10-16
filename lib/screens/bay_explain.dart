@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/bayes.dart' as bay_utils;
+import '../utils/content.dart';
 
 class BAYExplainScreen extends StatefulWidget {
   final double prior;
@@ -90,7 +91,11 @@ class _BAYExplainScreenState extends State<BAYExplainScreen> {
                             style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
                         Text(
-                          'Bayesian reasoning updates prior beliefs when new evidence arrives. Even a test with high accuracy can produce mostly false positives when the prior probability of an event is tiny.',
+                          tiered(context,
+                            beginner: 'When you get new information, it should change what you believe. Even a very accurate test can be wrong most of the time if the thing being tested for is rare.',
+                            intermediate: 'Bayesian reasoning updates prior beliefs when new evidence arrives. Even a test with high accuracy can produce mostly false positives when the prior probability of an event is tiny.',
+                            advanced: 'Bayesian inference computes posterior ∝ likelihood × prior. The base rate fallacy arises because P(H|E) depends critically on P(H). In ML, Bayesian methods yield calibrated uncertainty and naturally regularize via the prior.',
+                          ),
                           style: inter(fontSize: 14, color: const Color(0xFFD1D5DB)),
                         ),
                       ],

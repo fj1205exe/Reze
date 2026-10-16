@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../utils/lr.dart' as lr;
+import '../utils/content.dart';
 
 class _Term {
   final String sym;
@@ -80,7 +81,11 @@ class _LRExplainScreenState extends State<LRExplainScreen> {
                                 fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.01)),
                         const SizedBox(height: 8),
                         Text(
-                          'Every adjustment you made changed the Mean Squared Error — the average of all squared residuals.',
+                          tiered(context,
+                            beginner: 'You dragged a line to fit the data points. The number you minimized — MSE — measures how far off your line was, on average.',
+                            intermediate: 'Every adjustment you made changed the Mean Squared Error — the average of all squared residuals.',
+                            advanced: 'Every adjustment you made changed the Mean Squared Error. OLS minimizes this analytically via the normal equations: θ = (XᵀX)⁻¹Xᵀy.',
+                          ),
                           style: inter(fontSize: 14),
                         ),
                       ],
