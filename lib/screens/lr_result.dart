@@ -159,7 +159,7 @@ class LRResultScreen extends StatelessWidget {
                       children: [
                         Expanded(child: _metricTile('Final MSE', challengeMSE.toStringAsFixed(4), C.accentLight)),
                         const SizedBox(width: 8),
-                        Expanded(child: _metricTile('Target', '< 0.05', C.blue)),
+                        Expanded(child: _metricTile('Target', '< 0.03', C.blue)),
                       ],
                     ),
                   ],

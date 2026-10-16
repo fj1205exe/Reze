@@ -5,7 +5,7 @@ import '../widgets/follow_up.dart';
 import '../utils/lr.dart' as lr;
 
 const _maxSteps = 10;
-const _targetMSE = 0.05;
+const _targetMSE = 0.03;
 
 class LRChallengeScreen extends StatefulWidget {
   final double slope;

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
@@ -9,10 +10,10 @@ class _Scenario {
   final String description;
   final String correct;
   final String explanation;
-  _Scenario({required this.title, required this.description, required this.correct, required this.explanation});
+  const _Scenario({required this.title, required this.description, required this.correct, required this.explanation});
 }
 
-final _scenarios = [
+const _pool = [
   _Scenario(
     title: 'Clean regression data',
     description: 'Your data has no outliers and you want the tightest possible fit. Which loss penalizes large errors most?',
@@ -43,6 +44,42 @@ final _scenarios = [
     correct: 'mae',
     explanation: 'Minimizing MAE finds the median. Minimizing MSE finds the mean. When you want a robust central tendency, use MAE.',
   ),
+  _Scenario(
+    title: 'Autonomous driving',
+    description: 'Your self-driving model must handle occasional extreme GPS outliers gracefully while still learning from clean data. Which loss?',
+    correct: 'huber',
+    explanation: 'Huber gives you the best of both: smooth gradients for normal data, but capped penalty so GPS spikes don\'t dominate learning.',
+  ),
+  _Scenario(
+    title: 'Speech recognition',
+    description: 'You\'re training on clean audio transcriptions. Every word matters equally — you want to minimize average error precisely.',
+    correct: 'mse',
+    explanation: 'With clean data and no outliers, MSE\'s squared penalty forces the model to get every prediction as close as possible.',
+  ),
+  _Scenario(
+    title: 'Delivery time estimation',
+    description: 'Your delivery data has occasional extreme delays (traffic jams, accidents). You want a loss that won\'t be thrown off by these rare events.',
+    correct: 'mae',
+    explanation: 'MAE handles outliers gracefully — a 3-hour delay costs 3× a 1-hour delay, not 9×. The model stays robust to rare extremes.',
+  ),
+  _Scenario(
+    title: 'Robotics control',
+    description: 'Your robot arm needs precise movements. Small errors should be corrected smoothly, but a collision (huge error) shouldn\'t cause wild gradient updates.',
+    correct: 'huber',
+    explanation: 'Huber\'s quadratic-near-zero gives smooth corrections for small errors, while its linear tail prevents catastrophic gradient updates from collisions.',
+  ),
+  _Scenario(
+    title: 'House price prediction',
+    description: 'Your dataset has a few mansions worth 10× the median price. You care about predicting typical houses well. Which loss?',
+    correct: 'mae',
+    explanation: 'MAE won\'t let the few mansions dominate training. The model focuses on typical houses instead of being pulled toward extreme prices.',
+  ),
+  _Scenario(
+    title: 'Weather forecasting',
+    description: 'You\'re predicting temperature on clean weather station data. Accuracy within 0.1°C matters. Which loss drives the tightest fit?',
+    correct: 'mse',
+    explanation: 'Clean data + need for precision = MSE. The squared penalty punishes even small deviations, driving the model toward tight predictions.',
+  ),
 ];
 
 class LFChallengeScreen extends StatefulWidget {
@@ -62,11 +99,19 @@ class LFChallengeScreen extends StatefulWidget {
 }
 
 class _LFChallengeScreenState extends State<LFChallengeScreen> {
+  late final List<_Scenario> _scenarios;
   int _current = 0;
   int _correct = 0;
   String? _selected;
   bool _answered = false;
   bool _followUpDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final shuffled = List<_Scenario>.of(_pool)..shuffle(Random());
+    _scenarios = shuffled.take(5).toList();
+  }
 
   _Scenario get _scenario => _scenarios[_current];
   bool get _done => _current >= _scenarios.length;
@@ -236,8 +281,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
   }
 
   Widget _buildSummary() {
-    final pct = (_correct / _scenarios.length * 100).round();
-    final passed = pct >= 60;
+    final passed = _correct >= 4;
 
     return Container(
       color: C.bg,

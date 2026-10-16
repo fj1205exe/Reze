@@ -1,10 +1,11 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../widgets/follow_up.dart';
 import '../utils/bayes.dart' as bay_utils;
 
-const _scenarios = [
+const _scenarioPool = [
   {
     'name': 'Rare Cancer Screening',
     'prior': 0.01,
@@ -26,6 +27,20 @@ const _scenarios = [
     'specificity': 0.92,
     'desc': 'Marker in 5% of people. Test is 98% sensitive, 92% specific. You test positive.',
   },
+  {
+    'name': 'Airport Security',
+    'prior': 0.001,
+    'sensitivity': 0.95,
+    'specificity': 0.97,
+    'desc': '0.1% of travelers carry contraband. Scanner is 95% sensitive, 97% specific. It flags you.',
+  },
+  {
+    'name': 'COVID Rapid Test',
+    'prior': 0.10,
+    'sensitivity': 0.80,
+    'specificity': 0.98,
+    'desc': '10% currently infected. Rapid test is 80% sensitive, 98% specific. You test positive.',
+  },
 ];
 
 class BAYChallengeScreen extends StatefulWidget {
@@ -45,6 +60,7 @@ class BAYChallengeScreen extends StatefulWidget {
 }
 
 class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
+  late final List<Map<String, Object>> _scenarios;
   int _currentScenario = 0;
   double _userGuess = 50.0;
   bool _submitted = false;
@@ -52,6 +68,13 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
   bool _started = false;
 
   bool _followUpDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final shuffled = List<Map<String, Object>>.of(_scenarioPool)..shuffle(Random());
+    _scenarios = shuffled.take(3).toList();
+  }
 
   bool get _done => _results.length >= 3;
   int get _correctCount => _results.where((r) => r).length;
