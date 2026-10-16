@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'config.dart';
 import 'theme.dart';
 import 'utils/gd.dart' as gd;
 import 'utils/sgd.dart' as sgd;
@@ -13,6 +15,7 @@ import 'utils/probability.dart' as pr;
 import 'utils/content.dart';
 
 import 'screens/splash_screen.dart';
+import 'screens/auth_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/goal_screen.dart';
 import 'screens/diagnostic_screen.dart';
@@ -86,9 +89,10 @@ const int maxHistory = 12;
 
 enum ComprehensionLevel { beginner, intermediate, advanced }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
   };
@@ -110,6 +114,7 @@ class MLabApp extends StatelessWidget {
 
 enum AppScreen {
   splash,
+  login,
   welcome,
   goal,
   diagnostic,
@@ -518,34 +523,50 @@ class _MLabHomeState extends State<MLabHome> {
   Future<void> _loadProgress() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString('mlab_progress');
+    AppProgress? local;
     if (raw != null) {
       try {
-        final saved = AppProgress.fromJson(jsonDecode(raw));
-        setState(() {
-          _progress = saved;
-          final flags = [
-            'gdComplete',
-            'lrComplete',
-            'ofComplete',
-            'lfComplete',
-            'sgdComplete',
-            'clComplete',
-            'prComplete',
-            'vecComplete',
-            'dotComplete',
-            'bayComplete',
-            'nnComplete',
-            'bpComplete',
-          ];
-          final hasProgress =
-              _progress.history.isNotEmpty ||
-              flags.any((f) => _progress.getFlag(f));
-          if (hasProgress) _screen = AppScreen.home;
-        });
+        local = AppProgress.fromJson(jsonDecode(raw));
       } catch (_) {
-        await SharedPreferences.getInstance()
-            .then((p) => p.remove('mlab_progress'));
+        await prefs.remove('mlab_progress');
       }
+    }
+
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
+      try {
+        final row = await Supabase.instance.client
+            .from('progress')
+            .select('data, updated_at')
+            .eq('user_id', user.id)
+            .maybeSingle();
+        if (row != null) {
+          final remote = AppProgress.fromJson(row['data'] as Map<String, dynamic>);
+          final remoteTs = DateTime.parse(row['updated_at'] as String);
+          final localTs = local != null
+              ? DateTime.fromMillisecondsSinceEpoch(local.history.isNotEmpty ? local.history.first.ts : 0)
+              : DateTime(2000);
+          local = remoteTs.isAfter(localTs) ? remote : local;
+        }
+      } catch (_) {}
+    }
+
+    if (local != null) {
+      setState(() {
+        _progress = local!;
+        final flags = [
+          'gdComplete', 'lrComplete', 'ofComplete', 'lfComplete',
+          'sgdComplete', 'clComplete', 'prComplete', 'vecComplete',
+          'dotComplete', 'bayComplete', 'nnComplete', 'bpComplete',
+        ];
+        final hasProgress =
+            _progress.history.isNotEmpty ||
+            flags.any((f) => _progress.getFlag(f));
+        if (hasProgress) _screen = AppScreen.home;
+      });
+    }
+    if (local == null && user != null) {
+      setState(() => _screen = AppScreen.welcome);
     }
   }
 
@@ -554,6 +575,16 @@ class _MLabHomeState extends State<MLabHome> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('mlab_progress', jsonEncode(_progress.toJson()));
     } catch (_) {}
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
+      try {
+        await Supabase.instance.client.from('progress').upsert({
+          'user_id': user.id,
+          'data': _progress.toJson(),
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
+        });
+      } catch (_) {}
+    }
   }
 
   void _nav(AppScreen s) => setState(() {
@@ -596,6 +627,21 @@ class _MLabHomeState extends State<MLabHome> {
     });
     _addHistory(concept, 'Concept completed', detail, 0xFF4ADE80);
     _saveProgress();
+    _recordScore(flag.replaceAll('Complete', ''), true);
+  }
+
+  void _recordScore(String concept, bool success, {int? steps, double? accuracy}) {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return;
+    final score = success ? max(1, 100 - (steps ?? 0) * 5 + ((accuracy ?? 0) * 50).round()) : 0;
+    Supabase.instance.client.from('challenge_scores').insert({
+      'user_id': user.id,
+      'concept': concept,
+      'success': success,
+      'steps': steps,
+      'accuracy': accuracy,
+      'score': score,
+    }).then((_) {}).catchError((_) {});
   }
 
   void _completeGD(int roundsPassed, int totalRounds, int totalSteps) {
@@ -761,7 +807,15 @@ class _MLabHomeState extends State<MLabHome> {
       case AppScreen.splash:
         return SplashScreen(
           key: const ValueKey('splash'),
-          onNext: () => _nav(AppScreen.welcome),
+          onNext: () => _nav(AppScreen.login),
+        );
+      case AppScreen.login:
+        return AuthScreen(
+          key: const ValueKey('login'),
+          onContinueAsGuest: () => _nav(AppScreen.welcome),
+          onAuthenticated: () {
+            _loadProgress();
+          },
         );
       case AppScreen.welcome:
         return WelcomeScreen(
