@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/vectors.dart' as vec_utils;
 
 const _maxAttempts = 8;
@@ -34,6 +35,7 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
   int _lockIns = 0;
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
   late double _angleB;
 
   @override
@@ -361,7 +363,26 @@ class _DOTChallengeScreenState extends State<DOTChallengeScreen> {
                       child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
                     ),
 
-                  if (_done)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'When are two vectors perpendicular?',
+                          options: [
+                            'When their dot product is at its maximum',
+                            'When their dot product is zero',
+                            'When they have equal magnitude',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'a · b = |a||b|cos(θ). At θ = 90°, cos(90°) = 0, so the dot product is zero regardless of magnitude.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_done && (_followUpDone || !_hasSucceeded))
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),

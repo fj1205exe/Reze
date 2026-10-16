@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/loss_fns.dart' as lf;
 
 class _Scenario {
@@ -65,6 +66,7 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
   int _correct = 0;
   String? _selected;
   bool _answered = false;
+  bool _followUpDone = false;
 
   _Scenario get _scenario => _scenarios[_current];
   bool get _done => _current >= _scenarios.length;
@@ -270,29 +272,52 @@ class _LFChallengeScreenState extends State<LFChallengeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  FadeSlideIn(
-                    delay: const Duration(milliseconds: 200),
-                    duration: const Duration(milliseconds: 350),
-                    slideDistance: 10,
-                    child: Column(
-                      children: [
-                        PrimaryBtn(label: passed ? 'Complete' : 'See results', onPressed: () => widget.onComplete(passed, _correct, _scenarios.length)),
-                        if (!passed) ...[
-                          const SizedBox(height: 10),
-                          SecondaryBtn(
-                            label: 'Retry challenge',
-                            onPressed: () => setState(() {
-                              _current = 0;
-                              _correct = 0;
-                              _selected = null;
-                              _answered = false;
-                            }),
-                          ),
-                        ],
-                      ],
+                  if (passed && !_followUpDone) ...[
+                    const SizedBox(height: 16),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'Why does MSE react more strongly to outliers than MAE?',
+                          options: [
+                            'MSE ignores small errors',
+                            'MSE squares the error, amplifying large differences',
+                            'MAE squares the error instead',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'MSE computes (y - ŷ)². An error of 10 costs 100, while MAE costs only 10. Squaring makes large errors dominate the gradient, pulling the model toward outliers.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
                     ),
-                  ),
+                  ],
+                  if (_followUpDone || !passed) ...[
+                    const SizedBox(height: 24),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: Column(
+                        children: [
+                          PrimaryBtn(label: passed ? 'Complete' : 'See results', onPressed: () => widget.onComplete(passed, _correct, _scenarios.length)),
+                          if (!passed) ...[
+                            const SizedBox(height: 10),
+                            SecondaryBtn(
+                              label: 'Retry challenge',
+                              onPressed: () => setState(() {
+                                _current = 0;
+                                _correct = 0;
+                                _selected = null;
+                                _answered = false;
+                              }),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

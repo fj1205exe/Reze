@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../widgets/loss_curve.dart';
 import '../utils/gd.dart' as gd;
 import '../utils/sgd.dart' as sgd;
@@ -28,6 +29,8 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
   double _lr = 0.3;
   sgd.BatchSize _batch = sgd.BatchSize.full;
   int _steps = 0;
+
+  bool _followUpDone = false;
 
   bool get _converged => gd.isConverged(_theta);
   bool get _exhausted => _steps >= _maxSteps;
@@ -299,15 +302,34 @@ class _SGDChallengeScreenState extends State<SGDChallengeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    if (_converged && !_followUpDone)
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: FollowUpCard(
+                          data: const FollowUpData(
+                            question: 'Why can mini-batch gradient descent sometimes find better solutions?',
+                            options: [
+                              'Mini-batches compute more accurate gradients',
+                              'Noise helps escape shallow local minima',
+                              'It always converges faster than full-batch',
+                            ],
+                            correctIndex: 1,
+                            explanation: 'Mini-batch noise acts as implicit regularization — random gradient estimates can bounce the optimizer out of sharp, narrow minima into flatter ones that generalize better.',
+                          ),
+                          onDismiss: () => setState(() => _followUpDone = true),
+                        ),
+                      ),
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
                       child: Column(
                         children: [
-                          if (_converged)
+                          if (_converged && _followUpDone)
                             PrimaryBtn(label: 'Continue', onPressed: () => widget.onComplete(true, _steps, gd.lossFunc(_theta)))
-                          else
+                          else if (!_converged)
                             PrimaryBtn(label: 'Retry', onPressed: _retry),
                           if (!_converged) ...[
                             const SizedBox(height: 12),

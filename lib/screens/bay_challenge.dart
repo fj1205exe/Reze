@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/bayes.dart' as bay_utils;
 
 const _scenarios = [
@@ -49,6 +50,8 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
   bool _submitted = false;
   final List<bool> _results = [];
   bool _started = false;
+
+  bool _followUpDone = false;
 
   bool get _done => _results.length >= 3;
   int get _correctCount => _results.where((r) => r).length;
@@ -563,30 +566,52 @@ class _BAYChallengeScreenState extends State<BAYChallengeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-
-                  FadeSlideIn(
-                    delay: const Duration(milliseconds: 250),
-                    duration: const Duration(milliseconds: 350),
-                    slideDistance: 10,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: () => widget.onComplete(_passed, _correctCount, 3),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _passed ? C.green : C.accent,
-                          foregroundColor: _passed ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: S.borderMd),
-                          elevation: 0,
+                  if (_passed && !_followUpDone) ...[
+                    const SizedBox(height: 16),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'A rare disease (1%) with a 95% accurate test gives a positive result. How likely do you actually have it?',
+                          options: [
+                            '~95% — the test is very accurate',
+                            '~16% — most positives are false alarms when the disease is rare',
+                            '~50% — it\'s a coin flip',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'Base rate neglect: with 1% prevalence and 95% accuracy, ~5% of healthy people test positive. That\'s ~50 false positives vs ~10 true positives out of 1000 — so P(disease|+) ≈ 16%.',
                         ),
-                        child: Text('See results', style: spaceGrotesk(
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _passed ? C.bg : Colors.white, letterSpacing: 0.05,
-                        )),
+                        onDismiss: () => setState(() => _followUpDone = true),
                       ),
                     ),
-                  ),
+                  ],
+                  if (_followUpDone || !_passed) ...[
+                    const SizedBox(height: 24),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: () => widget.onComplete(_passed, _correctCount, 3),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _passed ? C.green : C.accent,
+                            foregroundColor: _passed ? C.bg : Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: S.borderMd),
+                            elevation: 0,
+                          ),
+                          child: Text('See results', style: spaceGrotesk(
+                            fontSize: 15, fontWeight: FontWeight.w600,
+                            color: _passed ? C.bg : Colors.white, letterSpacing: 0.05,
+                          )),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

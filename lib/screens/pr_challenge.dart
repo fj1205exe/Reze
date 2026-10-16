@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/probability.dart' as pr_utils;
 
 class PRChallengeScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
   bool _guessSubmitted = false;
   int _correctGuesses = 0;
   bool _gameFinished = false;
+  bool _followUpDone = false;
 
   @override
   void initState() {
@@ -349,13 +351,36 @@ class _PRChallengeScreenState extends State<PRChallengeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    FadeSlideIn(
-                      delay: const Duration(milliseconds: 150),
-                      duration: const Duration(milliseconds: 350),
-                      slideDistance: 10,
-                      child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_correctGuesses, 3)),
-                    ),
+                    if (_correctGuesses >= 2 && !_followUpDone) ...[
+                      const SizedBox(height: 16),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: FollowUpCard(
+                          data: const FollowUpData(
+                            question: 'Why might 20 coin flips show a different P(H) than the true bias?',
+                            options: [
+                              'The coin must be broken',
+                              'Small samples have high variance — the Law of Large Numbers needs more trials',
+                              'Probability theory doesn\'t apply to physical coins',
+                            ],
+                            correctIndex: 1,
+                            explanation: 'With only 20 flips, random variation dominates. As sample size grows, the observed proportion converges to the true probability — that\'s the Law of Large Numbers.',
+                          ),
+                          onDismiss: () => setState(() => _followUpDone = true),
+                        ),
+                      ),
+                    ],
+                    if (_followUpDone || _correctGuesses < 2) ...[
+                      const SizedBox(height: 16),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: PrimaryBtn(label: 'See results', onPressed: () => widget.onComplete(_correctGuesses, 3)),
+                      ),
+                    ],
                   ],
                 ],
               ),

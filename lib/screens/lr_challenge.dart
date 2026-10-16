@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/lr.dart' as lr;
 
 const _maxSteps = 10;
@@ -34,6 +35,7 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
   int _lockIns = 0;
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
 
   @override
   void initState() {
@@ -241,7 +243,26 @@ class _LRChallengeScreenState extends State<LRChallengeScreen> {
                     ),
                   const SizedBox(height: 20),
 
-                  if (_done)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'What happens to MSE if you increase slope past the optimal value?',
+                          options: [
+                            'MSE decreases further',
+                            'MSE increases — predictions overshoot the data',
+                            'MSE stays the same',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'MSE is a U-shaped curve. Past the optimum, the line overshoots data points and squared errors grow rapidly.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_done && (_followUpDone || !_hasSucceeded))
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),

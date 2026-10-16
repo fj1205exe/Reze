@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/classification.dart' as cl_utils;
 
 const _stepLimit = 8;
@@ -31,6 +32,7 @@ class CLChallengeScreen extends StatefulWidget {
 class _CLChallengeScreenState extends State<CLChallengeScreen> {
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
   int _lockIns = 0;
   late double _angle;
   late double _offset;
@@ -295,28 +297,47 @@ class _CLChallengeScreenState extends State<CLChallengeScreen> {
                         message: '${accuracy.round()}% accuracy — ${max(0, _stepLimit - _lockIns)} lock-ins remaining.',
                       ),
                     ),
-                  if (_done)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'Why is the angle of the boundary more important than the offset?',
+                          options: [
+                            'Offset is actually more important',
+                            'Angle determines which side each class falls on; offset only shifts the line',
+                            'Both contribute equally',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'The angle defines the orientation of the decision boundary — it determines the classification rule. Offset just translates the line without changing which regions map to which class.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_done && (_followUpDone || !_hasSucceeded))
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),
                       slideDistance: 10,
                       child: SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: () => widget.onComplete(_hasSucceeded, _lockIns, _accuracy),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _hasSucceeded ? C.green : C.accent,
-                          foregroundColor: _hasSucceeded ? C.bg : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: S.borderMd),
-                          elevation: 0,
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: () => widget.onComplete(_hasSucceeded, _lockIns, _accuracy),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _hasSucceeded ? C.green : C.accent,
+                            foregroundColor: _hasSucceeded ? C.bg : Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: S.borderMd),
+                            elevation: 0,
+                          ),
+                          child: Text('See results', style: spaceGrotesk(
+                            fontSize: 15, fontWeight: FontWeight.w600,
+                            color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
+                          )),
                         ),
-                        child: Text('See results', style: spaceGrotesk(
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: _hasSucceeded ? C.bg : Colors.white, letterSpacing: 0.05,
-                        )),
                       ),
-                    ),
                     ),
                 ],
               ),

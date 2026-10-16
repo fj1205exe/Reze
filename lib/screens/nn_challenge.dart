@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/neuralnet.dart' as nn;
 
 const _targetOutput = 0.7;
@@ -29,6 +30,7 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
   int _lockIns = 0;
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
 
   Map<String, double> get _fwd => nn.neuronForward(_x1, _x2, _w1, _w2, _bias);
   double get _z => _fwd['z']!;
@@ -201,7 +203,26 @@ class _NNChallengeScreenState extends State<NNChallengeScreen> {
                   ],
                   const SizedBox(height: 20),
 
-                  if (_hasSucceeded)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'What role does the bias term play in a single neuron?',
+                          options: [
+                            'It scales the input weights',
+                            'It shifts the activation threshold — deciding when the neuron fires',
+                            'It controls the learning rate',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'Bias shifts the weighted sum z before the activation function. Without bias, the decision boundary must pass through the origin.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_hasSucceeded && _followUpDone)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),

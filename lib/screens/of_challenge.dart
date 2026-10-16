@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/overfitting.dart' as of_utils;
 
 const _maxAttempts = 5;
@@ -31,6 +32,7 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
   int _lockIns = 0;
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
 
   @override
   void initState() {
@@ -396,7 +398,26 @@ class _OFChallengeScreenState extends State<OFChallengeScreen> {
                   if (!_done)
                     FeedbackBar(type: _feedbackType, message: _feedbackMsg),
 
-                  if (_done)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'Why does a very high degree polynomial perform worse on new data?',
+                          options: [
+                            'High-degree polynomials are always slower to compute',
+                            'It memorizes training noise instead of learning the pattern',
+                            'The training error is too high',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'Overfitting: a high-degree polynomial can fit every training point exactly, but the wiggles between points are noise — not signal. New data falls on those wiggles.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_done && (_followUpDone || !_hasSucceeded))
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),

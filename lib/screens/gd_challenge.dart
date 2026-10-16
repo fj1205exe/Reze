@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../widgets/loss_curve.dart';
 import '../utils/gd.dart' as gd;
 
@@ -71,6 +72,7 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
   int _passed = 0;
   int _totalSteps = 0;
   bool _allDone = false;
+  bool _followUpDone = false;
   late AnimationController _ballAnim;
   Animation<double>? _ballTween;
 
@@ -484,16 +486,37 @@ class _GDChallengeScreenState extends State<GDChallengeScreen>
                       inter(fontSize: 14, color: C.txt, height: 1.5),
                 ),
               ),
+              if (mastered && !_followUpDone) ...[
+                const SizedBox(height: 16),
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 400),
+                  slideDistance: 12,
+                  child: FollowUpCard(
+                    data: const FollowUpData(
+                      question: 'Why does a large learning rate cause oscillation around the minimum?',
+                      options: [
+                        'The gradient becomes zero at the minimum',
+                        'Steps overshoot the minimum and bounce back and forth',
+                        'The loss function changes shape',
+                      ],
+                      correctIndex: 1,
+                      explanation: 'A large learning rate takes big steps. Near the minimum, the gradient is small but the step size (lr × gradient) can still overshoot, landing on the other side — then overshooting again.',
+                    ),
+                    onDismiss: () => setState(() => _followUpDone = true),
+                  ),
+                ),
+              ],
               const SizedBox(height: 24),
               FadeSlideIn(
                 delay: const Duration(milliseconds: 350),
                 duration: const Duration(milliseconds: 400),
                 slideDistance: 12,
                 child: Column(children: [
-                  if (mastered)
+                  if (mastered && _followUpDone)
                     PrimaryBtn(
                         label: 'Free play sandbox →', onPressed: _finish)
-                  else ...[
+                  else if (!mastered) ...[
                     PrimaryBtn(
                         label: 'Retry challenge',
                         onPressed: () {

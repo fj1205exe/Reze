@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/vectors.dart' as vec_utils;
 
 const _maxSteps = 6;
@@ -35,6 +36,7 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
   int _lockIns = 0;
   bool _hasSucceeded = false;
   bool _hasMoved = false;
+  bool _followUpDone = false;
   late double _ax;
   late double _ay;
 
@@ -312,7 +314,26 @@ class _VECChallengeScreenState extends State<VECChallengeScreen> {
                       child: FeedbackBar(type: _feedbackType, message: _feedbackMsg),
                     ),
 
-                  if (_done)
+                  if (_hasSucceeded && !_followUpDone)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 350),
+                      slideDistance: 10,
+                      child: FollowUpCard(
+                        data: const FollowUpData(
+                          question: 'If you double both x and y components of a vector, what happens to its magnitude?',
+                          options: [
+                            'It stays the same',
+                            'It doubles',
+                            'It quadruples',
+                          ],
+                          correctIndex: 1,
+                          explanation: 'Magnitude = sqrt(x² + y²). Doubling both gives sqrt((2x)² + (2y)²) = 2·sqrt(x² + y²). Scaling components by k scales magnitude by k.',
+                        ),
+                        onDismiss: () => setState(() => _followUpDone = true),
+                      ),
+                    ),
+                  if (_done && (_followUpDone || !_hasSucceeded))
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 150),
                       duration: const Duration(milliseconds: 350),

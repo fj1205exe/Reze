@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../widgets/follow_up.dart';
 import '../utils/neuralnet.dart' as nn;
 
 class BPChallengeScreen extends StatefulWidget {
@@ -59,6 +60,7 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
 
   bool get _passed => _correctCount >= 2;
   bool get _allAnswered => _ansW1 != null && _ansW2 != null && _ansWh != null;
+  bool _followUpDone = false;
 
   void _submit() => setState(() => _submitted = true);
 
@@ -181,7 +183,26 @@ class _BPChallengeScreenState extends State<BPChallengeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (_passed)
+                    if (_passed && !_followUpDone)
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 350),
+                        slideDistance: 10,
+                        child: FollowUpCard(
+                          data: const FollowUpData(
+                            question: 'During backpropagation, gradients flow:',
+                            options: [
+                              'Forward from inputs to output',
+                              'Backward from loss to inputs, using the chain rule',
+                              'Randomly through the network',
+                            ],
+                            correctIndex: 1,
+                            explanation: 'Backpropagation computes ∂Loss/∂weight for every weight by applying the chain rule backward through the network — from loss to output to hidden layers to inputs.',
+                          ),
+                          onDismiss: () => setState(() => _followUpDone = true),
+                        ),
+                      ),
+                    if (_passed && _followUpDone)
                       FadeSlideIn(
                         delay: const Duration(milliseconds: 150),
                         duration: const Duration(milliseconds: 350),
