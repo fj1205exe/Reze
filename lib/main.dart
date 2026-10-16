@@ -20,7 +20,6 @@ import 'screens/welcome_screen.dart';
 import 'screens/goal_screen.dart';
 import 'screens/diagnostic_screen.dart';
 import 'screens/skill_map_screen.dart';
-import 'screens/recommended_start_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/map_tab.dart';
 import 'screens/progress_tab.dart';
@@ -118,7 +117,6 @@ enum AppScreen {
   goal,
   diagnostic,
   skillmap,
-  recommend,
   gdPlay,
   gdDiscover,
   gdExplain,
@@ -858,13 +856,6 @@ class _MLabHomeState extends State<MLabHome> {
           onNext: () => _nav(AppScreen.home),
           onBack: () => _back(AppScreen.home),
         );
-      case AppScreen.recommend:
-        return RecommendedStartScreen(
-          key: const ValueKey('rec'),
-          onNext: () => _nav(AppScreen.gdPlay),
-          onBack: () => _back(AppScreen.skillmap),
-        );
-
       // GD flow
       case AppScreen.gdPlay:
         return GDPlayScreen(
