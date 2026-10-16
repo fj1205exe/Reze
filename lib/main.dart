@@ -88,8 +88,6 @@ import 'screens/leaderboard_tab.dart';
 
 const int maxHistory = 12;
 
-enum ComprehensionLevel { beginner, intermediate, advanced }
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;

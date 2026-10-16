@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
+import '../utils/comprehension.dart';
 import '../theme.dart';
 import '../widgets.dart';
 

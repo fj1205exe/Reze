@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import '../main.dart';
+import 'comprehension.dart';
+export 'comprehension.dart';
 
 class LevelProvider extends InheritedWidget {
   final ComprehensionLevel level;
