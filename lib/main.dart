@@ -609,8 +609,9 @@ class _MLabHomeState extends State<MLabHome> {
         ts: DateTime.now().millisecondsSinceEpoch,
       ),
     );
-    if (_progress.history.length > maxHistory)
+    if (_progress.history.length > maxHistory) {
       _progress.history = _progress.history.sublist(0, maxHistory);
+    }
   }
 
   void _completeConcept(
