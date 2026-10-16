@@ -84,6 +84,7 @@ import 'screens/nn_discover.dart';
 import 'screens/nn_challenge.dart';
 import 'screens/bp_discover.dart';
 import 'screens/bp_challenge.dart';
+import 'screens/leaderboard_tab.dart';
 
 const int maxHistory = 12;
 
@@ -183,6 +184,7 @@ enum AppScreen {
   bpExplain,
   bpChallenge,
   bpResult,
+  ranks,
 }
 
 class LRState {
@@ -1691,6 +1693,11 @@ class _MLabHomeState extends State<MLabHome> {
           key: const ValueKey('prog'),
           skillMap: _progress.skillMap,
           progress: _progress,
+          onNavigate: _nav,
+        );
+      case AppScreen.ranks:
+        return LeaderboardTabScreen(
+          key: const ValueKey('ranks'),
           onNavigate: _nav,
         );
     }

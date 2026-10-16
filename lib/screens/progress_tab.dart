@@ -158,6 +158,7 @@ class ProgressTabScreen extends StatelessWidget {
             onNavigate: (id) {
               if (id == 'home') onNavigate(AppScreen.home);
               if (id == 'map') onNavigate(AppScreen.mapTab);
+              if (id == 'ranks') onNavigate(AppScreen.ranks);
             },
           ),
         ],

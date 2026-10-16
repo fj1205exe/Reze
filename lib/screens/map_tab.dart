@@ -98,6 +98,7 @@ class MapTabScreen extends StatelessWidget {
             onNavigate: (id) {
               if (id == 'home') onNavigate(AppScreen.home);
               if (id == 'progress') onNavigate(AppScreen.progress);
+              if (id == 'ranks') onNavigate(AppScreen.ranks);
             },
           ),
         ],

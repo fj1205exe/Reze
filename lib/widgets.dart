@@ -472,6 +472,7 @@ class MLabNavBar extends StatelessWidget {
             _tab('home', 'Home', Icons.home_outlined, Icons.home),
             _tab('map', 'Map', Icons.explore_outlined, Icons.explore),
             _tab('progress', 'Progress', Icons.bar_chart_outlined, Icons.bar_chart),
+            _tab('ranks', 'Ranks', Icons.emoji_events_outlined, Icons.emoji_events),
           ],
         ),
       ),

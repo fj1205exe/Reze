@@ -182,6 +182,7 @@ class HomeScreen extends StatelessWidget {
             onNavigate: (id) {
               if (id == 'map') onNavigate(AppScreen.mapTab);
               if (id == 'progress') onNavigate(AppScreen.progress);
+              if (id == 'ranks') onNavigate(AppScreen.ranks);
             },
           ),
         ],
