@@ -16,8 +16,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
+  final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
+  final _nameFocus = FocusNode();
   final _emailFocus = FocusNode();
   final _passFocus = FocusNode();
   bool _isSignUp = false;
@@ -30,8 +32,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   SupabaseClient get _sb => Supabase.instance.client;
 
   Future<void> _submit() async {
+    final name = _nameCtrl.text.trim();
     final email = _emailCtrl.text.trim();
     final pass = _passCtrl.text;
+    if (_isSignUp && name.isEmpty) {
+      setState(() => _error = 'Pick a display name.');
+      return;
+    }
     if (email.isEmpty || pass.isEmpty) {
       setState(() => _error = 'Enter your email and password.');
       return;
@@ -47,9 +54,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     setState(() { _loading = true; _error = null; _info = null; });
     try {
       if (_isSignUp) {
-        final res = await _sb.auth.signUp(email: email, password: pass);
+        final res = await _sb.auth.signUp(
+          email: email,
+          password: pass,
+          data: {'display_name': name},
+        );
         if (!mounted) return;
         if (res.session != null) {
+          await _sb.from('profiles').update(
+            {'display_name': name},
+          ).eq('id', res.user!.id);
+          if (!mounted) return;
           widget.onAuthenticated();
         } else {
           setState(() {
@@ -84,8 +99,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _nameCtrl.dispose();
     _emailCtrl.dispose();
     _passCtrl.dispose();
+    _nameFocus.dispose();
     _emailFocus.dispose();
     _passFocus.dispose();
     super.dispose();
@@ -302,6 +319,19 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           if (_error != null) ...[
             _errorBanner(_error!),
             const SizedBox(height: 14),
+          ],
+
+          if (_isSignUp) ...[
+            _inputField(
+              controller: _nameCtrl,
+              focusNode: _nameFocus,
+              hint: 'Display name',
+              icon: Icons.badge_outlined,
+              obscure: false,
+              inputAction: TextInputAction.next,
+              onSubmit: (_) => _emailFocus.requestFocus(),
+            ),
+            const SizedBox(height: 12),
           ],
 
           _inputField(
