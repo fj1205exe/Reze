@@ -84,6 +84,7 @@ import 'screens/nn_challenge.dart';
 import 'screens/bp_discover.dart';
 import 'screens/bp_challenge.dart';
 import 'screens/leaderboard_tab.dart';
+import 'screens/account_screen.dart';
 
 const int maxHistory = 12;
 
@@ -181,6 +182,7 @@ enum AppScreen {
   bpChallenge,
   bpResult,
   ranks,
+  account,
 }
 
 class LRState {
@@ -1692,6 +1694,15 @@ class _MLabHomeState extends State<MLabHome> {
         return LeaderboardTabScreen(
           key: const ValueKey('ranks'),
           onNavigate: _nav,
+        );
+      case AppScreen.account:
+        return AccountScreen(
+          key: const ValueKey('account'),
+          onBack: () => _back(AppScreen.progress),
+          onSignedOut: () {
+            _progress = AppProgress();
+            _nav(AppScreen.login);
+          },
         );
     }
   }

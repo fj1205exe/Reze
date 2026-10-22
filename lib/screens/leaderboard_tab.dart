@@ -49,11 +49,7 @@ class _LeaderboardTabScreenState extends State<LeaderboardTabScreen> {
     try {
       final concept = _concepts[_selectedConcept]['key'] as String;
       final data = await Supabase.instance.client
-          .from('leaderboard')
-          .select()
-          .eq('concept', concept)
-          .order('best_score', ascending: false)
-          .limit(50);
+          .rpc('get_leaderboard', params: {'concept_filter': concept});
       if (!mounted) return;
       setState(() {
         _rows = List<Map<String, dynamic>>.from(data);
@@ -67,8 +63,6 @@ class _LeaderboardTabScreenState extends State<LeaderboardTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Supabase.instance.client.auth.currentUser;
-
     return Container(
       color: C.bg,
       child: Column(
@@ -155,7 +149,7 @@ class _LeaderboardTabScreenState extends State<LeaderboardTabScreen> {
                             itemCount: _rows.length,
                             itemBuilder: (_, i) {
                               final row = _rows[i];
-                              final isMe = user != null && row['user_id'] == user.id;
+                              final isMe = row['is_me'] == true;
                               final name = (row['display_name'] as String?) ?? 'Anonymous';
                               final score = row['best_score'] as int? ?? 0;
                               final rank = i + 1;

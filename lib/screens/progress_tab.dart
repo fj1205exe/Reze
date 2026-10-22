@@ -33,9 +33,15 @@ class ProgressTabScreen extends StatelessWidget {
             bottom: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Progress', style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+              child: Row(
+                children: [
+                  Text('Progress', style: spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => onNavigate(AppScreen.account),
+                    child: Icon(Icons.settings_outlined, size: 22, color: C.muted),
+                  ),
+                ],
               ),
             ),
           ),
