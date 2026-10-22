@@ -812,8 +812,11 @@ class _MLabHomeState extends State<MLabHome> {
         return AuthScreen(
           key: const ValueKey('login'),
           onContinueAsGuest: () => _nav(AppScreen.welcome),
-          onAuthenticated: () {
-            _loadProgress();
+          onAuthenticated: () async {
+            await _loadProgress();
+            if (_screen == AppScreen.login) {
+              _nav(AppScreen.welcome);
+            }
           },
         );
       case AppScreen.welcome:
