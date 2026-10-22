@@ -356,6 +356,5 @@ class _OFPlayPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_OFPlayPainter old) =>
-      curvePoints != old.curvePoints || curveColor != old.curveColor;
+  bool shouldRepaint(_OFPlayPainter old) => true;
 }

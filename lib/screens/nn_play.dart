@@ -246,16 +246,16 @@ class _NNXorPainter extends CustomPainter {
         canvas.drawLine(Offset(dx, midY), Offset(dx + 4, midY), dashPaint);
       }
     } else if (w1.abs() > w2.abs()) {
-      final x0 = (-bias) / w1;
-      final x1 = (-w2 - bias) / w1;
+      final x0 = ((-bias) / w1).clamp(-5.0, 6.0);
+      final x1 = ((-w2 - bias) / w1).clamp(-5.0, 6.0);
       canvas.drawLine(
         Offset(toX(x0), toY(0)),
         Offset(toX(x1), toY(1)),
         Paint()..color = Colors.white..strokeWidth = 2,
       );
     } else {
-      final y0 = (-bias) / w2;
-      final y1 = (-w1 - bias) / w2;
+      final y0 = ((-bias) / w2).clamp(-5.0, 6.0);
+      final y1 = ((-w1 - bias) / w2).clamp(-5.0, 6.0);
       canvas.drawLine(
         Offset(toX(0), toY(y0)),
         Offset(toX(1), toY(y1)),

@@ -336,6 +336,7 @@ class _PlayCanvasPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_PlayCanvasPainter old) =>
+      a != old.a || b != old.b ||
       highlightA != old.highlightA || highlightB != old.highlightB ||
       hintA != old.hintA || hintB != old.hintB;
 }
