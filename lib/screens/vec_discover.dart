@@ -433,27 +433,24 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       ),
                     ),
 
-                  PrimaryBtn(
-                    label: unlocked
-                        ? 'Continue'
-                        : _sliderMoves < 8
-                            ? 'Explore more ($_sliderMoves/8 interactions)'
-                            : 'Toggle sum or difference to unlock',
-                    disabled: !unlocked,
-                    onPressed: unlocked ? widget.onNext : null,
-                  ),
-                  if (unlocked) ...[
-                    const SizedBox(height: 12),
+                  if (unlocked)
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 200),
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 12,
-                      child: SecondaryBtn(
+                      child: PrimaryBtn(
                         label: 'I understand — show me the math →',
                         onPressed: widget.onNext,
                       ),
+                    )
+                  else
+                    PrimaryBtn(
+                      label: _sliderMoves < 8
+                          ? 'Explore more ($_sliderMoves/8 interactions)'
+                          : 'Toggle sum or difference to unlock',
+                      disabled: true,
+                      onPressed: null,
                     ),
-                  ],
                 ],
               ),
             ),

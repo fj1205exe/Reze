@@ -263,20 +263,21 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                   FeedbackBar(message: _feedbackMsg, type: _feedbackType),
                   const SizedBox(height: 16),
 
-                  PrimaryBtn(label: 'Step', onPressed: widget.onStep),
-                  const SizedBox(height: 12),
-
-                  if (_allTried && widget.history.length >= 6)
+                  if (_allTried && widget.history.length >= 6) ...[
+                    SecondaryBtn(label: 'Step', onPressed: widget.onStep),
+                    const SizedBox(height: 12),
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 200),
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 12,
-                      child: SecondaryBtn(
+                      child: PrimaryBtn(
                         label: 'Why does noise help? →',
                         onPressed: widget.onNext,
                       ),
-                    )
-                  else
+                    ),
+                  ] else ...[
+                    PrimaryBtn(label: 'Step', onPressed: widget.onStep),
+                    const SizedBox(height: 12),
                     PrimaryBtn(
                       label: _allTried
                           ? 'Take a few more steps...'
@@ -284,6 +285,7 @@ class _SGDDiscoverScreenState extends State<SGDDiscoverScreen> {
                       disabled: true,
                       onPressed: null,
                     ),
+                  ],
                 ],
               ),
             ),

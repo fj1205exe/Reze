@@ -162,26 +162,15 @@ class _BPDiscoverScreenState extends State<BPDiscoverScreen> {
                   ],
                   const SizedBox(height: 20),
 
-                  if (step < 4)
+                  if (_allSeen)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      slideDistance: 12,
+                      child: PrimaryBtn(label: 'Continue →', onPressed: widget.onNext),
+                    )
+                  else if (step < 4)
                     PrimaryBtn(label: 'Next step →', onPressed: widget.onStep),
-                  if (_allSeen) ...[
-                    if (step == 4) ...[
-                      FadeSlideIn(
-                        delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 400),
-                        slideDistance: 12,
-                        child: PrimaryBtn(label: 'Continue', onPressed: widget.onNext),
-                      ),
-                    ] else ...[
-                      const SizedBox(height: 12),
-                      FadeSlideIn(
-                        delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 400),
-                        slideDistance: 12,
-                        child: SecondaryBtn(label: 'Continue →', onPressed: widget.onNext),
-                      ),
-                    ],
-                  ],
                 ],
               ),
             ),
