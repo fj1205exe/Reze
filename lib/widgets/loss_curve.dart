@@ -42,8 +42,11 @@ class LossCurvePainter extends CustomPainter {
     // History dots
     for (int i = 0; i < history.length; i++) {
       final ht = history[i];
+      if (ht.isNaN || ht.isInfinite) continue;
+      final loss = gd.lossFunc(ht);
+      if (loss.isNaN || loss.isInfinite) continue;
       final dotPaint = Paint()..color = C.accent.withValues(alpha: (i + 1) / history.length * 0.45);
-      canvas.drawCircle(Offset(_xOf(ht, w), _yOf(gd.lossFunc(ht), h)), 2.5, dotPaint);
+      canvas.drawCircle(Offset(_xOf(ht, w), _yOf(loss, h)), 2.5, dotPaint);
     }
 
     // Min marker
