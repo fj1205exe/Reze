@@ -60,7 +60,6 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
     setState(() {
       _ax = x;
       _ay = y;
-      _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Adjust components to see how vectors change';
     });
@@ -71,11 +70,14 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
     setState(() {
       _bx = x;
       _by = y;
-      _sliderMoves++;
       _feedbackType = 'info';
       _feedbackMsg = 'Adjust components to see how vectors change';
     });
     widget.onUpdateB(x, y);
+  }
+
+  void _handleSliderEnd(double _) {
+    setState(() => _sliderMoves++);
   }
 
   void _handleScale() {
@@ -312,8 +314,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       children: [
                         Text('Vector a controls', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.accentLight)),
                         const SizedBox(height: 6),
-                        _buildSlider('x', _ax, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(v, _ay)),
-                        _buildSlider('y', _ay, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(_ax, v)),
+                        _buildSlider('x', _ax, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(v, _ay), onChangeEnd: _handleSliderEnd),
+                        _buildSlider('y', _ay, -1.2, 1.2, C.accentLight, (v) => _handleSliderA(_ax, v), onChangeEnd: _handleSliderEnd),
                       ],
                     ),
                   ),
@@ -332,8 +334,8 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
                       children: [
                         Text('Vector b controls', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: C.blue)),
                         const SizedBox(height: 6),
-                        _buildSlider('x', _bx, -1.2, 1.2, C.blue, (v) => _handleSliderB(v, _by)),
-                        _buildSlider('y', _by, -1.2, 1.2, C.blue, (v) => _handleSliderB(_bx, v)),
+                        _buildSlider('x', _bx, -1.2, 1.2, C.blue, (v) => _handleSliderB(v, _by), onChangeEnd: _handleSliderEnd),
+                        _buildSlider('y', _by, -1.2, 1.2, C.blue, (v) => _handleSliderB(_bx, v), onChangeEnd: _handleSliderEnd),
                       ],
                     ),
                   ),
@@ -460,7 +462,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
     );
   }
 
-  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
+  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange, {ValueChanged<double>? onChangeEnd}) {
     return Row(
       children: [
         SizedBox(width: 14, child: Text(label, style: mono(fontSize: 12, color: C.muted))),
@@ -478,6 +480,7 @@ class _VECDiscoverScreenState extends State<VECDiscoverScreen> {
               min: min,
               max: max,
               onChanged: onChange,
+              onChangeEnd: onChangeEnd,
             ),
           ),
         ),

@@ -69,9 +69,10 @@ class _LFPlayScreenState extends State<LFPlayScreen> {
 
   void _handleSlider(double pred) {
     widget.onUpdate(pred, widget.selectedLoss);
-    setState(() {
-      _sliderMoves++;
-    });
+  }
+
+  void _handleSliderEnd(double _) {
+    setState(() => _sliderMoves++);
   }
 
   @override
@@ -214,6 +215,7 @@ class _LFPlayScreenState extends State<LFPlayScreen> {
                             min: 0,
                             max: 1,
                             onChanged: _handleSlider,
+                            onChangeEnd: _handleSliderEnd,
                           ),
                         ),
                         Row(

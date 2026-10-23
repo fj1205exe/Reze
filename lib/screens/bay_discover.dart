@@ -190,11 +190,11 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             onChanged: (v) {
                               setState(() {
                                 _prior = v;
-                                _discoverSteps++;
                                 _adjustedSliders.add('prior');
                               });
                               widget.onUpdate(v, _sensitivity, _specificity);
                             },
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                       ],
@@ -236,11 +236,11 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             onChanged: (v) {
                               setState(() {
                                 _sensitivity = v;
-                                _discoverSteps++;
                                 _adjustedSliders.add('sensitivity');
                               });
                               widget.onUpdate(_prior, v, _specificity);
                             },
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                       ],
@@ -282,11 +282,11 @@ class _BAYDiscoverScreenState extends State<BAYDiscoverScreen> {
                             onChanged: (v) {
                               setState(() {
                                 _specificity = v;
-                                _discoverSteps++;
                                 _adjustedSliders.add('specificity');
                               });
                               widget.onUpdate(_prior, _sensitivity, v);
                             },
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                       ],

@@ -30,7 +30,7 @@ class BAYPlayScreen extends StatefulWidget {
 class _BAYPlayScreenState extends State<BAYPlayScreen> {
   _BayPhase _phase = _BayPhase.guess;
   int? _selectedGuess;
-  int _sliderMoves = 0;
+
 
   final _guessOptions = [
     {'label': '~5%', 'sub': 'Too low — even with 95% test?', 'correct': false},
@@ -208,10 +208,7 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       0.005,
                       0.30,
                       C.yellow,
-                      (v) {
-                        widget.onUpdate(v, sensitivity, specificity);
-                        setState(() => _sliderMoves++);
-                      },
+                      (v) => widget.onUpdate(v, sensitivity, specificity),
                     ),
                     const SizedBox(height: 10),
 
@@ -222,10 +219,7 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       0.70,
                       0.99,
                       C.accentLight,
-                      (v) {
-                        widget.onUpdate(prior, v, specificity);
-                        setState(() => _sliderMoves++);
-                      },
+                      (v) => widget.onUpdate(prior, v, specificity),
                     ),
                     const SizedBox(height: 10),
 
@@ -236,10 +230,7 @@ class _BAYPlayScreenState extends State<BAYPlayScreen> {
                       0.70,
                       0.99,
                       C.blue,
-                      (v) {
-                        widget.onUpdate(prior, sensitivity, v);
-                        setState(() => _sliderMoves++);
-                      },
+                      (v) => widget.onUpdate(prior, sensitivity, v),
                     ),
                     const SizedBox(height: 20),
 
