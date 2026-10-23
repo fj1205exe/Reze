@@ -53,6 +53,9 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
     final nextW2 = w2 ?? widget.w2;
     final nextB = b ?? widget.bias;
     widget.onUpdate(nextW1, nextW2, nextB);
+  }
+
+  void _handleSliderEnd(double _) {
     setState(() => _moves++);
   }
 
@@ -152,11 +155,11 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
                     ),
                     child: Column(
                       children: [
-                        _sliderRow('Weight w₁', w1, -2.0, 2.0, C.green, (v) => _handleUpdate(w1: v)),
+                        _sliderRow('Weight w₁', w1, -2.0, 2.0, C.green, (v) => _handleUpdate(w1: v), onChangeEnd: _handleSliderEnd),
                         const SizedBox(height: 4),
-                        _sliderRow('Weight w₂', w2, -2.0, 2.0, C.blue, (v) => _handleUpdate(w2: v)),
+                        _sliderRow('Weight w₂', w2, -2.0, 2.0, C.blue, (v) => _handleUpdate(w2: v), onChangeEnd: _handleSliderEnd),
                         const SizedBox(height: 4),
-                        _sliderRow('Bias b', b, -2.0, 2.0, C.yellow, (v) => _handleUpdate(b: v)),
+                        _sliderRow('Bias b', b, -2.0, 2.0, C.yellow, (v) => _handleUpdate(b: v), onChangeEnd: _handleSliderEnd),
                       ],
                     ),
                   ),
@@ -187,7 +190,7 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
     );
   }
 
-  Widget _sliderRow(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
+  Widget _sliderRow(String label, double val, double min, double max, Color color, ValueChanged<double> onChange, {ValueChanged<double>? onChangeEnd}) {
     return Column(
       children: [
         Row(
@@ -203,6 +206,7 @@ class _NNPlayScreenState extends State<NNPlayScreen> {
           max: max,
           activeColor: color,
           onChanged: onChange,
+          onChangeEnd: onChangeEnd,
         ),
       ],
     );

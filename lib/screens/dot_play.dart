@@ -34,7 +34,6 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
     final nextAB = aB ?? widget.angleB;
 
     if (nextAA != widget.angleA || nextAB != widget.angleB) {
-      setState(() => _moves++);
       widget.onUpdate(nextAA, nextAB, widget.magA, widget.magB);
     }
   }
@@ -176,6 +175,7 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aA: v),
+                            onChangeEnd: (_) => setState(() => _moves++),
                           ),
                         ),
                       ],
@@ -216,6 +216,7 @@ class _DOTPlayScreenState extends State<DOTPlayScreen> {
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aB: v),
+                            onChangeEnd: (_) => setState(() => _moves++),
                           ),
                         ),
                       ],

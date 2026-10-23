@@ -73,11 +73,14 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
     setState(() {
       _slope = slope;
       _intercept = intercept;
-      _discoverSteps++;
     });
     final mse = lr_utils.calcMSE(slope, intercept);
     _updateFeedback(mse);
     widget.onUpdate(slope, intercept);
+  }
+
+  void _handleSliderEnd(double _) {
+    setState(() => _discoverSteps++);
   }
 
   void _handleGradientStep() {
@@ -292,6 +295,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                             max: 2,
                             onChanged: (v) =>
                                 _handleSliderUpdate(v, _intercept),
+                            onChangeEnd: _handleSliderEnd,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -325,6 +329,7 @@ class _LRDiscoverScreenState extends State<LRDiscoverScreen> {
                             max: 1.2,
                             onChanged: (v) =>
                                 _handleSliderUpdate(_slope, v),
+                            onChangeEnd: _handleSliderEnd,
                           ),
                         ),
                       ],

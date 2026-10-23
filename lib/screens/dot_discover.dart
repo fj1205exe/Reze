@@ -83,7 +83,6 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
         _angleB = nextAB;
         _magA = nextMA;
         _magB = nextMB;
-        _discoverSteps++;
       });
       widget.onUpdate(nextAA, nextAB, nextMA, nextMB);
     }
@@ -264,6 +263,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aA: v),
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -288,6 +288,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             min: 0.2,
                             max: 1.5,
                             onChanged: (v) => _handleUpdate(mA: v),
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                       ],
@@ -329,6 +330,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             min: 0,
                             max: 360,
                             onChanged: (v) => _handleUpdate(aB: v),
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -353,6 +355,7 @@ class _DOTDiscoverScreenState extends State<DOTDiscoverScreen> {
                             min: 0.2,
                             max: 1.5,
                             onChanged: (v) => _handleUpdate(mB: v),
+                            onChangeEnd: (_) => setState(() => _discoverSteps++),
                           ),
                         ),
                       ],

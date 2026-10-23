@@ -253,22 +253,31 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
                   const SizedBox(height: 12),
 
                   // Weight sliders
-                  _buildSlider('Weight w₁', _w1, -2.0, 2.0, C.green, (v) {
-                    setState(() { _w1 = v; _discoverSteps++; });
-                    widget.onUpdate(v, _w2, _bias);
-                  }),
+                  _buildSlider('Weight w₁', _w1, -2.0, 2.0, C.green,
+                    onChanged: (v) {
+                      setState(() => _w1 = v);
+                      widget.onUpdate(v, _w2, _bias);
+                    },
+                    onChangeEnd: (_) => setState(() => _discoverSteps++),
+                  ),
                   const SizedBox(height: 8),
 
-                  _buildSlider('Weight w₂', _w2, -2.0, 2.0, C.green, (v) {
-                    setState(() { _w2 = v; _discoverSteps++; });
-                    widget.onUpdate(_w1, v, _bias);
-                  }),
+                  _buildSlider('Weight w₂', _w2, -2.0, 2.0, C.green,
+                    onChanged: (v) {
+                      setState(() => _w2 = v);
+                      widget.onUpdate(_w1, v, _bias);
+                    },
+                    onChangeEnd: (_) => setState(() => _discoverSteps++),
+                  ),
                   const SizedBox(height: 8),
 
-                  _buildSlider('Bias b', _bias, -2.0, 2.0, C.yellow, (v) {
-                    setState(() { _bias = v; _discoverSteps++; });
-                    widget.onUpdate(_w1, _w2, v);
-                  }),
+                  _buildSlider('Bias b', _bias, -2.0, 2.0, C.yellow,
+                    onChanged: (v) {
+                      setState(() => _bias = v);
+                      widget.onUpdate(_w1, _w2, v);
+                    },
+                    onChangeEnd: (_) => setState(() => _discoverSteps++),
+                  ),
                   const SizedBox(height: 16),
 
                   FeedbackBar(type: _feedbackType, message: _feedbackMsg),
@@ -291,7 +300,7 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
     );
   }
 
-  Widget _buildSlider(String label, double val, double min, double max, Color color, ValueChanged<double> onChange) {
+  Widget _buildSlider(String label, double val, double min, double max, Color color, {required ValueChanged<double> onChanged, ValueChanged<double>? onChangeEnd}) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -321,7 +330,8 @@ class _NNDiscoverScreenState extends State<NNDiscoverScreen> {
               value: val.clamp(min, max),
               min: min,
               max: max,
-              onChanged: onChange,
+              onChanged: onChanged,
+              onChangeEnd: onChangeEnd,
             ),
           ),
         ],
