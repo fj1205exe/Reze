@@ -99,8 +99,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (!mounted) return;
       _startResendTimer();
       setState(() { _loading = false; _info = 'New code sent.'; });
-    } catch (_) {
+    } on AuthException catch (e) {
       if (!mounted) return;
+      setState(() { _loading = false; _error = _friendlyError(e.message); });
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Resend OTP failed: $e');
       setState(() { _loading = false; _error = 'Failed to resend. Try again.'; });
     }
   }
