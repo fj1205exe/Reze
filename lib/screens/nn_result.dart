@@ -70,7 +70,7 @@ class NNResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    Text(progress.goal == 'math' ? 'what you proved' : progress.goal == 'prep' ? 'what you learned' : 'what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     const SizedBox(height: 10),
                     Text(
                       'Every neuron in a neural network does one simple thing — weighted sum plus bias, passed through a non-linearity. Training a neural network means adjusting those weights and biases to minimize error across data points.',

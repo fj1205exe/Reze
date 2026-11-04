@@ -101,7 +101,7 @@ class PRResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    Text(progress.goal == 'math' ? 'what you proved' : progress.goal == 'prep' ? 'what you learned' : 'what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     const SizedBox(height: 10),
                     Text(
                       'Individual outcomes are unpredictable, but averages follow precise mathematical rules. The law of large numbers guarantees that with enough samples, observed frequency converges to true probability. Expected value and variance describe the long-run behaviour of any random process.',

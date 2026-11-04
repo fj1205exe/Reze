@@ -80,7 +80,7 @@ class LRResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    Text(progress.goal == 'math' ? 'what you proved' : progress.goal == 'prep' ? 'what you learned' : 'what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     const SizedBox(height: 10),
                     Text(
                       'Linear regression finds a line that minimizes the average squared distance between predictions and actual values. That distance is the MSE.',

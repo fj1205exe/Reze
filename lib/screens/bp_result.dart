@@ -70,7 +70,7 @@ class BPResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    Text(progress.goal == 'math' ? 'what you proved' : progress.goal == 'prep' ? 'what you learned' : 'what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     const SizedBox(height: 10),
                     Text(
                       'The chain rule, applied layer by layer, computes each parameter\'s responsibility for the loss. Gradients flow backward through the exact same connections that activations flow forward — this symmetry makes training deep networks fast and tractable.',

@@ -72,7 +72,7 @@ class SGDResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    Text(progress.goal == 'math' ? 'what you proved' : progress.goal == 'prep' ? 'what you learned' : 'what you discovered', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     const SizedBox(height: 10),
                     Text(
                       'SGD is gradient descent with a random twist. Instead of computing the full gradient over all data, it estimates it from a mini-batch. This makes training faster, helps escape local minima, and scales to datasets too large to fit in memory.',
