@@ -454,6 +454,7 @@ class MLabHome extends StatefulWidget {
 class _MLabHomeState extends State<MLabHome> {
   AppScreen _screen = AppScreen.splash;
   String _goal = '';
+  String _displayName = '';
   bool _goingBack = false;
 
   int _gdRoundsPassed = 0;
@@ -569,6 +570,23 @@ class _MLabHomeState extends State<MLabHome> {
     }
     if (local == null && user != null) {
       setState(() => _screen = AppScreen.welcome);
+    }
+
+    if (user != null) {
+      try {
+        final profile = await Supabase.instance.client
+            .from('profiles')
+            .select('display_name')
+            .eq('id', user.id)
+            .maybeSingle();
+        if (profile != null && mounted) {
+          setState(() {
+            _displayName = (profile['display_name'] as String?) ?? '';
+          });
+        }
+      } catch (e) {
+        debugPrint('Profile load failed: $e');
+      }
     }
   }
 
@@ -1681,6 +1699,7 @@ class _MLabHomeState extends State<MLabHome> {
         return HomeScreen(
           key: const ValueKey('home'),
           progress: _progress,
+          displayName: _displayName,
           onNavigate: (s) => _nav(s),
         );
       case AppScreen.mapTab:

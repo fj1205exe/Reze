@@ -34,10 +34,19 @@ const _allSkills = [
   {'label': 'Functions', 'color': 0xFF6EE7B7},
 ];
 
+Color _goalAccent(String goal) {
+  switch (goal) {
+    case 'math': return const Color(0xFF38BDF8);
+    case 'prep': return const Color(0xFF4ADE80);
+    default: return C.accent;
+  }
+}
+
 class HomeScreen extends StatelessWidget {
   final AppProgress progress;
+  final String displayName;
   final void Function(AppScreen s) onNavigate;
-  const HomeScreen({super.key, required this.progress, required this.onNavigate});
+  const HomeScreen({super.key, required this.progress, this.displayName = '', required this.onNavigate});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,8 @@ class HomeScreen extends StatelessWidget {
     final nextConcept = _conceptOrder.cast<_ConceptInfo?>().firstWhere((c) => !progress.getFlag(c!.flag), orElse: () => null);
     final available = _conceptOrder.where((c) => !progress.getFlag(c.flag) && c != nextConcept).take(3).toList();
     final hour = DateTime.now().hour;
-    final greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    final greetBase = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    final greeting = displayName.isNotEmpty ? '$greetBase, $displayName' : greetBase;
 
     return Container(
       color: C.bg,
@@ -72,9 +82,9 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Container(
                       width: 36, height: 36,
-                      decoration: const BoxDecoration(shape: BoxShape.circle, color: C.accent),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: _goalAccent(progress.goal)),
                       alignment: Alignment.center,
-                      child: Text('M', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white)),
+                      child: Text(displayName.isNotEmpty ? displayName[0].toUpperCase() : 'M', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white)),
                     ),
                   ],
                 ),
