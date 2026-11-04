@@ -21,6 +21,14 @@ class C {
 
   static final border = Colors.white.withValues(alpha: 0.06);
   static final dim = Colors.white.withValues(alpha: 0.04);
+
+  static Color goalAccent(String goal) {
+    switch (goal) {
+      case 'math': return blue;
+      case 'prep': return green;
+      default: return accent;
+    }
+  }
 }
 
 class S {

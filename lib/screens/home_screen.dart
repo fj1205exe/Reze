@@ -34,14 +34,6 @@ const _allSkills = [
   {'label': 'Functions', 'color': 0xFF6EE7B7},
 ];
 
-Color _goalAccent(String goal) {
-  switch (goal) {
-    case 'math': return const Color(0xFF38BDF8);
-    case 'prep': return const Color(0xFF4ADE80);
-    default: return C.accent;
-  }
-}
-
 class HomeScreen extends StatelessWidget {
   final AppProgress progress;
   final String displayName;
@@ -56,6 +48,11 @@ class HomeScreen extends StatelessWidget {
     final available = _conceptOrder.where((c) => !progress.getFlag(c.flag) && c != nextConcept).take(3).toList();
     final hour = DateTime.now().hour;
     final greetBase = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    final accent = C.goalAccent(progress.goal);
+    final continueLabel = progress.goal == 'math' ? 'your next proof'
+        : progress.goal == 'prep' ? 'keep preparing' : 'continue';
+    final recommendLabel = progress.goal == 'math' ? 'explore more'
+        : progress.goal == 'prep' ? 'also useful' : 'recommended';
     final greeting = displayName.isNotEmpty ? '$greetBase, $displayName' : greetBase;
 
     return Container(
@@ -82,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Container(
                       width: 36, height: 36,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: _goalAccent(progress.goal)),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: C.goalAccent(progress.goal)),
                       alignment: Alignment.center,
                       child: Text(displayName.isNotEmpty ? displayName[0].toUpperCase() : 'M', style: spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white)),
                     ),
@@ -101,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                     delay: const Duration(milliseconds: 60),
                     duration: const Duration(milliseconds: 400),
                     slideDistance: 12,
-                    child: Text('continue', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                    child: Text(continueLabel, style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                   ),
                   const SizedBox(height: 8),
                   FadeSlideIn(
@@ -109,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                     duration: const Duration(milliseconds: 450),
                     slideDistance: 14,
                     child: nextConcept != null
-                      ? _continueCard(nextConcept, completedCount, totalConcepts)
+                      ? _continueCard(nextConcept, completedCount, totalConcepts, accent)
                       : Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(20),
@@ -128,7 +125,7 @@ class HomeScreen extends StatelessWidget {
                       delay: const Duration(milliseconds: 200),
                       duration: const Duration(milliseconds: 400),
                       slideDistance: 12,
-                      child: Text('recommended', style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
+                      child: Text(recommendLabel, style: spaceGrotesk(fontSize: 12, color: C.muted, letterSpacing: 0.06)),
                     ),
                     const SizedBox(height: 8),
                     for (int i = 0; i < available.length; i++) ...[
@@ -173,7 +170,7 @@ class HomeScreen extends StatelessWidget {
                                 onTap: () => onNavigate(AppScreen.skillmap),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text('View full map →', style: inter(fontSize: 12, color: C.accent.withValues(alpha: 0.65))),
+                                  child: Text('View full map →', style: inter(fontSize: 12, color: accent.withValues(alpha: 0.65))),
                                 ),
                               ),
                             ],
@@ -200,7 +197,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _continueCard(_ConceptInfo c, int completed, int total) {
+  Widget _continueCard(_ConceptInfo c, int completed, int total, Color accent) {
     return GestureDetector(
       onTap: () => onNavigate(c.nav),
       child: Container(
@@ -209,7 +206,7 @@ class HomeScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: C.surface,
           borderRadius: S.borderMd,
-          border: Border.all(color: C.accent.withValues(alpha: 0.2)),
+          border: Border.all(color: accent.withValues(alpha: 0.2)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +226,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Container(
                   width: 36, height: 36,
-                  decoration: BoxDecoration(color: C.accent, borderRadius: S.borderSm),
+                  decoration: BoxDecoration(color: accent, borderRadius: S.borderSm),
                   child: const Icon(Icons.arrow_forward, color: Colors.white, size: 16),
                 ),
               ],
@@ -239,7 +236,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Progress', style: inter(fontSize: 12, color: C.muted)),
-                Text('$completed / $total', style: mono(fontSize: 12, fontWeight: FontWeight.w500, color: C.accent)),
+                Text('$completed / $total', style: mono(fontSize: 12, fontWeight: FontWeight.w500, color: accent)),
               ],
             ),
             const SizedBox(height: 6),
@@ -253,7 +250,7 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, val, _) => FractionallySizedBox(
                   alignment: Alignment.centerLeft,
                   widthFactor: val,
-                  child: Container(decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(3))),
+                  child: Container(decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(3))),
                 ),
               ),
             ),
