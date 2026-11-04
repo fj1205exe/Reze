@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import 'legal_screen.dart';
 
 enum _AuthStep { initial, otp, setupProfile }
 
@@ -274,6 +275,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       FadeSlideIn(child: _profileSetupSection()),
                     ],
                     const SizedBox(height: 24),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 400),
+                      child: _legalLinks(),
+                    ),
                   ],
                 ),
               ),
@@ -667,6 +672,67 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         const SizedBox(width: 8),
         Expanded(child: Text(msg, style: inter(fontSize: 13, color: C.blue))),
       ]),
+    );
+  }
+
+  Widget _legalLinks() {
+    return Center(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => _showLegalSheet('Privacy Policy', privacyPolicyText),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Privacy Policy', style: inter(fontSize: 11, color: C.muted).copyWith(decoration: TextDecoration.underline)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Text('·', style: inter(fontSize: 11, color: C.muted)),
+          ),
+          GestureDetector(
+            onTap: () => _showLegalSheet('Terms of Service', termsOfServiceText),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Terms of Service', style: inter(fontSize: 11, color: C.muted).copyWith(decoration: TextDecoration.underline)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLegalSheet(String title, String body) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: C.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        maxChildSize: 0.95,
+        minChildSize: 0.4,
+        expand: false,
+        builder: (ctx, scrollCtrl) => Column(
+          children: [
+            const SizedBox(height: 12),
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: C.border, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: 16),
+            Text(title, style: spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 16),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollCtrl,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(body, style: inter(fontSize: 13, color: C.muted, height: 1.7)),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

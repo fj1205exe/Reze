@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import 'legal_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   final VoidCallback onBack;
@@ -151,8 +152,18 @@ class _AccountScreenState extends State<AccountScreen> {
                       delay: const Duration(milliseconds: 200),
                       child: _dangerSection(),
                     ),
+                    const SizedBox(height: 24),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 300),
+                      child: _legalSection(),
+                    ),
                   ] else ...[
                     FadeSlideIn(child: _guestCard()),
+                    const SizedBox(height: 24),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 100),
+                      child: _legalSection(),
+                    ),
                   ],
                 ],
               ),
@@ -313,6 +324,76 @@ class _AccountScreenState extends State<AccountScreen> {
             style: inter(fontSize: 13, color: C.muted),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _legalSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Legal',
+            style: spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600)),
+        const SizedBox(height: 12),
+        _legalTile('Privacy Policy', Icons.shield_outlined, privacyPolicyText),
+        const SizedBox(height: 8),
+        _legalTile('Terms of Service', Icons.description_outlined, termsOfServiceText),
+      ],
+    );
+  }
+
+  Widget _legalTile(String title, IconData icon, String body) {
+    return GestureDetector(
+      onTap: () => _showLegalSheet(title, body),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: C.surface,
+          borderRadius: S.borderSm,
+          border: Border.all(color: C.border),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: C.muted),
+            const SizedBox(width: 12),
+            Expanded(child: Text(title, style: inter(fontSize: 14, color: C.txt))),
+            Icon(Icons.chevron_right, size: 18, color: C.muted),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLegalSheet(String title, String body) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: C.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        maxChildSize: 0.95,
+        minChildSize: 0.4,
+        expand: false,
+        builder: (ctx, scrollCtrl) => Column(
+          children: [
+            const SizedBox(height: 12),
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: C.border, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: 16),
+            Text(title, style: spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 16),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollCtrl,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(body, style: inter(fontSize: 13, color: C.muted, height: 1.7)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
