@@ -30,8 +30,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   final _passConfirmFocus = FocusNode();
   final _nameFocus = FocusNode();
   final List<TextEditingController> _otpCtrls =
-      List.generate(6, (_) => TextEditingController());
-  final List<FocusNode> _otpFocuses = List.generate(6, (_) => FocusNode());
+      List.generate(8, (_) => TextEditingController());
+  final List<FocusNode> _otpFocuses = List.generate(8, (_) => FocusNode());
 
   bool _isSignUp = false;
   bool _loading = false;
@@ -517,7 +517,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           const SizedBox(height: 4),
           Text(_signupEmail, style: spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600)),
           const SizedBox(height: 24),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(6, (i) => _otpDigitField(i))),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(8, (i) => _otpDigitField(i))),
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
@@ -550,7 +550,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   Widget _otpDigitField(int index) {
     return Container(
-      width: 44, height: 52, margin: EdgeInsets.only(left: index > 0 ? 8 : 0),
+      width: 36, height: 48, margin: EdgeInsets.only(left: index > 0 ? 6 : 0),
       child: TextField(
         controller: _otpCtrls[index], focusNode: _otpFocuses[index],
         keyboardType: TextInputType.number, textAlign: TextAlign.center, maxLength: 1,
@@ -564,11 +564,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: C.accent.withValues(alpha: 0.5))),
         ),
         onChanged: (val) {
-          if (val.isNotEmpty && index < 5) _otpFocuses[index + 1].requestFocus();
+          if (val.isNotEmpty && index < 7) _otpFocuses[index + 1].requestFocus();
           if (val.isEmpty && index > 0) _otpFocuses[index - 1].requestFocus();
           if (index == 5 && val.isNotEmpty) {
             final code = _otpCtrls.map((c) => c.text).join();
-            if (code.length == 6) _verifyOtp();
+            if (code.length == 8) _verifyOtp();
           }
         },
       ),
