@@ -145,7 +145,7 @@ class LFResultScreen extends StatelessWidget {
               ],
               const SizedBox(height: 20),
 
-              Text('skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
+              Text(progress.goal == 'math' ? 'skills sharpened' : progress.goal == 'prep' ? 'skills gained' : 'skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 10),
               SkillGainBar(skill: 'Optimization', delta: 15, color: C.accent,
                   delay: const Duration(milliseconds: 300)),

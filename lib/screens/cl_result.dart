@@ -157,7 +157,7 @@ class CLResultScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Skill updates
-              Text('skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
+              Text(progress.goal == 'math' ? 'skills sharpened' : progress.goal == 'prep' ? 'skills gained' : 'skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 10),
               SkillGainBar(skill: 'Statistics', delta: 12, color: const Color(0xFFA78BFA),
                   delay: const Duration(milliseconds: 300)),

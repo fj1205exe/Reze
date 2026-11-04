@@ -151,7 +151,7 @@ class NNResultScreen extends StatelessWidget {
               ],
               const SizedBox(height: 20),
 
-              Text('skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
+              Text(progress.goal == 'math' ? 'skills sharpened' : progress.goal == 'prep' ? 'skills gained' : 'skill updates', style: spaceGrotesk(fontSize: 12, color: C.muted)),
               const SizedBox(height: 10),
               SkillGainBar(skill: 'Calculus', delta: 18, color: C.blue,
                   delay: const Duration(milliseconds: 300)),
