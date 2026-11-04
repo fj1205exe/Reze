@@ -548,7 +548,9 @@ class _MLabHomeState extends State<MLabHome> {
               : DateTime(2000);
           local = remoteTs.isAfter(localTs) ? remote : local;
         }
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Supabase progress load failed: $e');
+      }
     }
 
     if (local != null) {
@@ -583,7 +585,9 @@ class _MLabHomeState extends State<MLabHome> {
           'data': _progress.toJson(),
           'updated_at': DateTime.now().toUtc().toIso8601String(),
         });
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Supabase progress sync failed: $e');
+      }
     }
   }
 
@@ -642,7 +646,9 @@ class _MLabHomeState extends State<MLabHome> {
       'steps': steps,
       'accuracy': accuracy,
       'score': score,
-    }).then((_) {}).catchError((_) {});
+    }).then((_) {}).catchError((e) {
+      debugPrint('Supabase score record failed: $e');
+    });
   }
 
   void _completeGD(int roundsPassed, int totalRounds, int totalSteps) {

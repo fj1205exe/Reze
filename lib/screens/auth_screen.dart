@@ -61,9 +61,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         );
         if (!mounted) return;
         if (res.session != null) {
-          await _sb.from('profiles').update(
-            {'display_name': name},
-          ).eq('id', res.user!.id);
+          await _sb.from('profiles').upsert({
+            'id': res.user!.id,
+            'display_name': name,
+          });
           if (!mounted) return;
           widget.onAuthenticated();
         } else {
